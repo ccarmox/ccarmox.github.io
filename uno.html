@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Limpiar estilo</title><meta name="description" content="Limpiador de texto del portapapeles Copia cualquier texto (con o sin formato) a tu portapapeles y luego haz clic en el botón de abajo. Esta herramienta leerá el texto de tu portapapeles, eliminará todo el formato (como estilos, colores, fuentes) y lo volverá a copiar&hellip;"><meta name="generator" content="Publii Open-Source CMS for Static Site"><link rel="canonical" href="https://ccarmox.github.io/uno.html"><link rel="alternate" type="application/atom+xml" href="https://ccarmox.github.io/feed.xml" title="Cristian Do Carmo Rodríguez - RSS"><link rel="alternate" type="application/json" href="https://ccarmox.github.io/feed.json" title="Cristian Do Carmo Rodríguez - JSON"><meta property="og:title" content="Limpiar estilo"><meta property="og:site_name" content="Cristian Do Carmo Rodríguez"><meta property="og:description" content="Limpiador de texto del portapapeles Copia cualquier texto (con o sin formato) a tu portapapeles y luego haz clic en el botón de abajo. Esta herramienta leerá el texto de tu portapapeles, eliminará todo el formato (como estilos, colores, fuentes) y lo volverá a copiar&hellip;"><meta property="og:url" content="https://ccarmox.github.io/uno.html"><meta property="og:type" content="article"><link rel="stylesheet" href="https://ccarmox.github.io/assets/css/style.css?v=2002660dd94cad760891d70547054118"><script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://ccarmox.github.io/uno.html"},"headline":"Limpiar estilo","datePublished":"2025-12-28T23:29+01:00","dateModified":"2025-12-30T15:00+01:00","description":"Limpiador de texto del portapapeles Copia cualquier texto (con o sin formato) a tu portapapeles y luego haz clic en el botón de abajo. Esta herramienta leerá el texto de tu portapapeles, eliminará todo el formato (como estilos, colores, fuentes) y lo volverá a copiar&hellip;","author":{"@type":"Person","name":"Cristian Do Carmo Rodríguez","url":"https://ccarmox.github.io/authors/yo/"},"publisher":{"@type":"Organization","name":"Cristian Do Carmo Rodríguez"}}</script><noscript><style>img[loading] {
+                    opacity: 1;
+                }</style></noscript></head><body class="page-template"><header class="top js-header"><a class="logo" href="https://ccarmox.github.io/">Cristian Do Carmo Rodríguez</a><nav class="navbar js-navbar"><button class="navbar__toggle js-toggle" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span></button><ul class="navbar__menu"><li><a href="https://ccarmox.github.io//tags/trucos-de-costura/index.html" target="_self">Blog</a></li><li class="has-submenu"><span class="is-separator" aria-haspopup="true">Redes sociales</span><ul class="navbar__submenu level-2" aria-hidden="true"><li><a href="https://www.linkedin.com/in/cristian-do-carmo-rodr%C3%ADguez-9321a9163/" target="_self">LinkedIn</a></li><li><a href="https://x.com/ccarmox" target="_self">X (Twitter)</a></li></ul></li><li class="active-parent has-submenu"><span class="is-separator" aria-haspopup="true">Utilidades</span><ul class="navbar__submenu level-2" aria-hidden="true"><li class="active"><a href="https://ccarmox.github.io/uno.html" target="_self">Limpiar estilo de un texto</a></li></ul></li></ul></nav></header><main class="page"><article class="content"><div class="hero hero--noimage"><header class="hero__content"><div class="wrapper"><h1>Limpiar estilo</h1></div></header></div><div class="entry-wrapper content__entry"><div class="watermark"><div class="card project-card"><div class="project-info"><h3>Limpiador de texto del portapapeles</h3><p>Copia cualquier texto (con o sin formato) a tu portapapeles y luego haz clic en el botón de abajo.</p><p>Esta herramienta leerá el texto de tu portapapeles, eliminará todo el formato (como estilos, colores, fuentes) y lo volverá a copiar como texto plano, listo para ser pegado en cualquier aplicación.</p><div id="statusMessage"></div><button id="cleanCopyButton" class="btn-project" role="button"><span class="btn-project__text">Limpiar y copiar texto del portapapeles</span> <i class="fas fa-clipboard"></i></button></div></div><script>// Espera a que el DOM esté completamente cargado
+    document.addEventListener("DOMContentLoaded", () => {
+      const cleanCopyButton = document.getElementById("cleanCopyButton");
+      const statusMessage = document.getElementById("statusMessage");
+
+      // Define la duración de la espera en milisegundos (ej: 500ms = 0.5 segundos)
+      const delayDuration = 500; // Puedes ajustar este valor si quieres experimentar
+
+      cleanCopyButton.addEventListener("click", async () => {
+        statusMessage.textContent =
+          'Intentando leer del portapapeles... (Pulsa "Permitir" si tu navegador lo solicita)';
+        statusMessage.className = ""; // Limpia clases de estado anteriores
+
+        // Comprueba si el API del portapapeles está disponible
+        if (
+          !navigator.clipboard ||
+          !navigator.clipboard.readText ||
+          !navigator.clipboard.writeText
+        ) {
+          statusMessage.textContent =
+            "Tu navegador no soporta el API del portapapeles o no es un contexto seguro (HTTPS).";
+          statusMessage.classList.add("error");
+          console.error("API de portapapeles no disponible");
+          return;
+        }
+
+        let textToCopy = "";
+
+        try {
+          // 1. Leer el texto del portapapeles
+          const text = await navigator.clipboard.readText();
+
+          if (!text) {
+            statusMessage.textContent =
+              "El portapapeles parece estar vacío o no se pudo leer.";
+            statusMessage.classList.add("error");
+            return; // Detiene si no se leyó texto
+          }
+
+          textToCopy = text; // Guarda el texto para copiar después de la espera
+
+          statusMessage.textContent =
+            "Texto leído. Procesando y esperando un momento antes de copiar...";
+
+          // --- INICIO: ESPERA AÑADIDA ---
+          await new Promise((resolve) => setTimeout(resolve, delayDuration));
+          // --- FIN: ESPERA AÑADIDA ---
+
+          // 3. Escribir el texto plano de vuelta al portapapeles
+          statusMessage.textContent =
+            "Intentando copiar de vuelta al portapapeles...";
+
+          // Es buena práctica intentar vaciar el portapapeles primero, aunque no siempre es necesario
+          // y puede generar un segundo diálogo de permiso en algunos navegadores si el usuario no tiene la pestaña activa.
+          // Para esta funcionalidad, escribir directamente el texto limpio es suficiente.
+          await navigator.clipboard.writeText(textToCopy);
+
+          statusMessage.textContent =
+            "¡Texto limpio copiado exitosamente al portapapeles!";
+          statusMessage.classList.add("success");
+
+          // Limpiar el mensaje de estado después de unos segundos
+          setTimeout(() => {
+            statusMessage.textContent = "";
+            statusMessage.className = "";
+          }, 4000); // Limpiar después de 4 segundos
+        } catch (err) {
+          console.error("Error al acceder o modificar el portapapeles:", err);
+          let errorMessage = "Ocurrió un error al acceder o modificar el portapapeles.";
+
+          if (err.name === "NotAllowedError") {
+            errorMessage +=
+              " Asegúrate de que has concedido permiso y que la pestaña está activa cuando haces clic.";
+          } else if (err.message) {
+            errorMessage += " Detalles: " + err.message;
+          }
+
+          statusMessage.textContent = errorMessage;
+          statusMessage.classList.add("error");
+        }
+      });
+    });</script></div></div></article></main><footer class="footer"><div class="wrapper"><div class="footer__copyright"><footer style="margin-top: 50px; padding: 20px 0; border-top: 1px solid #eee; text-align: left;"><div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: space-between; align-items: flex-start; text-align: left;"><div style="flex: 1; min-width: 300px; background: #1e1e1e; border-radius: 6px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); text-align: left;"><div style="background: #333; padding: 8px 15px; display: flex; gap: 6px; align-items: center;"><div style="width: 10px; height: 10px; background: #ff5f56; border-radius: 50%;"> </div><div style="width: 10px; height: 10px; background: #ffbd2e; border-radius: 50%;"> </div><div style="width: 10px; height: 10px; background: #27c93f; border-radius: 50%;"> </div><span style="color: #888; font-family: monospace; font-size: 10px; margin-left: 10px;">android-dev-shell</span></div><div style="padding: 20px; font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; line-height: 1.4; text-align: left;"><p style="margin: 0; color: #3ddc84; text-align: left;"><span style="color: #fff;">&gt;</span> status --check</p><p style="margin: 5px 0 0 0; color: #aaa; text-align: left;">[INFO] Industrial Logic: <span style="color: #3ddc84;">READY</span></p><p style="margin: 5px 0 0 0; color: #aaa; text-align: left;">[INFO] Mobile Innovation: <span style="color: #3ddc84;">ACTIVE</span></p><p style="margin: 15px 0 0 0; color: #ffbd2e; text-align: left;"><span style="color: #fff;">&gt;</span> brew coffee --now</p><p style="margin: 5px 0 0 0; color: #aaa; text-align: left;">[WARN] Coffee pot empty. Logic levels dropping...</p><p style="margin: 5px 0 0 0; color: #aaa; text-align: left;">[RETRY] Converting caffeine to code: <span style="color: #3ddc84;">99% complete</span></p><p style="margin: 15px 0 0 0; color: #3ddc84; text-align: left;"><span style="color: #fff;">&gt;</span> contact --now</p></div></div><div style="max-width: 30%; flex: 1; min-width: 250px; display: flex; flex-direction: column; justify-content: space-between; align-self: stretch; text-align: left;"><div style="text-align: left;"><h4 style="margin: 0 0 10px 0; font-family: sans-serif; color: #004d99; text-align: left;">¿Hablamos?</h4><p style="margin: 0 0 20px 0; font-family: sans-serif; font-size: 0.9rem; text-align: left;">Disponible para proyectos Android innovadores y consultoría de ingeniería.</p><a href="https://www.linkedin.com/in/cristian-do-carmo-rodr%C3%ADguez-9321a9163/" target="_blank" style="display: inline-flex; align-items: center; background: #0077b5; color: white !important; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-family: sans-serif; font-weight: bold; font-size: 0.85rem;" rel="noopener"><span style="margin-right: 8px;">in</span> VER PERFIL EN LINKEDIN</a></div><div style="margin-top: 30px; font-family: 'Courier New', Courier, monospace; font-size: 0.75rem; color: black; border-top: 1px solid #f0f0f0; padding-top: 15px; text-align: left;">© 2026<br>BUILD: 2.0.4-RELEASE | VIGO, SPAIN</div></div></div></footer></div><div class="footer__social"></div><button id="backToTop" class="footer__bttop" aria-label="Back to top" title="Back to top"><svg width="20" height="20"><use xlink:href="https://ccarmox.github.io/assets/svg/svg-map.svg#toparrow"/></svg></button></div></footer><script defer="defer" src="https://ccarmox.github.io/assets/js/scripts.min.js?v=ffcbea6c02c8178d10092962b235a5b0"></script><script>window.publiiThemeMenuConfig={mobileMenuMode:'sidebar',animationSpeed:300,submenuWidth: 'auto',doubleClickTime:500,mobileMenuExpandableSubmenus:true,relatedContainerForOverlayMenuSelector:'.top'};</script><script>var images = document.querySelectorAll('img[loading]');
+        for (var i = 0; i < images.length; i++) {
+            if (images[i].complete) {
+                images[i].classList.add('is-loaded');
+            } else {
+                images[i].addEventListener('load', function () {
+                    this.classList.add('is-loaded');
+                }, false);
+            }
+        }</script></body></html>
