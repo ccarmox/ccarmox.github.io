@@ -1,18 +1,176 @@
-<div class="game-container"><header>
-<h1>🧪 Química</h1>
-</header>
-<div class="stats-bar"><span id="score">Puntos: 0</span> <span id="streak">Racha: 0</span> <span id="lives">❤️❤️❤️</span></div>
-<div class="question-area">
-<div id="instruction" class="instruction">Selecciona la respuesta correcta:</div>
-<div id="display" class="chemical-formula">Cargando...</div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulación química</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --success: #27ae60;
+            --error: #c0392b;
+            --bg: #ecf0f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: #34495e;
+            color: #bdc3c7;
+            font-size: 0.9em;
+        }
+
+        .question-area {
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .chemical-formula {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 20px;
+            height: 60px; /* reserva espacio */
+        }
+
+        .instruction {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            padding: 0 20px 30px;
+        }
+
+        @media (min-width: 500px) {
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        button.option-btn {
+            background: white;
+            border: 2px solid var(--accent);
+            color: var(--primary);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.2s;
+        }
+
+        button.option-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        button.option-btn.correct {
+            background-color: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        button.option-btn.wrong {
+            background-color: var(--error);
+            border-color: var(--error);
+            color: white;
+        }
+
+        .feedback-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            display: none; /* Hidden by default */
+            text-align: center;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+
+        /* Subíndices químicos */
+        sub {
+            font-size: 0.6em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <header>
+        <h1>🧪 Química</h1>
+    </header>
+    
+    <div class="stats-bar">
+        <span id="score">Puntos: 0</span>
+        <span id="streak">Racha: 0</span>
+        <span id="lives">❤️❤️❤️</span>
+    </div>
+
+    <div class="question-area">
+        <div class="instruction" id="instruction">Selecciona la respuesta correcta:</div>
+        <div class="chemical-formula" id="display">Cargando...</div>
+    </div>
+
+    <div class="options-grid" id="options-container">
+        </div>
+
+    <div class="feedback-modal" id="modal">
+        <h2 id="modal-title">¡Correcto!</h2>
+        <p id="modal-msg">Muy bien hecho.</p>
+        <button class="next-btn" onclick="nextQuestion()">Siguiente Pregunta</button>
+    </div>
 </div>
-<div id="options-container" class="options-grid"></div>
-<div id="modal" class="feedback-modal">
-<h2 id="modal-title">¡Correcto!</h2>
-<p id="modal-msg">Muy bien hecho.</p>
-<button class="next-btn">Siguiente Pregunta</button></div>
-</div>
-<p>
+
 <script>
     // --- BASE DE DATOS DE PREGUNTAS ---
     // Tipos: 1 = Fórmula a Nombre, 2 = Nombre a Fórmula
