@@ -176,109 +176,130 @@
     // Tipos: 1 = Fórmula a Nombre, 2 = Nombre a Fórmula
     const database = [
     // --- ÓXIDOS METÁLICOS Y NO METÁLICOS ---
-    { type: 1, val: "Na2O", correct: "Óxido de sodio", distractors: ["Dióxido de sodio", "Óxido de disodio(I)", "Óxido sódico"] },
-    { type: 1, val: "FeO", correct: "Óxido de hierro(II)", distractors: ["Óxido de hierro(III)", "Monóxido de dihierro", "Óxido férrico"] },
-    { type: 1, val: "Fe2O3", correct: "Trióxido de dihierro", distractors: ["Óxido de hierro(II)", "Dióxido de trihierro", "Óxido ferroso"] },
-    { type: 1, val: "CaO", correct: "Óxido de calcio", distractors: ["Monóxido de dicalcio", "Óxido cálcico(II)", "Calcio oxigenado"] },
-    { type: 1, val: "PbO2", correct: "Dióxido de plomo", distractors: ["Óxido de plomo(II)", "Óxido plumboso", "Monóxido de plomo"] },
-    { type: 1, val: "Cu2O", correct: "Óxido de cobre(I)", distractors: ["Óxido de cobre(II)", "Dióxido de cobre", "Óxido cúprico"] },
-    { type: 1, val: "Al2O3", correct: "Óxido de aluminio", distractors: ["Trióxido de aluminio", "Óxido de aluminio(II)", "Alúmina"] }, // Nota: Trióxido de dialuminio también es correcto, pero Óxido de aluminio es la preferida IUPAC al tener valencia única.
+    { type: 1, val: "Na2O", correct: "Óxido de sodio", distractors: ["Dióxido de sodio", "Óxido de disodio(I)", "Óxido sódico"], error_explanation: ""},
+    { type: 1, val: "FeO", correct: "Óxido de hierro(II)", distractors: ["Óxido de hierro(III)", "Monóxido de dihierro", "Óxido férrico"] , error_explanation: "" },
+    { type: 1, val: "Fe2O3", correct: "Trióxido de dihierro", distractors: ["Óxido de hierro(II)", "Dióxido de trihierro", "Óxido ferroso"] , error_explanation: "" },
+    { type: 1, val: "CaO", correct: "Óxido de calcio", distractors: ["Monóxido de dicalcio", "Óxido cálcico(II)", "Calcio oxigenado"] , error_explanation: "" },
+    { type: 1, val: "PbO2", correct: "Dióxido de plomo", distractors: ["Óxido de plomo(II)", "Óxido plumboso", "Monóxido de plomo"] , error_explanation: "" },
+    { type: 1, val: "Cu2O", correct: "Óxido de cobre(I)", distractors: ["Óxido de cobre(II)", "Dióxido de cobre", "Óxido cúprico"] , error_explanation: "" },
+    { type: 1, val: "Al2O3", correct: "Óxido de aluminio", distractors: ["Trióxido de aluminio", "Óxido de aluminio(II)", "Alúmina"] , error_explanation: "" }, // Nota: Trióxido de dialuminio también es correcto, pero Óxido de aluminio es la preferida IUPAC al tener valencia única.
     
-    { type: 2, val: "Dióxido de carbono", correct: "CO2", distractors: ["CO", "C2O", "C2O3"] },
-    { type: 2, val: "Óxido de azufre(VI)", correct: "SO3", distractors: ["SO2", "S2O3", "SO"] },
-    { type: 2, val: "Monóxido de carbono", correct: "CO", distractors: ["CO2", "C2O", "CoO"] },
-    { type: 2, val: "Óxido de dicloro", correct: "Cl2O", distractors: ["ClO2", "Cl2O3", "ClO"] },
-    { type: 2, val: "Heptóxido de dimanganeso", correct: "Mn2O7", distractors: ["Mn7O2", "MnO7", "Mn2O5"] },
-    { type: 2, val: "Óxido de plata", correct: "Ag2O", distractors: ["AgO", "AgO2", "PlO"] },
+    { type: 2, val: "Dióxido de carbono", correct: "CO2", distractors: ["CO", "C2O", "C2O3"] , error_explanation: "" },
+    { type: 2, val: "Óxido de azufre(VI)", correct: "SO3", distractors: ["SO2", "S2O3", "SO"] , error_explanation: "" },
+    { type: 2, val: "Monóxido de carbono", correct: "CO", distractors: ["CO2", "C2O", "CoO"] , error_explanation: "" },
+    { type: 2, val: "Óxido de dicloro", correct: "Cl2O", distractors: ["ClO2", "Cl2O3", "ClO"] , error_explanation: "" },
+    { type: 2, val: "Heptóxido de dimanganeso", correct: "Mn2O7", distractors: ["Mn7O2", "MnO7", "Mn2O5"] , error_explanation: "" },
+    { type: 2, val: "Óxido de plata", correct: "Ag2O", distractors: ["AgO", "AgO2", "PlO"] , error_explanation: "" },
 
     // --- HIDRUROS (Metálicos y Volátiles/Ácidos) ---
-    { type: 1, val: "LiH", correct: "Hidruro de litio", distractors: ["Hidróxido de litio", "Monohidruro de dilitio", "Litio hídrico"] },
-    { type: 1, val: "CaH2", correct: "Dihidruro de calcio", distractors: ["Hidruro de calcio(I)", "Hidróxido cálcico", "Calciohidruro"] },
-    { type: 1, val: "AlH3", correct: "Hidruro de aluminio", distractors: ["Trihidruro de monoaluminio", "Aluminio hídrico", "Hidróxido de aluminio"] },
-    { type: 1, val: "KH", correct: "Hidruro de potasio", distractors: ["Hidruro potásico(I)", "Kaliohidruro", "Hidróxido de potasio"] },
-    { type: 1, val: "H2S", correct: "Sulfuro de hidrógeno", distractors: ["Hidruro de azufre", "Ácido sulfúrico", "Sulfato de hidrógeno"] },
+    { type: 1, val: "LiH", correct: "Hidruro de litio", distractors: ["Hidróxido de litio", "Monohidruro de dilitio", "Litio hídrico"] , error_explanation: "" },
+    { type: 1, val: "CaH2", correct: "Dihidruro de calcio", distractors: ["Hidruro de calcio(I)", "Hidróxido cálcico", "Calciohidruro"] , error_explanation: "" },
+    { type: 1, val: "AlH3", correct: "Hidruro de aluminio", distractors: ["Trihidruro de monoaluminio", "Aluminio hídrico", "Hidróxido de aluminio"] , error_explanation: "" },
+    { type: 1, val: "KH", correct: "Hidruro de potasio", distractors: ["Hidruro potásico(I)", "Kaliohidruro", "Hidróxido de potasio"] , error_explanation: "" },
+    { type: 1, val: "H2S", correct: "Sulfuro de hidrógeno", distractors: ["Hidruro de azufre", "Ácido sulfúrico", "Sulfato de hidrógeno"] , error_explanation: "" },
     
-    { type: 2, val: "Amoníaco (Azano)", correct: "NH3", distractors: ["NH4", "NH2", "N3H"] },
-    { type: 2, val: "Ácido clorhídrico (disolución)", correct: "HCl", distractors: ["ClH", "H2Cl", "ClOH"] },
-    { type: 2, val: "Metano", correct: "CH4", distractors: ["CH3", "C2H6", "MH4"] },
-    { type: 2, val: "Hidruro de hierro(III)", correct: "FeH3", distractors: ["FeH2", "Fe3H", "FeOH3"] },
-    { type: 2, val: "Fluoruro de hidrógeno", correct: "HF", distractors: ["FH", "H2F", "HFL"] },
+    { type: 2, val: "Amoníaco (Azano)", correct: "NH3", distractors: ["NH4", "NH2", "N3H"] , error_explanation: "" },
+    { type: 2, val: "Ácido clorhídrico (disolución)", correct: "HCl", distractors: ["ClH", "H2Cl", "ClOH"] , error_explanation: "" },
+    { type: 2, val: "Metano", correct: "CH4", distractors: ["CH3", "C2H6", "MH4"] , error_explanation: "" },
+    { type: 2, val: "Hidruro de hierro(III)", correct: "FeH3", distractors: ["FeH2", "Fe3H", "FeOH3"] , error_explanation: "" },
+    { type: 2, val: "Fluoruro de hidrógeno", correct: "HF", distractors: ["FH", "H2F", "HFL"] , error_explanation: "" },
 
     // --- HIDRÓXIDOS ---
-    { type: 1, val: "NaOH", correct: "Hidróxido de sodio", distractors: ["Óxido de sodio", "Hidruro de sodio", "Sodiohidróxido"] },
-    { type: 1, val: "Mg(OH)2", correct: "Dihidróxido de magnesio", distractors: ["Hidróxido de magnesio(I)", "Hidruro de magnesio", "Óxido de magnesio"] },
-    { type: 1, val: "KOH", correct: "Hidróxido de potasio", distractors: ["Hidróxido potásico(I)", "Óxido de potasio", "Potasa"] },
-    { type: 1, val: "Ba(OH)2", correct: "Hidróxido de bario", distractors: ["Dihidróxido de bario(II)", "Óxido de bario", "Bariohidróxido"] },
+    { type: 1, val: "NaOH", correct: "Hidróxido de sodio", distractors: ["Óxido de sodio", "Hidruro de sodio", "Sodiohidróxido"] , error_explanation: "" },
+    { type: 1, val: "Mg(OH)2", correct: "Dihidróxido de magnesio", distractors: ["Hidróxido de magnesio(I)", "Hidruro de magnesio", "Óxido de magnesio"] , error_explanation: "" },
+    { type: 1, val: "KOH", correct: "Hidróxido de potasio", distractors: ["Hidróxido potásico(I)", "Óxido de potasio", "Potasa"] , error_explanation: "" },
+    { type: 1, val: "Ba(OH)2", correct: "Hidróxido de bario", distractors: ["Dihidróxido de bario(II)", "Óxido de bario", "Bariohidróxido"] , error_explanation: "" },
     
-    { type: 2, val: "Hidróxido de hierro(III)", correct: "Fe(OH)3", distractors: ["Fe(OH)2", "Fe3OH", "FeOH"] },
-    { type: 2, val: "Hidróxido de aluminio", correct: "Al(OH)3", distractors: ["AlOH3", "Al(OH)2", "Al3OH"] },
-    { type: 2, val: "Dihidróxido de plomo", correct: "Pb(OH)2", distractors: ["Pb(OH)4", "Pb2OH", "Pl(OH)2"] },
-    { type: 2, val: "Hidróxido de litio", correct: "LiOH", distractors: ["Li(OH)2", "LiHO", "LOH"] },
+    { type: 2, val: "Hidróxido de hierro(III)", correct: "Fe(OH)3", distractors: ["Fe(OH)2", "Fe3OH", "FeOH"] , error_explanation: "" },
+    { type: 2, val: "Hidróxido de aluminio", correct: "Al(OH)3", distractors: ["AlOH3", "Al(OH)2", "Al3OH"] , error_explanation: "" },
+    { type: 2, val: "Dihidróxido de plomo", correct: "Pb(OH)2", distractors: ["Pb(OH)4", "Pb2OH", "Pl(OH)2"] , error_explanation: "" },
+    { type: 2, val: "Hidróxido de litio", correct: "LiOH", distractors: ["Li(OH)2", "LiHO", "LOH"] , error_explanation: "" },
 
     // --- SALES BINARIAS (Neutras) ---
-    { type: 1, val: "NaCl", correct: "Cloruro de sodio", distractors: ["Clorato de sodio", "Sodiocloruro", "Clorito sódico"] },
-    { type: 1, val: "FeS", correct: "Sulfuro de hierro(II)", distractors: ["Sulfuro de hierro(III)", "Sulfato de hierro", "Sulfuro ferroso"] },
-    { type: 1, val: "K2S", correct: "Sulfuro de potasio", distractors: ["Sulfato de potasio", "Disulfuro de potasio", "Sulfuro potásico(II)"] },
-    { type: 1, val: "CaBr2", correct: "Bromuro de calcio", distractors: ["Dibromuro de calcio(II)", "Bromito de calcio", "Calcio bromado"] },
-    { type: 1, val: "AlCl3", correct: "Tricloruro de aluminio", distractors: ["Cloruro de aluminio(III)", "Clorato de aluminio", "Aluminio clorado"] },
-    { type: 1, val: "KI", correct: "Yoduro de potasio", distractors: ["Yodato de potasio", "Yoduro potásico(I)", "Potasio yodado"] },
+    { type: 1, val: "NaCl", correct: "Cloruro de sodio", distractors: ["Clorato de sodio", "Sodiocloruro", "Clorito sódico"] , error_explanation: "" },
+    { type: 1, val: "FeS", correct: "Sulfuro de hierro(II)", distractors: ["Sulfuro de hierro(III)", "Sulfato de hierro", "Sulfuro ferroso"] , error_explanation: "" },
+    { type: 1, val: "K2S", correct: "Sulfuro de potasio", distractors: ["Sulfato de potasio", "Disulfuro de potasio", "Sulfuro potásico(II)"] , error_explanation: "" },
+    { type: 1, val: "CaBr2", correct: "Bromuro de calcio", distractors: ["Dibromuro de calcio(II)", "Bromito de calcio", "Calcio bromado"] , error_explanation: "" },
+    { type: 1, val: "AlCl3", correct: "Tricloruro de aluminio", distractors: ["Cloruro de aluminio(III)", "Clorato de aluminio", "Aluminio clorado"] , error_explanation: "" },
+    { type: 1, val: "KI", correct: "Yoduro de potasio", distractors: ["Yodato de potasio", "Yoduro potásico(I)", "Potasio yodado"] , error_explanation: "" },
 
-    { type: 2, val: "Tricloruro de hierro", correct: "FeCl3", distractors: ["FeCl2", "Fe3Cl", "Cl3Fe"] },
-    { type: 2, val: "Fluoruro de calcio", correct: "CaF2", distractors: ["CaF", "Ca2F", "CF2"] },
-    { type: 2, val: "Sulfuro de plomo(IV)", correct: "PbS2", distractors: ["PbS", "Pb2S", "Pb4S"] },
-    { type: 2, val: "Bromuro de cobre(II)", correct: "CuBr2", distractors: ["CuBr", "Cu2Br", "CoBr2"] },
-    { type: 2, val: "Cloruro de magnesio", correct: "MgCl2", distractors: ["MgCl", "Mg2Cl", "MnCl2"] },
+    { type: 2, val: "Tricloruro de hierro", correct: "FeCl3", distractors: ["FeCl2", "Fe3Cl", "Cl3Fe"] , error_explanation: "" },
+    { type: 2, val: "Fluoruro de calcio", correct: "CaF2", distractors: ["CaF", "Ca2F", "CF2"] , error_explanation: "" },
+    { type: 2, val: "Sulfuro de plomo(IV)", correct: "PbS2", distractors: ["PbS", "Pb2S", "Pb4S"] , error_explanation: "" },
+    { type: 2, val: "Bromuro de cobre(II)", correct: "CuBr2", distractors: ["CuBr", "Cu2Br", "CoBr2"] , error_explanation: "" },
+    { type: 2, val: "Cloruro de magnesio", correct: "MgCl2", distractors: ["MgCl", "Mg2Cl", "MnCl2"] , error_explanation: "" },
     
     // --- MÁS ÓXIDOS (Elementos "trampa" y valencias variables) ---
-    { type: 1, val: "Au2O3", correct: "Óxido de oro(III)", distractors: ["Óxido de oro(II)", "Trióxido de oro", "Óxido áureo"] },
-    { type: 1, val: "HgO", correct: "Óxido de mercurio(II)", distractors: ["Óxido de mercurio(I)", "Monóxido de mercurio", "Óxido mercúrico"] },
-    { type: 1, val: "ZnO", correct: "Óxido de zinc", distractors: ["Óxido de zinc(II)", "Monóxido de zinc", "Óxido zíncico"] }, // Zinc solo tiene valencia 2, no se pone (II)
-    { type: 1, val: "SnO2", correct: "Dióxido de estaño", distractors: ["Óxido de estaño(II)", "Óxido de estaño", "Dióxido de monoestaño"] },
-    { type: 1, val: "NiO", correct: "Óxido de níquel(II)", distractors: ["Óxido de níquel(III)", "Monóxido de níquel", "Óxido niqueloso"] },
+    { type: 1, val: "Au2O3", correct: "Óxido de oro(III)", distractors: ["Óxido de oro(II)", "Trióxido de oro", "Óxido áureo"] , error_explanation: "" },
+    { type: 1, val: "HgO", correct: "Óxido de mercurio(II)", distractors: ["Óxido de mercurio(I)", "Monóxido de mercurio", "Óxido mercúrico"] , error_explanation: "" },
+    { type: 1, val: "ZnO", correct: "Óxido de zinc", distractors: ["Óxido de zinc(II)", "Monóxido de zinc", "Óxido zíncico"] , error_explanation: "" }, // Zinc solo tiene valencia 2, no se pone (II)
+    { type: 1, val: "SnO2", correct: "Dióxido de estaño", distractors: ["Óxido de estaño(II)", "Óxido de estaño", "Dióxido de monoestaño"] , error_explanation: "" },
+    { type: 1, val: "NiO", correct: "Óxido de níquel(II)", distractors: ["Óxido de níquel(III)", "Monóxido de níquel", "Óxido niqueloso"] , error_explanation: "" },
     
-    { type: 2, val: "Óxido de platino(IV)", correct: "PtO2", distractors: ["PtO4", "Pt2O4", "PtO"] },
-    { type: 2, val: "Óxido de litio", correct: "Li2O", distractors: ["LiO", "LiO2", "Li2O3"] },
-    { type: 2, val: "Trióxido de azufre", correct: "SO3", distractors: ["SO2", "S3O", "S2O3"] }, // Muy común confundirlo con el sulfito
-    { type: 2, val: "Óxido de cromo(III)", correct: "Cr2O3", distractors: ["CrO3", "Cr3O2", "CrO"] },
+    { type: 2, val: "Óxido de platino(IV)", correct: "PtO2", distractors: ["PtO4", "Pt2O4", "PtO"] , error_explanation: "" },
+    { type: 2, val: "Óxido de litio", correct: "Li2O", distractors: ["LiO", "LiO2", "Li2O3"] , error_explanation: "" },
+    { type: 2, val: "Trióxido de azufre", correct: "SO3", distractors: ["SO2", "S3O", "S2O3"] , error_explanation: "" }, // Muy común confundirlo con el sulfito
+    { type: 2, val: "Óxido de cromo(III)", correct: "Cr2O3", distractors: ["CrO3", "Cr3O2", "CrO"] , error_explanation: "" },
 
     // --- PERÓXIDOS (Opcional en 3º ESO, pero habitual: Agua Oxigenada) ---
-    { type: 1, val: "H2O2", correct: "Peróxido de hidrógeno", distractors: ["Dióxido de dihidrógeno", "Óxido de agua", "Hidruro de oxígeno"] },
-    { type: 2, val: "Peróxido de sodio", correct: "Na2O2", distractors: ["NaO", "Na2O", "NaO2"] },
+    { type: 1, val: "H2O2", correct: "Peróxido de hidrógeno", distractors: ["Dióxido de dihidrógeno", "Óxido de agua", "Hidruro de oxígeno"] , error_explanation: "" },
+    { type: 2, val: "Peróxido de sodio", correct: "Na2O2", distractors: ["NaO", "Na2O", "NaO2"] , error_explanation: "" },
 
     // --- MÁS HIDRUROS Y COMPUESTOS CON NOMBRES PROPIOS ---
-    { type: 1, val: "PH3", correct: "Fosfano", distractors: ["Fosfina", "Trihidruro de fósforo", "Fósforo hídrico"] }, // IUPAC prefiere Fosfano
-    { type: 1, val: "SiH4", correct: "Silano", distractors: ["Tetrahidruro de silicio", "Silicio hídrico", "Hidruro de silicio"] },
-    { type: 1, val: "SbH3", correct: "Estibano", distractors: ["Antimonano", "Hidruro de antimonio", "Estibina"] },
-    { type: 1, val: "HBr(aq)", correct: "Ácido bromhídrico", distractors: ["Bromuro de hidrógeno", "Hidruro de bromo", "Bromhidruro"] }, // En disolución acuosa
-    { type: 1, val: "H2Se", correct: "Seleniuro de hidrógeno", distractors: ["Hidruro de selenio", "Ácido selenhídrico", "Seleniuro hídrico"] }, // En estado gaseoso
+    { type: 1, val: "PH3", correct: "Fosfano", distractors: ["Fosfina", "Trihidruro de fósforo", "Fósforo hídrico"] , error_explanation: "" }, // IUPAC prefiere Fosfano
+    { type: 1, val: "SiH4", correct: "Silano", distractors: ["Tetrahidruro de silicio", "Silicio hídrico", "Hidruro de silicio"] , error_explanation: "" },
+    { type: 1, val: "SbH3", correct: "Estibano", distractors: ["Antimonano", "Hidruro de antimonio", "Estibina"] , error_explanation: "" },
+    { type: 1, val: "HBr(aq)", correct: "Ácido bromhídrico", distractors: ["Bromuro de hidrógeno", "Hidruro de bromo", "Bromhidruro"] , error_explanation: "" }, // En disolución acuosa
+    { type: 1, val: "H2Se", correct: "Seleniuro de hidrógeno", distractors: ["Hidruro de selenio", "Ácido selenhídrico", "Seleniuro hídrico"] , error_explanation: "" }, // En estado gaseoso
 
-    { type: 2, val: "Arsano", correct: "AsH3", distractors: ["ArH3", "AsH4", "AhH3"] },
-    { type: 2, val: "Yoduro de hidrógeno", correct: "HI", distractors: ["H2I", "IH", "HId"] },
-    { type: 2, val: "Tetrahidruro de estaño", correct: "SnH4", distractors: ["SnH2", "ThH4", "Sn4H"] },
+    { type: 2, val: "Arsano", correct: "AsH3", distractors: ["ArH3", "AsH4", "AhH3"] , error_explanation: "" },
+    { type: 2, val: "Yoduro de hidrógeno", correct: "HI", distractors: ["H2I", "IH", "HId"] , error_explanation: "" },
+    { type: 2, val: "Tetrahidruro de estaño", correct: "SnH4", distractors: ["SnH2", "ThH4", "Sn4H"] , error_explanation: "" },
     
     // --- MÁS HIDRÓXIDOS ---
-    { type: 1, val: "Be(OH)2", correct: "Hidróxido de berilio", distractors: ["Dihidróxido de berilio(II)", "Óxido de berilio", "Beriliohidróxido"] },
-    { type: 1, val: "HgOH", correct: "Hidróxido de mercurio(I)", distractors: ["Hidróxido de mercurio(II)", "Hidróxido mercuroso", "Mercurio hidróxido"] },
-    { type: 1, val: "Cd(OH)2", correct: "Hidróxido de cadmio", distractors: ["Hidróxido de cadmio(II)", "Dihidróxido de cadmio", "Cadmio hidroxilado"] },
+    { type: 1, val: "Be(OH)2", correct: "Hidróxido de berilio", distractors: ["Dihidróxido de berilio(II)", "Óxido de berilio", "Beriliohidróxido"] , error_explanation: "" },
+    { type: 1, val: "HgOH", correct: "Hidróxido de mercurio(I)", distractors: ["Hidróxido de mercurio(II)", "Hidróxido mercuroso", "Mercurio hidróxido"] , error_explanation: "" },
+    { type: 1, val: "Cd(OH)2", correct: "Hidróxido de cadmio", distractors: ["Hidróxido de cadmio(II)", "Dihidróxido de cadmio", "Cadmio hidroxilado"] , error_explanation: "" },
     
-    { type: 2, val: "Hidróxido de cesio", correct: "CsOH", distractors: ["CeOH", "Cs(OH)2", "CoH"] },
-    { type: 2, val: "Hidróxido de níquel(III)", correct: "Ni(OH)3", distractors: ["Ni(OH)2", "Ni3OH", "NOH3"] },
-    { type: 2, val: "Dihidróxido de cobalto", correct: "Co(OH)2", distractors: ["Co(OH)3", "Cb(OH)2", "Co2OH"] },
+    { type: 2, val: "Hidróxido de cesio", correct: "CsOH", distractors: ["CeOH", "Cs(OH)2", "CoH"] , error_explanation: "" },
+    { type: 2, val: "Hidróxido de níquel(III)", correct: "Ni(OH)3", distractors: ["Ni(OH)2", "Ni3OH", "NOH3"] , error_explanation: "" },
+    { type: 2, val: "Dihidróxido de cobalto", correct: "Co(OH)2", distractors: ["Co(OH)3", "Cb(OH)2", "Co2OH"] , error_explanation: "" },
 
     // --- MÁS SALES BINARIAS (Neutras y Volátiles) ---
-    { type: 1, val: "AgCl", correct: "Cloruro de plata", distractors: ["Cloruro de plata(I)", "Clorato de plata", "Plata clorada"] }, // Plata valencia única, no lleva (I)
-    { type: 1, val: "AuBr3", correct: "Tribromuro de oro", distractors: ["Bromuro de oro", "Bromuro de oro(I)", "Óxido de oro"] },
-    { type: 1, val: "CCl4", correct: "Tetracloruro de carbono", distractors: ["Cloruro de carbono(IV)", "Metano clorado", "Carbocloruro"] }, // Sal volátil muy común
-    { type: 1, val: "CS2", correct: "Disulfuro de carbono", distractors: ["Sulfuro de carbono", "Carburo de azufre", "Sulfato de carbono"] },
-    { type: 1, val: "MgCl2", correct: "Dicloruro de magnesio", distractors: ["Cloruro de magnesio(II)", "Clorito de magnesio", "Magnesio diclorado"] },
-    { type: 1, val: "KCN", correct: "Cianuro de potasio", distractors: ["Cianato de potasio", "Nitruro de carbono y potasio", "Carbonitruro potásico"] }, // Un poco avanzada pero a veces sale como curiosidad
+    { type: 1, val: "AgCl", correct: "Cloruro de plata", distractors: ["Cloruro de plata(I)", "Clorato de plata", "Plata clorada"] , error_explanation: "" }, // Plata valencia única, no lleva (I)
+    { type: 1, val: "AuBr3", correct: "Tribromuro de oro", distractors: ["Bromuro de oro", "Bromuro de oro(I)", "Óxido de oro"] , error_explanation: "" },
+    { type: 1, val: "CCl4", correct: "Tetracloruro de carbono", distractors: ["Cloruro de carbono(IV)", "Metano clorado", "Carbocloruro"] , error_explanation: "" }, // Sal volátil muy común
+    { type: 1, val: "CS2", correct: "Disulfuro de carbono", distractors: ["Sulfuro de carbono", "Carburo de azufre", "Sulfato de carbono"] , error_explanation: "" },
+    { type: 1, val: "MgCl2", correct: "Dicloruro de magnesio", distractors: ["Cloruro de magnesio(II)", "Clorito de magnesio", "Magnesio diclorado"] , error_explanation: "" },
+    { type: 1, val: "KCN", correct: "Cianuro de potasio", distractors: ["Cianato de potasio", "Nitruro de carbono y potasio", "Carbonitruro potásico"] , error_explanation: "" }, // Un poco avanzada pero a veces sale como curiosidad
 
-    { type: 2, val: "Nitruro de magnesio", correct: "Mg3N2", distractors: ["MgN", "Mg2N3", "Mn3N2"] }, // Cruce de valencias difícil (Mg=2, N=3)
-    { type: 2, val: "Sulfuro de plomo(II)", correct: "PbS", distractors: ["PbS2", "Pb2S", "PbSO3"] }, // Simplificación Pb2S2 -> PbS
-    { type: 2, val: "Fluoruro de azufre(VI)", correct: "SF6", distractors: ["SF4", "S6F", "FS6"] },
-    { type: 2, val: "Yoduro de mercurio(II)", correct: "HgI2", distractors: ["HgI", "Hg2I", "MeI2"] },
-    { type: 2, val: "Carburo de calcio", correct: "CaC2", distractors: ["CaC", "Ca2C", "CCa"] },
-    { type: 2, val: "Cloruro de amonio", correct: "NH4Cl", distractors: ["NH3Cl", "NCl3", "AmCl"] } // Trampa clásica: catión amonio
+    // Óxidos de Nitrógeno (Casos especiales y muy comunes)
+    { type: 1, val: "N2O3", correct: "Trióxido de dinitrógeno", distractors: ["Óxido de nitrógeno(II)", "Óxido nitroso", "Trióxido de nitrógeno"] , error_explanation: "" },
+    { type: 1, val: "N2O5", correct: "Pentaóxido de dinitrógeno", distractors: ["Óxido de nitrógeno(III)", "Pentóxido de nitrógeno", "Óxido nítrico"] , error_explanation: "" },
+    { type: 2, val: "Dióxido de nitrógeno", correct: "NO2", distractors: ["N2O", "NO", "N2O4"] , error_explanation: "" },
+
+    // Hidruros y Ácidos Hidrácidos
+    { type: 1, val: "HI(acuoso)", correct: "Ácido yodhídrico", distractors: ["Yoduro de hidrógeno", "Hidruro de yodo", "Yodhidruro"] , error_explanation: "" },
+    { type: 2, val: "Borano", correct: "BH3", distractors: ["B3H", "BH", "B(OH)3"] , error_explanation: "" },
+    { type: 2, val: "Seleniuro de hidrógeno", correct: "H2Se", distractors: ["SeH2", "HSe", "SeH"] , error_explanation: "" },
+
+    // Sales Binarias (Más combinaciones de valencias)
+    { type: 1, val: "CuS", correct: "Sulfuro de cobre(II)", distractors: ["Sulfuro de cobre(I)", "Monosulfuro de cobre", "Sulfuro cúprico"] , error_explanation: "" },
+    { type: 1, val: "MnBr2", correct: "Dibromuro de manganeso", distractors: ["Bromuro de manganeso(III)", "Bromuro magnésico", "MnBr"] , error_explanation: "" },
+    { type: 2, val: "Tricloruro de cobalto", correct: "CoCl3", distractors: ["CoCl2", "Co3Cl", "Cl3Co"] , error_explanation: "" },
+    { type: 2, val: "Fluoruro de plata", correct: "AgF", distractors: ["AgF2", "Ag2F", "PlF"] , error_explanation: "" },
+
+    // Sales Volátiles (No metal + No metal)
+    { type: 1, val: "IF7", correct: "Heptafluoruro de yodo", distractors: ["Fluoruro de yodo(VII)", "Heptafluoro de yodo", "Yoduro de flúor"] , error_explanation: "" },
+    { type: 2, val: "Trisulfuro de difósforo", correct: "P2S3", distractors: ["P3S2", "PS3", "P2S"] , error_explanation: "" },
+    { type: 2, val: "Tetranitruro de trisilicio", correct: "Si3N4", distractors: ["Si4N3", "SiN", "Si3N"] , error_explanation: "" },
+
+    { type: 2, val: "Nitruro de magnesio", correct: "Mg3N2", distractors: ["MgN", "Mg2N3", "Mn3N2"] , error_explanation: "" }, // Cruce de valencias difícil (Mg=2, N=3)
+    { type: 2, val: "Sulfuro de plomo(II)", correct: "PbS", distractors: ["PbS2", "Pb2S", "PbSO3"] , error_explanation: "" }, // Simplificación Pb2S2 -> PbS
+    { type: 2, val: "Fluoruro de azufre(VI)", correct: "SF6", distractors: ["SF4", "S6F", "FS6"] , error_explanation: "" },
+    { type: 2, val: "Yoduro de mercurio(II)", correct: "HgI2", distractors: ["HgI", "Hg2I", "MeI2"] , error_explanation: "" },
+    { type: 2, val: "Carburo de calcio", correct: "CaC2", distractors: ["CaC", "Ca2C", "CCa"] , error_explanation: "" },
+    { type: 2, val: "Cloruro de amonio", correct: "NH4Cl", distractors: ["NH3Cl", "NCl3", "AmCl"] , error_explanation: ""} // Trampa clásica: catión amonio
 ];
 
     // --- LÓGICA DEL JUEGO ---
@@ -401,7 +422,7 @@
         } else {
             title.innerText = "Incorrecto";
             title.style.color = "var(--error)";
-            let correctText = (currentQuestion.type === 2) ? currentQuestion.correct : currentQuestion.correct; // Sin formato HTML para alert simple
+            let correctText = ((currentQuestion.type === 2) ? currentQuestion.correct : currentQuestion.correct) + "     " + currentQuestion.error_explanation; // Sin formato HTML para alert simple
             msg.innerHTML = `La respuesta correcta era: <strong>${correctText}</strong>`;
         }
         btn.onclick = nextQuestion;
