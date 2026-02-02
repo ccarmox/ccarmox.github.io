@@ -1,0 +1,264 @@
+<div class="game-container"><header>
+<h1>🧪 Química</h1>
+</header>
+<div class="stats-bar"><span id="score">Puntos: 0</span> <span id="streak">Racha: 0</span> <span id="lives">❤️❤️❤️</span></div>
+<div class="question-area">
+<div id="instruction" class="instruction">Selecciona la respuesta correcta:</div>
+<div id="display" class="chemical-formula">Cargando...</div>
+</div>
+<div id="options-container" class="options-grid"></div>
+<div id="modal" class="feedback-modal">
+<h2 id="modal-title">¡Correcto!</h2>
+<p id="modal-msg">Muy bien hecho.</p>
+<button class="next-btn">Siguiente Pregunta</button></div>
+</div>
+<p>
+<script>
+    // --- BASE DE DATOS DE PREGUNTAS ---
+    // Tipos: 1 = Fórmula a Nombre, 2 = Nombre a Fórmula
+    const database = [
+    // --- ÓXIDOS METÁLICOS Y NO METÁLICOS ---
+    { type: 1, val: "Na2O", correct: "Óxido de sodio", distractors: ["Dióxido de sodio", "Óxido de disodio(I)", "Óxido sódico"] },
+    { type: 1, val: "FeO", correct: "Óxido de hierro(II)", distractors: ["Óxido de hierro(III)", "Monóxido de dihierro", "Óxido férrico"] },
+    { type: 1, val: "Fe2O3", correct: "Trióxido de dihierro", distractors: ["Óxido de hierro(II)", "Dióxido de trihierro", "Óxido ferroso"] },
+    { type: 1, val: "CaO", correct: "Óxido de calcio", distractors: ["Monóxido de dicalcio", "Óxido cálcico(II)", "Calcio oxigenado"] },
+    { type: 1, val: "PbO2", correct: "Dióxido de plomo", distractors: ["Óxido de plomo(II)", "Óxido plumboso", "Monóxido de plomo"] },
+    { type: 1, val: "Cu2O", correct: "Óxido de cobre(I)", distractors: ["Óxido de cobre(II)", "Dióxido de cobre", "Óxido cúprico"] },
+    { type: 1, val: "Al2O3", correct: "Óxido de aluminio", distractors: ["Trióxido de aluminio", "Óxido de aluminio(II)", "Alúmina"] }, // Nota: Trióxido de dialuminio también es correcto, pero Óxido de aluminio es la preferida IUPAC al tener valencia única.
+    
+    { type: 2, val: "Dióxido de carbono", correct: "CO2", distractors: ["CO", "C2O", "C2O3"] },
+    { type: 2, val: "Óxido de azufre(VI)", correct: "SO3", distractors: ["SO2", "S2O3", "SO"] },
+    { type: 2, val: "Monóxido de carbono", correct: "CO", distractors: ["CO2", "C2O", "CoO"] },
+    { type: 2, val: "Óxido de dicloro", correct: "Cl2O", distractors: ["ClO2", "Cl2O3", "ClO"] },
+    { type: 2, val: "Heptóxido de dimanganeso", correct: "Mn2O7", distractors: ["Mn7O2", "MnO7", "Mn2O5"] },
+    { type: 2, val: "Óxido de plata", correct: "Ag2O", distractors: ["AgO", "AgO2", "PlO"] },
+
+    // --- HIDRUROS (Metálicos y Volátiles/Ácidos) ---
+    { type: 1, val: "LiH", correct: "Hidruro de litio", distractors: ["Hidróxido de litio", "Monohidruro de dilitio", "Litio hídrico"] },
+    { type: 1, val: "CaH2", correct: "Dihidruro de calcio", distractors: ["Hidruro de calcio(I)", "Hidróxido cálcico", "Calciohidruro"] },
+    { type: 1, val: "AlH3", correct: "Hidruro de aluminio", distractors: ["Trihidruro de monoaluminio", "Aluminio hídrico", "Hidróxido de aluminio"] },
+    { type: 1, val: "KH", correct: "Hidruro de potasio", distractors: ["Hidruro potásico(I)", "Kaliohidruro", "Hidróxido de potasio"] },
+    { type: 1, val: "H2S", correct: "Sulfuro de hidrógeno", distractors: ["Hidruro de azufre", "Ácido sulfúrico", "Sulfato de hidrógeno"] },
+    
+    { type: 2, val: "Amoníaco (Azano)", correct: "NH3", distractors: ["NH4", "NH2", "N3H"] },
+    { type: 2, val: "Ácido clorhídrico (disolución)", correct: "HCl", distractors: ["ClH", "H2Cl", "ClOH"] },
+    { type: 2, val: "Metano", correct: "CH4", distractors: ["CH3", "C2H6", "MH4"] },
+    { type: 2, val: "Hidruro de hierro(III)", correct: "FeH3", distractors: ["FeH2", "Fe3H", "FeOH3"] },
+    { type: 2, val: "Fluoruro de hidrógeno", correct: "HF", distractors: ["FH", "H2F", "HFL"] },
+
+    // --- HIDRÓXIDOS ---
+    { type: 1, val: "NaOH", correct: "Hidróxido de sodio", distractors: ["Óxido de sodio", "Hidruro de sodio", "Sodiohidróxido"] },
+    { type: 1, val: "Mg(OH)2", correct: "Dihidróxido de magnesio", distractors: ["Hidróxido de magnesio(I)", "Hidruro de magnesio", "Óxido de magnesio"] },
+    { type: 1, val: "KOH", correct: "Hidróxido de potasio", distractors: ["Hidróxido potásico(I)", "Óxido de potasio", "Potasa"] },
+    { type: 1, val: "Ba(OH)2", correct: "Hidróxido de bario", distractors: ["Dihidróxido de bario(II)", "Óxido de bario", "Bariohidróxido"] },
+    
+    { type: 2, val: "Hidróxido de hierro(III)", correct: "Fe(OH)3", distractors: ["Fe(OH)2", "Fe3OH", "FeOH"] },
+    { type: 2, val: "Hidróxido de aluminio", correct: "Al(OH)3", distractors: ["AlOH3", "Al(OH)2", "Al3OH"] },
+    { type: 2, val: "Dihidróxido de plomo", correct: "Pb(OH)2", distractors: ["Pb(OH)4", "Pb2OH", "Pl(OH)2"] },
+    { type: 2, val: "Hidróxido de litio", correct: "LiOH", distractors: ["Li(OH)2", "LiHO", "LOH"] },
+
+    // --- SALES BINARIAS (Neutras) ---
+    { type: 1, val: "NaCl", correct: "Cloruro de sodio", distractors: ["Clorato de sodio", "Sodiocloruro", "Clorito sódico"] },
+    { type: 1, val: "FeS", correct: "Sulfuro de hierro(II)", distractors: ["Sulfuro de hierro(III)", "Sulfato de hierro", "Sulfuro ferroso"] },
+    { type: 1, val: "K2S", correct: "Sulfuro de potasio", distractors: ["Sulfato de potasio", "Disulfuro de potasio", "Sulfuro potásico(II)"] },
+    { type: 1, val: "CaBr2", correct: "Bromuro de calcio", distractors: ["Dibromuro de calcio(II)", "Bromito de calcio", "Calcio bromado"] },
+    { type: 1, val: "AlCl3", correct: "Tricloruro de aluminio", distractors: ["Cloruro de aluminio(III)", "Clorato de aluminio", "Aluminio clorado"] },
+    { type: 1, val: "KI", correct: "Yoduro de potasio", distractors: ["Yodato de potasio", "Yoduro potásico(I)", "Potasio yodado"] },
+
+    { type: 2, val: "Tricloruro de hierro", correct: "FeCl3", distractors: ["FeCl2", "Fe3Cl", "Cl3Fe"] },
+    { type: 2, val: "Fluoruro de calcio", correct: "CaF2", distractors: ["CaF", "Ca2F", "CF2"] },
+    { type: 2, val: "Sulfuro de plomo(IV)", correct: "PbS2", distractors: ["PbS", "Pb2S", "Pb4S"] },
+    { type: 2, val: "Bromuro de cobre(II)", correct: "CuBr2", distractors: ["CuBr", "Cu2Br", "CoBr2"] },
+    { type: 2, val: "Cloruro de magnesio", correct: "MgCl2", distractors: ["MgCl", "Mg2Cl", "MnCl2"] },
+    
+    // --- MÁS ÓXIDOS (Elementos "trampa" y valencias variables) ---
+    { type: 1, val: "Au2O3", correct: "Óxido de oro(III)", distractors: ["Óxido de oro(II)", "Trióxido de oro", "Óxido áureo"] },
+    { type: 1, val: "HgO", correct: "Óxido de mercurio(II)", distractors: ["Óxido de mercurio(I)", "Monóxido de mercurio", "Óxido mercúrico"] },
+    { type: 1, val: "ZnO", correct: "Óxido de zinc", distractors: ["Óxido de zinc(II)", "Monóxido de zinc", "Óxido zíncico"] }, // Zinc solo tiene valencia 2, no se pone (II)
+    { type: 1, val: "SnO2", correct: "Dióxido de estaño", distractors: ["Óxido de estaño(II)", "Óxido de estaño", "Dióxido de monoestaño"] },
+    { type: 1, val: "NiO", correct: "Óxido de níquel(II)", distractors: ["Óxido de níquel(III)", "Monóxido de níquel", "Óxido niqueloso"] },
+    
+    { type: 2, val: "Óxido de platino(IV)", correct: "PtO2", distractors: ["PtO4", "Pt2O4", "PtO"] },
+    { type: 2, val: "Óxido de litio", correct: "Li2O", distractors: ["LiO", "LiO2", "Li2O3"] },
+    { type: 2, val: "Trióxido de azufre", correct: "SO3", distractors: ["SO2", "S3O", "S2O3"] }, // Muy común confundirlo con el sulfito
+    { type: 2, val: "Óxido de cromo(III)", correct: "Cr2O3", distractors: ["CrO3", "Cr3O2", "CrO"] },
+
+    // --- PERÓXIDOS (Opcional en 3º ESO, pero habitual: Agua Oxigenada) ---
+    { type: 1, val: "H2O2", correct: "Peróxido de hidrógeno", distractors: ["Dióxido de dihidrógeno", "Óxido de agua", "Hidruro de oxígeno"] },
+    { type: 2, val: "Peróxido de sodio", correct: "Na2O2", distractors: ["NaO", "Na2O", "NaO2"] },
+
+    // --- MÁS HIDRUROS Y COMPUESTOS CON NOMBRES PROPIOS ---
+    { type: 1, val: "PH3", correct: "Fosfano", distractors: ["Fosfina", "Trihidruro de fósforo", "Fósforo hídrico"] }, // IUPAC prefiere Fosfano
+    { type: 1, val: "SiH4", correct: "Silano", distractors: ["Tetrahidruro de silicio", "Silicio hídrico", "Hidruro de silicio"] },
+    { type: 1, val: "SbH3", correct: "Estibano", distractors: ["Antimonano", "Hidruro de antimonio", "Estibina"] },
+    { type: 1, val: "HBr(aq)", correct: "Ácido bromhídrico", distractors: ["Bromuro de hidrógeno", "Hidruro de bromo", "Bromhidruro"] }, // En disolución acuosa
+    { type: 1, val: "H2Se", correct: "Seleniuro de hidrógeno", distractors: ["Hidruro de selenio", "Ácido selenhídrico", "Seleniuro hídrico"] }, // En estado gaseoso
+
+    { type: 2, val: "Arsano", correct: "AsH3", distractors: ["ArH3", "AsH4", "AhH3"] },
+    { type: 2, val: "Yoduro de hidrógeno", correct: "HI", distractors: ["H2I", "IH", "HId"] },
+    { type: 2, val: "Tetrahidruro de estaño", correct: "SnH4", distractors: ["SnH2", "ThH4", "Sn4H"] },
+    
+    // --- MÁS HIDRÓXIDOS ---
+    { type: 1, val: "Be(OH)2", correct: "Hidróxido de berilio", distractors: ["Dihidróxido de berilio(II)", "Óxido de berilio", "Beriliohidróxido"] },
+    { type: 1, val: "HgOH", correct: "Hidróxido de mercurio(I)", distractors: ["Hidróxido de mercurio(II)", "Hidróxido mercuroso", "Mercurio hidróxido"] },
+    { type: 1, val: "Cd(OH)2", correct: "Hidróxido de cadmio", distractors: ["Hidróxido de cadmio(II)", "Dihidróxido de cadmio", "Cadmio hidroxilado"] },
+    
+    { type: 2, val: "Hidróxido de cesio", correct: "CsOH", distractors: ["CeOH", "Cs(OH)2", "CoH"] },
+    { type: 2, val: "Hidróxido de níquel(III)", correct: "Ni(OH)3", distractors: ["Ni(OH)2", "Ni3OH", "NOH3"] },
+    { type: 2, val: "Dihidróxido de cobalto", correct: "Co(OH)2", distractors: ["Co(OH)3", "Cb(OH)2", "Co2OH"] },
+
+    // --- MÁS SALES BINARIAS (Neutras y Volátiles) ---
+    { type: 1, val: "AgCl", correct: "Cloruro de plata", distractors: ["Cloruro de plata(I)", "Clorato de plata", "Plata clorada"] }, // Plata valencia única, no lleva (I)
+    { type: 1, val: "AuBr3", correct: "Tribromuro de oro", distractors: ["Bromuro de oro", "Bromuro de oro(I)", "Óxido de oro"] },
+    { type: 1, val: "CCl4", correct: "Tetracloruro de carbono", distractors: ["Cloruro de carbono(IV)", "Metano clorado", "Carbocloruro"] }, // Sal volátil muy común
+    { type: 1, val: "CS2", correct: "Disulfuro de carbono", distractors: ["Sulfuro de carbono", "Carburo de azufre", "Sulfato de carbono"] },
+    { type: 1, val: "MgCl2", correct: "Dicloruro de magnesio", distractors: ["Cloruro de magnesio(II)", "Clorito de magnesio", "Magnesio diclorado"] },
+    { type: 1, val: "KCN", correct: "Cianuro de potasio", distractors: ["Cianato de potasio", "Nitruro de carbono y potasio", "Carbonitruro potásico"] }, // Un poco avanzada pero a veces sale como curiosidad
+
+    { type: 2, val: "Nitruro de magnesio", correct: "Mg3N2", distractors: ["MgN", "Mg2N3", "Mn3N2"] }, // Cruce de valencias difícil (Mg=2, N=3)
+    { type: 2, val: "Sulfuro de plomo(II)", correct: "PbS", distractors: ["PbS2", "Pb2S", "PbSO3"] }, // Simplificación Pb2S2 -> PbS
+    { type: 2, val: "Fluoruro de azufre(VI)", correct: "SF6", distractors: ["SF4", "S6F", "FS6"] },
+    { type: 2, val: "Yoduro de mercurio(II)", correct: "HgI2", distractors: ["HgI", "Hg2I", "MeI2"] },
+    { type: 2, val: "Carburo de calcio", correct: "CaC2", distractors: ["CaC", "Ca2C", "CCa"] },
+    { type: 2, val: "Cloruro de amonio", correct: "NH4Cl", distractors: ["NH3Cl", "NCl3", "AmCl"] } // Trampa clásica: catión amonio
+];
+
+    // --- LÓGICA DEL JUEGO ---
+    let score = 0;
+    let streak = 0;
+    let lives = 3;
+    let currentQuestion = null;
+
+    // Formatear números para que parezcan subíndices químicos (CO2 -> CO₂)
+    function formatChemical(str) {
+        return str.replace(/(\d+)/g, '<sub>$1</sub>');
+    }
+
+    function startGame() {
+        score = 0;
+        streak = 0;
+        lives = 3;
+        updateStats();
+        loadRandomQuestion();
+    }
+
+    function updateStats() {
+        document.getElementById('score').innerText = `Puntos: ${score}`;
+        document.getElementById('streak').innerText = `Racha: ${streak}`;
+        let hearts = "";
+        for(let i=0; i<lives; i++) hearts += "❤️";
+        document.getElementById('lives').innerText = hearts;
+    }
+
+    function loadRandomQuestion() {
+        if (lives <= 0) return gameOver();
+
+        // Elegir pregunta al azar
+        const randomIndex = Math.floor(Math.random() * database.length);
+        const data = database[randomIndex];
+        currentQuestion = data;
+
+        // Mezclar opciones (correcta + distractores)
+        let options = [...data.distractors, data.correct];
+        options.sort(() => Math.random() - 0.5);
+
+        // Renderizar en el DOM
+        const display = document.getElementById('display');
+        const instruction = document.getElementById('instruction');
+        const container = document.getElementById('options-container');
+
+        container.innerHTML = ''; // Limpiar botones anteriores
+
+        if (data.type === 1) {
+            // Caso: Formula -> Nombre
+            instruction.innerText = "¿Cuál es el nombre correcto de este compuesto?";
+            display.innerHTML = formatChemical(data.val);
+        } else {
+            // Caso: Nombre -> Formula
+            instruction.innerText = "¿Cuál es la fórmula de este compuesto?";
+            display.innerHTML = data.val;
+        }
+
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            // Si la opción es una fórmula, formatearla, si es texto, dejarlo tal cual
+            btn.innerHTML = (data.type === 2) ? formatChemical(opt) : opt;
+            btn.onclick = () => checkAnswer(opt, btn);
+            container.appendChild(btn);
+        });
+
+        // Ocultar modal
+        document.getElementById('modal').style.display = 'none';
+    }
+
+    function checkAnswer(selected, btnElement) {
+        // Desactivar todos los botones para evitar doble clic
+        const allBtns = document.querySelectorAll('.option-btn');
+        allBtns.forEach(b => b.disabled = true);
+
+        const isCorrect = (selected === currentQuestion.correct);
+
+        if (isCorrect) {
+            btnElement.classList.add('correct');
+            score += 10 + (streak * 2); // Bonus por racha
+            streak++;
+            showModal(true);
+        } else {
+            btnElement.classList.add('wrong');
+            lives--;
+            streak = 0;
+            // Resaltar la correcta
+            allBtns.forEach(b => {
+                let textCheck = (currentQuestion.type === 2) ? formatChemical(currentQuestion.correct) : currentQuestion.correct;
+                // Pequeño truco para comparar el innerHTML formateado
+                if(b.innerHTML === textCheck) b.classList.add('correct');
+            });
+            showModal(false);
+        }
+        updateStats();
+    }
+
+    function showModal(isWin) {
+        const modal = document.getElementById('modal');
+        const title = document.getElementById('modal-title');
+        const msg = document.getElementById('modal-msg');
+        const btn = document.querySelector('.next-btn');
+
+        modal.style.display = 'flex';
+        
+        if (lives <= 0) {
+            title.innerText = "¡Juego Terminado!";
+            title.style.color = "var(--error)";
+            msg.innerText = `Puntuación final: ${score}`;
+            btn.innerText = "Reiniciar Juego";
+            btn.onclick = startGame;
+            return;
+        }
+
+        if (isWin) {
+            title.innerText = "¡Correcto!";
+            title.style.color = "var(--success)";
+            msg.innerText = "¡Sigue así!";
+        } else {
+            title.innerText = "Incorrecto";
+            title.style.color = "var(--error)";
+            let correctText = (currentQuestion.type === 2) ? currentQuestion.correct : currentQuestion.correct; // Sin formato HTML para alert simple
+            msg.innerHTML = `La respuesta correcta era: <strong>${correctText}</strong>`;
+        }
+        btn.onclick = nextQuestion;
+    }
+
+    function nextQuestion() {
+        loadRandomQuestion();
+    }
+
+    function gameOver() {
+        showModal(false); // Ya manejado dentro de showModal con lives <= 0
+    }
+
+    // Iniciar
+    startGame();
+
+</script>
+</p>
