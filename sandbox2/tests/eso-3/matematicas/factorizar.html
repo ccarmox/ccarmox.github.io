@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cargando...</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script id="database" type="application/json">
+{
+  "titulo": "Factorización",
+  "descripcion": "Factoriza estos números",
+  "vidas": 3,
+  "help_title": "Factorización",
+  "help_content": "Recuerda las normas:\nDivisible entre -> Regla\n2 -> El número termina en 0 o cifra par (2, 4, 6, 8...)\n3 -> La suma de sus cifras es un múltiplo de 3\n5 -> Termina en 0 o 5",
+  "database": [
+    {
+      "val1": "Cuál es la descomposición de:",
+      "val2": "30",
+      "correct": "2*3*5",
+      "distractors": ["2*2*3", "2*5*7", "2*15"],
+      "error_explanation": "Recuerda dividir sucesivamente por los números primos más pequeños (2, 3, 5...)."
+    },
+    {
+      "val1": "Cuál es la descomposición de:",
+      "val2": "124",
+      "correct": "2^2*31",
+      "distractors": ["2*62", "2^3*31", "2^2*17"],
+      "error_explanation": "El número 124 es 4 * 31, y 4 se debe expresar como 2 al cuadrado."
+    },
+    {
+      "val1": "¿Cuál es el desglose en factores primos de:",
+      "val2": "500",
+      "correct": "2^2*5^3",
+      "distractors": ["2^3*5^2", "10^2*5", "2^2*5^2"],
+      "error_explanation": "500 es 4 * 125, lo que equivale a 2^2 * 5^3."
+    },
+    {
+      "val1": "Factoriza el siguiente número:",
+      "val2": "1024",
+      "correct": "2^10",
+      "distractors": ["2^9", "4^5", "2^11"],
+      "error_explanation": "1024 es una potencia pura de 2 (2 elevado a 10)."
+    },
+    {
+      "val1": "Calcula la descomposición de:",
+      "val2": "1331",
+      "correct": "11^3",
+      "distractors": ["11^2", "7*11*13", "11*121"],
+      "error_explanation": "1331 es el cubo de 11. Es un caso común en ejercicios de potencias."
+    },
+    {
+      "val1": "Halla los factores primos de:",
+      "val2": "2100",
+      "correct": "2^2*3*5^2*7",
+      "distractors": ["2*3*5*7", "2^2*5^2*21", "2^3*3*5*7"],
+      "error_explanation": "Asegúrate de no dejar números compuestos como el 21 en la respuesta final."
+    },
+    {
+      "val1": "Descomposición factorizada de:",
+      "val2": "12375",
+      "correct": "3^2*5^3*11",
+      "distractors": ["3*5^4*11", "3^2*5^2*11", "5^3*99"],
+      "error_explanation": "Al dividir 12375 entre 3 dos veces y entre 5 tres veces, obtenemos 11."
+    },
+    {
+      "val1": "Cuál es la descomposición de:",
+      "val2": "16500",
+      "correct": "2^2*3*5^3*11",
+      "distractors": ["2^2*3^2*5^2*11", "2*3*5^4*11", "2^2*3*5^3*7"],
+      "error_explanation": "Divide primero por 100 (2^2 * 5^2) y luego factoriza el 165 restante."
+    },
+    {
+      "val1": "Halla la descomposición factorial de:",
+      "val2": "225",
+      "correct": "3^2*5^2",
+      "distractors": ["3*5^3", "15^2", "3^3*5^2"],
+      "error_explanation": "225 es 15 al cuadrado. Como 15 es 3*5, al elevarlo al cuadrado ambos factores se elevan a 2."
+    },
+    {
+      "val1": "Factoriza el siguiente número:",
+      "val2": "512",
+      "correct": "2^9",
+      "distractors": ["2^8", "2^10", "8^3"],
+      "error_explanation": "512 es una potencia de 2. Es la mitad de 1024, por lo tanto es 2 elevado a 9."
+    },
+    {
+      "val1": "¿Cuál es el desglose en factores primos de:",
+      "val2": "729",
+      "correct": "3^6",
+      "distractors": ["3^5", "9^3", "3^7"],
+      "error_explanation": "729 es 9 al cubo o 27 al cuadrado. En ambos casos, su única base prima es 3."
+    },
+    {
+      "val1": "Descomposición factorizada de:",
+      "val2": "1089",
+      "correct": "3^2*11^2",
+      "distractors": ["3^3*11", "33^2", "3^2*7^2"],
+      "error_explanation": "La suma de sus cifras (1+0+8+9=18) indica que es divisible por 9 (3^2). El resultado, 121, es 11^2."
+    },
+    {
+      "val1": "Cuál es la descomposición de:",
+      "val2": "2744",
+      "correct": "2^3*7^3",
+      "distractors": ["2^4*7^2", "14^3", "2^3*7^2"],
+      "error_explanation": "Este número es 14 al cubo. Debes descomponer el 14 en 2*7 y aplicar el exponente a ambos."
+    },
+    {
+      "val1": "Halla los factores primos de:",
+      "val2": "4356",
+      "correct": "2^2*3^2*11^2",
+      "distractors": ["2^2*3^3*11", "66^2", "2^3*3^2*11^2"],
+      "error_explanation": "4356 es el cuadrado de 66. Factoriza 66 (2*3*11) y eleva cada factor al cuadrado."
+    },
+    {
+      "val1": "Calcula la descomposición de:",
+      "val2": "6860",
+      "correct": "2^2*5*7^3",
+      "distractors": ["2*5^2*7^3", "2^2*5*7^2", "4*5*343"],
+      "error_explanation": "Primero divide por 10 (2*5). Luego reconoce que 686 es 2 * 343, y 343 es 7^3."
+    },
+    {
+      "val1": "Factoriza el número:",
+      "val2": "11979",
+      "correct": "3^2*11^3",
+      "distractors": ["3^3*11^2", "3^2*11^2*13", "9*1331"],
+      "error_explanation": "Divide por 9 (3^2) y obtendrás 1331, que es un cubo perfecto muy conocido (11^3)."
+    },
+    {
+      "val1": "¿Cuál es la descomposición de:",
+      "val2": "14400",
+      "correct": "2^6*3^2*5^2",
+      "distractors": ["2^4*3^2*5^2", "120^2", "2^6*3*5^3"],
+      "error_explanation": "14400 es 144 * 100. 144 es 2^4 * 3^2 y 100 es 2^2 * 5^2. Suma los exponentes de las bases comunes."
+    },
+    {
+      "val1": "Descomposición factorizada de:",
+      "val2": "18018",
+      "correct": "2*3^2*7*11*13",
+      "distractors": ["2*3*7*11*13", "2*3^2*1001", "2*3^2*7^2*11"],
+      "error_explanation": "Divide por 18 (2 * 3^2) y te quedará 1001, cuyos factores son 7, 11 y 13."
+    },
+    {
+      "val1": "Factoriza el siguiente número:",
+      "val2": "144",
+      "correct": "2^4*3^2",
+      "distractors": ["2^3*3^3", "12^2", "2^4*3"],
+      "error_explanation": "144 es 12 al cuadrado. Como 12 es 2^2 * 3, al elevarlo al cuadrado obtienes los exponentes duplicados."
+    },
+    {
+      "val1": "Halla los factores primos de:",
+      "val2": "243",
+      "correct": "3^5",
+      "distractors": ["3^4*7", "9*27", "3^6"],
+      "error_explanation": "243 es una potencia pura de 3 (3*3*3*3*3)."
+    },
+    {
+      "val1": "Cuál es la descomposición de:",
+      "val2": "343",
+      "correct": "7^3",
+      "distractors": ["7^2*3", "49*7", "7^4"],
+      "error_explanation": "343 es el cubo de 7. Es importante memorizar las primeras potencias de 7."
+    },
+    {
+      "val1": "Descomposición factorizada de:",
+      "val2": "1001",
+      "correct": "7*11*13",
+      "distractors": ["7*143", "11*91", "3*17*19"],
+      "error_explanation": "1001 es el producto de tres números primos consecutivos (7, 11 y 13). Es clave para números con cifras repetidas."
+    },
+    {
+      "val1": "Calcula la descomposición de:",
+      "val2": "2025",
+      "correct": "3^4*5^2",
+      "distractors": ["3^3*5^3", "9^2*5^2", "3^4*5^3"],
+      "error_explanation": "Termina en 25 (múltiplo de 5^2) y la suma de sus cifras es 9 (múltiplo de 9 o 3^2)."
+    },
+    {
+      "val1": "Factoriza el siguiente número:",
+      "val2": "3600",
+      "correct": "2^4*3^2*5^2",
+      "distractors": ["2^3*3^3*5^2", "60^2", "2^5*3*5^2"],
+      "error_explanation": "3600 es 36 * 100. Descompón 36 (2^2*3^2) y 100 (2^2*5^2) y suma los exponentes."
+    },
+    {
+      "val1": "¿Cuál es el desglose en factores primos de:",
+      "val2": "4900",
+      "correct": "2^2*5^2*7^2",
+      "distractors": ["7^2*100", "2*5*7^3", "2^3*5*7^2"],
+      "error_explanation": "Separa el número en 49 (7^2) y 100 (2^2*5^2)."
+    },
+    {
+      "val1": "Halla los factores primos de:",
+      "val2": "8000",
+      "correct": "2^6*5^3",
+      "distractors": ["2^5*5^4", "20^3", "2^3*10^3"],
+      "error_explanation": "8000 es 8 (2^3) por 1000 (2^3*5^3). Suma los exponentes de base 2."
+    },
+    {
+      "val1": "Factoriza el número:",
+      "val2": "10125",
+      "correct": "3^4*5^3",
+      "distractors": ["3^3*5^4", "3^5*5^2", "9*15^3"],
+      "error_explanation": "La suma de cifras es 9, así que es divisible por 9 (3^2). Termina en 125, así que es divisible por 5^3."
+    },
+    {
+      "val1": "Cuál es la descomposición de:",
+      "val2": "15625",
+      "correct": "5^6",
+      "distractors": ["5^5", "25^3", "5^4*3^2"],
+      "error_explanation": "Es una potencia pura de 5. Observa que 15625 es el cuadrado de 125."
+    },
+    {
+      "val1": "Calcula la descomposición de:",
+      "val2": "17640",
+      "correct": "2^3*3^2*5*7^2",
+      "distractors": ["2^2*3^3*5*7^2", "2^3*3^2*5*49", "2^4*3*5*7^2"],
+      "error_explanation": "Separa el 0 final (2*5). Queda 1764, que es un cuadrado perfecto (42^2)."
+    },
+    {
+      "val1": "Descomposición factorizada de:",
+      "val2": "19600",
+      "correct": "2^4*5^2*7^2",
+      "distractors": ["14^2*100", "2^3*5^2*7^3", "2^2*5^4*7^2"],
+      "error_explanation": "Reconoce el 196 como 14^2 y el 100 como 10^2. Factoriza las bases y agrupa."
+    }
+]
+}
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="../../../components/layout.js"></script>
+    <script>
+        // Le decimos al script que cargue los datos de 'uno'
+        loadPageConfig(document.getElementById('database').textContent);
+    </script>
+</body>
+
+</html>

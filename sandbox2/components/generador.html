@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Enlaces Seguros</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --success: #10b981;
+            --bg: #0f172a;
+            --card: #1e293b;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: white;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+
+        h1 { font-size: 1.5rem; margin-bottom: 1.5rem; color: #818cf8; }
+
+        .group { margin-bottom: 1.2rem; }
+
+        label { display: block; font-size: 0.9rem; margin-bottom: 0.5rem; color: #94a3b8; }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            background: #334155;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover { background: #4338ca; transform: translateY(-1px); }
+
+        .output-box {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #475569;
+            display: none;
+        }
+
+        .result-item {
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .result-item p {
+            margin: 0;
+            font-size: 0.85rem;
+            font-family: monospace;
+            word-break: break-all;
+            padding-right: 80px;
+        }
+
+        .copy-badge {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--success);
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>🚀 Generador de URL Encriptada</h1>
+    
+    <div class="group">
+        <label>URL de destino (donde se leerán los datos):</label>
+        <input type="url" id="baseUrl" placeholder="https://tusitio.com/ver">
+    </div>
+
+    <div class="group">
+        <label>Texto o JSON a encriptar:</label>
+        <textarea id="texto" rows="4" placeholder='{"mensaje": "Hola secreto"}'></textarea>
+    </div>
+
+    <button onclick="generarTodo()">Generar Enlace Seguro</button>
+
+    <div id="output" class="output-box">
+        <div class="group">
+            <label>1. Contraseña Generada (key):</label>
+            <div class="result-item">
+                <p id="resClave"></p>
+                <span class="copy-badge" onclick="copiar('resClave')">Copiar</span>
+            </div>
+        </div>
+
+        <div class="group">
+            <label>2. Texto Encriptado:</label>
+            <div class="result-item">
+                <p id="resEncriptado"></p>
+                <span class="copy-badge" onclick="copiar('resEncriptado')">Copiar</span>
+            </div>
+        </div>
+
+        <div class="group">
+            <label>3. URL Final (con Key incluida):</label>
+            <div class="result-item">
+                <p id="resUrl"></p>
+                <span class="copy-badge" onclick="copiar('resUrl')">Copiar</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function generarPassword(longitud = 16) {
+        const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+        let pass = '';
+        for (let i = 0; i < longitud; i++) {
+            pass += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+        }
+        return pass;
+    }
+
+    function generarTodo() {
+        const baseUrl = document.getElementById('baseUrl').value;
+        const texto = document.getElementById('texto').value;
+
+        if (!baseUrl || !texto) {
+            alert("Por favor completa la URL y el texto.");
+            return;
+        }
+
+        // 1. Generar contraseña aleatoria
+        const clave = generarPassword();
+        
+        // 2. Encriptar el texto
+        const encriptado = CryptoJS.AES.encrypt(texto, clave).toString();
+
+        // Proceso de desencriptación
+        const bytes = CryptoJS.AES.decrypt(encriptado, clave);
+
+        // Convertir los bytes a texto legible (UTF-8)
+        const decripted_data = bytes.toString(CryptoJS.enc.Utf8);
+
+        console.log(texto);
+        console.log(decripted_data);
+        
+        // 3. Construir URL (Escapando el texto encriptado por seguridad)
+        const urlFinal = `${baseUrl}?key=${encodeURIComponent(clave)}`;
+
+        // Mostrar resultados
+        document.getElementById('resClave').innerText = clave;
+        document.getElementById('resEncriptado').innerText = encriptado;
+        document.getElementById('resUrl').innerText = urlFinal;
+        document.getElementById('output').style.display = 'block';
+    }
+
+    function copiar(id) {
+        const texto = document.getElementById(id).innerText;
+        navigator.clipboard.writeText(texto);
+        alert("Copiado al portapapeles");
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="main-title">Formulación química</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --success: #27ae60;
+            --error: #c0392b;
+            --bg: #ecf0f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: #34495e;
+            color: #bdc3c7;
+            font-size: 0.9em;
+        }
+
+        .question-area {
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .chemical-formula {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 20px;
+            height: 60px;
+        }
+
+        .instruction {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            padding: 0 20px 30px;
+        }
+
+        @media (min-width: 500px) {
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        button.option-btn {
+            background: white;
+            border: 2px solid var(--accent);
+            color: var(--primary);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.2s;
+        }
+
+        button.option-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        button.option-btn.correct {
+            background-color: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        button.option-btn.wrong {
+            background-color: var(--error);
+            border-color: var(--error);
+            color: white;
+        }
+
+        .feedback-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            display: none;
+            text-align: center;
+        }
+
+        /* Estilo contenedor botones modal */
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+
+        .next-btn {
+            background: var(--primary);
+        }
+        
+        .share-btn {
+            background: var(--accent);
+            display: none; /* Oculto por defecto */
+        }
+
+        sub {
+            font-size: 0.6em;
+        }
+
+        .context-area {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .context-area h3 {
+            margin: 0 0 5px 0;
+            color: var(--accent);
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .context-area p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #7f8c8d;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <header>
+        <h1 id="main-description">🧪 Química</h1>
+    </header>
+    
+    <div class="stats-bar">
+        <span id="score">Puntos: 0</span>
+        <span id="streak">Racha: 0</span>
+        <span id="lives">❤️❤️❤️</span>
+    </div>
+
+    <div class="context-area">
+        <h3 id="help-title">Tema: Formulación</h3>
+        <p id="help-desc">Selecciona la opción correcta.</p>
+    </div>
+
+    <div class="question-area">
+        <div class="instruction" id="instruction">Selecciona la respuesta correcta:</div>
+        <div class="chemical-formula" id="display">Cargando...</div>
+    </div>
+
+    <div class="options-grid" id="options-container">
+    </div>
+
+    <div class="feedback-modal" id="modal">
+        <h2 id="modal-title">¡Correcto!</h2>
+        <p id="modal-msg">Muy bien hecho.</p>
+        
+        <div class="modal-buttons">
+            <button id="action-btn" class="modal-btn next-btn" onclick="nextQuestion()">Siguiente Pregunta</button>
+            <button id="share-btn" class="modal-btn share-btn" onclick="shareScore()">📤 Compartir</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- BASE DE DATOS DE PREGUNTAS ---
+    const json_data = window.json_data;
+
+    const ejemplo = [
+        { val1: "¿Cuál es el nombre correcto de este compuesto?", val2: "Na2O", correct: "Óxido de sodio", distractors: ["Dióxido de sodio", "Óxido de disodio(I)", "Óxido sódico"], error_explanation: ""},
+    ];
+
+    // --- LÓGICA DEL JUEGO ---
+    let score = 0;
+    let streak = 0;
+    let lives = 0;
+    let currentQuestion = null;
+
+    function formatear(str) {
+        return str
+    .replace(/_(\d+)/g, '<sub>$1</sub>')  // Cambia _2 por <sub>2</sub>
+    .replace(/\^(\d+)/g, '<sup>$1</sup>'); // Cambia ^2 por <sup>2</sup>
+    }
+
+    function startGame() {
+        score = 0;
+        streak = 0;
+        // Comprobación de seguridad por si json_data no ha cargado aún
+        lives = (json_data && json_data.vidas) ? json_data.vidas : 3;
+
+        if(json_data) {
+            document.getElementById('help-title').innerText = json_data.help_title || "Tema";
+            document.getElementById('help-desc').innerText = json_data.help_content || "Instrucción";
+        }
+
+        updateStats();
+        loadRandomQuestion();
+    }
+
+    function updateStats() {
+        document.getElementById('score').innerText = `Puntos: ${score}`;
+        document.getElementById('streak').innerText = `Racha: ${streak}`;
+        let hearts = "";
+        for(let i=0; i<lives; i++) hearts += "❤️";
+        document.getElementById('lives').innerText = hearts;
+    }
+
+    function loadRandomQuestion() {
+        if (lives <= 0) return gameOver();
+
+        // Elegir pregunta al azar
+        const database = (json_data && json_data.database) ? json_data.database : ejemplo;
+        const randomIndex = Math.floor(Math.random() * database.length);
+        const data = database[randomIndex];
+        currentQuestion = data;
+
+        // Mezclar opciones
+        let options = [...data.distractors, data.correct];
+        options.sort(() => Math.random() - 0.5);
+
+        // Renderizar en el DOM
+        const display = document.getElementById('display');
+        const instruction = document.getElementById('instruction');
+        const container = document.getElementById('options-container');
+
+        container.innerHTML = ''; 
+
+        instruction.innerText = data.val1;
+        display.innerHTML = formatear(data.val2);
+
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = formatear(opt);
+            btn.onclick = () => checkAnswer(opt, btn);
+            container.appendChild(btn);
+        });
+
+        document.getElementById('modal').style.display = 'none';
+    }
+
+    function checkAnswer(selected, btnElement) {
+        const allBtns = document.querySelectorAll('.option-btn');
+        allBtns.forEach(b => b.disabled = true);
+
+        const isCorrect = (selected === currentQuestion.correct);
+
+        if (isCorrect) {
+            btnElement.classList.add('correct');
+            score += 10 + (streak * 2); 
+            streak++;
+            showModal(true);
+        } else {
+            btnElement.classList.add('wrong');
+            lives--;
+            streak = 0;
+            allBtns.forEach(b => {
+                let textCheck = (currentQuestion.type === 2) ? formatear(currentQuestion.correct) : currentQuestion.correct;
+                if(b.innerHTML === textCheck) b.classList.add('correct');
+            });
+            showModal(false);
+        }
+        updateStats();
+    }
+
+    function obtenerMensajeMotivador() {
+  const mensajes = [
+    // --- Épicas y Directas ---
+    "¡Exacto! Estás en racha. 🔥",
+    "¡Brillante! Ni Einstein lo habría hecho mejor. 🧠",
+    "¡Eso es! Tu cerebro está a otro nivel hoy. 🚀",
+    "¡Pum! Respuesta perfecta. 🎯",
+    "¡Increíble! Lo haces ver muy fácil. ✨",
+    "¡Diste en el clavo! Sigue así. 🙌",
+    "¡Imparable! Tienes el control total. 💪",
+    
+    // --- Con Humor / Ingeniosas ---
+    "¡Correcto! Tiembla, Google, aquí llega la competencia. 😉",
+    "¿Seguro que no estás haciendo trampa? ¡Eres demasiado bueno! 👀",
+    "Tu teclado debe estar echando humo con tanto acierto. 💨",
+    "¡Boom! Esa respuesta ha sido legendaria. 🎸",
+    "¡Confirmado! Eres la persona más inteligente en esta habitación. (Probablemente). 🏆",
+    "¡Hackeaste el sistema! Ah, no, espera... es que eres muy inteligente. 💻",
+
+    // --- Motivadoras y Cálidas ---
+    "¡Sabía que lo lograrías! Confianza al 100%. 🌟",
+    "Cada acierto te acerca más a la maestría. 🎓",
+    "¡Qué elegancia la de Francia! Respuesta perfecta. 🎩",
+    "¡Wow! Me has dejado sin palabras. 👏",
+    "¡Sigue así! Estás dominando el tema por completo. 🔝",
+    "¡Toma ya! Una más para la colección de victorias. 🏅",
+    "¡Nivel Dios activado! ⚡"
+  ];
+
+  const indiceAleatorio = Math.floor(Math.random() * mensajes.length);
+  return mensajes[indiceAleatorio];
+}
+
+function obtenerMensajeAnimo() {
+  const mensajesAnimo = [
+    // --- Empatía y Apoyo ---
+    "Casi lo tienes, ¡no te rindas ahora! 💪",
+    "¡No pasa nada! De los errores se aprende más que de los aciertos. ✨",
+    "Estuviste muy cerca. ¡Dale otra oportunidad! 🔄",
+    "Incluso los genios fallan a veces. ¡Sigue adelante! 🧠",
+    "Tu cerebro está calentando motores, ¡la próxima es la tuya! 🔥",
+
+    // --- Con un toque de Humor ---
+    "¡Ups! El teclado te ha traicionado, estoy seguro. 👀",
+    "Eso fue un 'ensayo clínico'. Ahora viene la de verdad. 😉",
+    "404: Respuesta no encontrada... pero tu talento sigue ahí. 💻",
+    "El sistema dice que no, pero yo confío en ti. 🤖",
+    "Esa respuesta era demasiado avanzada para esta pregunta. ¡Prueba otra! 🚀",
+
+    // --- Motivación Directa ---
+    "¡A la carga de nuevo! Tú puedes con esto. 🛡️",
+    "Ni un paso atrás, ¡vuelve a intentarlo! 👊",
+    "¡Casi rozas la gloria! Inténtalo una vez más. 🌟",
+    "El éxito es la suma de pequeños intentos. ¡Vas por buen camino! 📈"
+  ];
+
+  const indiceAleatorio = Math.floor(Math.random() * mensajesAnimo.length);
+  return mensajesAnimo[indiceAleatorio];
+}
+
+function obtenerMensajeFinVidas() {
+  const mensajesFin = [
+    // --- Enfoque en el Progreso ---
+    "¡Se acabaron las vidas, pero no el talento! Tómate un respiro y vuelve a por el récord. 🎮",
+    "Has llegado muy lejos en esta ronda. ¡La próxima vez llegarás incluso más allá! 🏆",
+    "Tu puntuación dice 'Fin', pero tu cerebro dice '¡He aprendido algo nuevo!'. 🧠",
+    "¡Game Over! Pero recuerda: cada partida te hace más sabio que la anterior. 📖",
+
+    // --- Estilo Gaming / Épico ---
+    "Incluso los mejores necesitan un 'respawn'. ¡Recarga energías y vuelve a la carga! ⚡",
+    "Has caído con honor. ¡Levántate, sacúdete el polvo y demuestra de qué estás hecho! 🔥",
+    "¿Un descanso? Tu teclado te lo agradecerá, pero yo te espero aquí para la revancha. 🥊",
+    "¡Casi bates tu propia marca! Un intento más y el podio es tuyo. 🎯",
+
+    // --- Motivación y Resiliencia ---
+    "Las vidas son limitadas, pero tu potencial no. ¡Vuelve a intentarlo cuando estés listo! ✨",
+    "No lo veas como un final, sino como un punto de control para volver con más fuerza. 💾",
+    "¡Buen intento! Roma no se construyó en un día, y tu maestría tampoco. 🏛️",
+    "¡Insert Coin emocional! Tienes todo lo necesario para superar este nivel. 🕹️"
+  ];
+
+  const indiceAleatorio = Math.floor(Math.random() * mensajesFin.length);
+  return mensajesFin[indiceAleatorio];
+}
+
+    function showModal(isWin) {
+        const modal = document.getElementById('modal');
+        const title = document.getElementById('modal-title');
+        const msg = document.getElementById('modal-msg');
+        
+        // Seleccionamos los botones por ID
+        const actionBtn = document.getElementById('action-btn');
+        const shareBtn = document.getElementById('share-btn');
+
+        modal.style.display = 'flex';
+        
+        // Resetear visualización del botón compartir (oculto por defecto)
+        shareBtn.style.display = 'none';
+
+        if (lives <= 0) {
+            title.innerText = "Te has quedado sin vidas";
+            title.style.color = "var(--error)";
+            msg.innerText = `Puntuación final: ${score} \n\n${obtenerMensajeFinVidas()}`;
+            
+            // Configurar botón principal para reiniciar
+            actionBtn.innerText = "Reiniciar Juego";
+            actionBtn.onclick = startGame;
+            
+            // Mostrar botón de compartir
+            shareBtn.style.display = 'block';
+            return;
+        }
+
+        if (isWin) {
+            title.innerText = "¡Correcto!";
+            title.style.color = "var(--success)";
+            msg.innerText = obtenerMensajeMotivador();
+        } else {
+            title.innerText = "Incorrecto";
+            title.style.color = "var(--error)";
+            let correctText = currentQuestion.correct + (currentQuestion.error_explanation ? " " + currentQuestion.error_explanation : "");
+            msg.innerHTML = `La respuesta correcta era: <strong>${correctText}</strong><br><br>${obtenerMensajeAnimo()}`;
+        }
+        
+        // Configurar botón principal para siguiente pregunta
+        actionBtn.innerText = "Siguiente Pregunta";
+        actionBtn.onclick = nextQuestion;
+    }
+
+    function formatScoreWithEmoji(score) {
+    let emoji = "";
+
+    if (score >= 500) {
+        emoji = "👑"; // Nivel Dios
+    } else if (score >= 300) {
+        emoji = "🚀"; // Experto
+    } else if (score >= 200) {
+        emoji = "🔥🔥🔥"; // Químico avanzado
+    } else if (score >= 100) {
+        emoji = "🔥🔥"; // Químico avanzado
+    } else if (score >= 80) {
+        emoji = "🔥"; // Buena racha
+    } else if (score >= 30) {
+        emoji = "😎"; // Decente
+    } else if (score > 0) {
+        emoji = "🐣"; // Principiante
+    } else {
+        emoji = "💀"; // 0 puntos
+    }
+
+    return `${score} ${emoji}`;
+}
+
+    function shareScore() {
+
+      const score2 = formatScoreWithEmoji(score)
+
+        const shareData = {
+            title: json_data.titulo,
+            text: `¡He conseguido ${score2} puntos en el juego de ${json_data.help_title}! 🧪 ¿Puedes superarme?`
+        };
+
+        // Intentar usar la API nativa de compartir (Móvil/Tablets)
+        if (navigator.share) {
+            navigator.share(shareData)
+                .catch((error) => console.log('Error compartiendo', error));
+        } else {
+            // Fallback: Copiar al portapapeles si no es compatible (PC)
+            navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`)
+                .then(() => {
+                    const btn = document.getElementById('share-btn');
+                    const originalText = btn.innerText;
+                    btn.innerText = "¡Copiado!";
+                    setTimeout(() => btn.innerText = originalText, 2000);
+                })
+                .catch(err => {
+                    alert("No se pudo compartir automáticamente. Tu puntuación es: " + score);
+                });
+        }
+    }
+
+    function nextQuestion() {
+        loadRandomQuestion();
+    }
+
+    function gameOver() {
+        showModal(false);
+    }
+
+    // Iniciar
+    startGame();
+
+</script>
+</body>
+</html>
