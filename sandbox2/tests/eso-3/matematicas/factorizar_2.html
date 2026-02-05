@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cargando...</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script id="database" type="application/json">
+  {
+  "titulo": "Factorización Avanzada - 3º ESO",
+  "descripcion": "Domina la descomposición numérica y algebraica",
+  "vidas": 3,
+  "help_title": "Estrategias de Factorización",
+  "help_content": "1. Números: Usa las reglas de divisibilidad y recuerda los primos: 2, 3, 5, 7, 11, 13, 17, 19...\n2. Álgebra: Busca identidades notables:\n- Diferencia de cuadrados: a² - b² = (a+b)(a-b)\n- Cuadrado de una suma: a² + 2ab + b² = (a+b)²\n3. Factor Común: Si todos los términos tienen la misma letra, ¡sácala fuera!",
+  "database": [
+    {
+      "val1": "Factoriza el número:",
+      "val2": "2431",
+      "correct": "11*13*17",
+      "distractors": ["11^2*13", "7*11*31", "13*17*19"],
+      "error_explanation": "2431 no es divisible por 2, 3, 5 o 7. Al probar con los siguientes primos obtenemos 11, 13 y 17."
+    },
+    {
+      "val1": "Descompón en factores primos el número:",
+      "val2": "5929",
+      "correct": "7^2*11^2",
+      "distractors": ["7*11^3", "7^3*11", "77^2"],
+      "error_explanation": "5929 es el cuadrado de 77. Como 77 es 7*11, su cuadrado es 7^2 * 11^2."
+    },
+    {
+      "val1": "Factoriza la expresión algebraica:",
+      "val2": "x² - 16",
+      "correct": "(x+4)(x-4)",
+      "distractors": ["(x-4)²", "(x+4)²", "x(x-16)"],
+      "error_explanation": "Es una diferencia de cuadrados: a² - b² = (a+b)(a-b). En este caso, a=x y b=4."
+    },
+    {
+      "val1": "Factoriza sacando factor común:",
+      "val2": "6x³ - 9x²",
+      "correct": "3x²(2x-3)",
+      "distractors": ["3x(2x²-3x)", "x²(6x-9)", "3x²(2x+3)"],
+      "error_explanation": "El máximo común divisor de 6 y 9 es 3, y la menor potencia de x es x². El resultado es 3x²(2x-3)."
+    },
+    {
+      "val1": "Identifica la identidad notable de:",
+      "val2": "x² + 10x + 25",
+      "correct": "(x+5)²",
+      "distractors": ["(x-5)²", "(x+5)(x-5)", "(x+25)²"],
+      "error_explanation": "Es el cuadrado de una suma. El primer término es x², el último es 5² y el medio es 2*x*5."
+    },
+    {
+      "val1": "Factoriza el número:",
+      "val2": "2310",
+      "correct": "2*3*5*7*11",
+      "distractors": ["2^2*3*5*11", "2*3*5*7*13", "10*231"],
+      "error_explanation": "Este número es el producto de los 5 primeros números primos."
+    },
+    {
+      "val1": "Factoriza la expresión:",
+      "val2": "4x² - 12x + 9",
+      "correct": "(2x-3)²",
+      "distractors": ["(2x+3)²", "(2x-3)(2x+3)", "2x(2x-6)+9"],
+      "error_explanation": "Es el cuadrado de una diferencia (a-b)²: (2x)² - 2*(2x)*3 + 3²."
+    },
+    {
+      "val1": "Cuál es la descomposición de:",
+      "val2": "28561",
+      "correct": "13^4",
+      "distractors": ["13^3", "11^4", "17^4"],
+      "error_explanation": "28561 es 169 al cuadrado, y 169 es 13 al cuadrado. Por tanto, es 13 elevado a 4."
+    },
+    {
+      "val1": "Factoriza al máximo:",
+      "val2": "2x² - 18",
+      "correct": "2(x+3)(x-3)",
+      "distractors": ["(2x+6)(x-3)", "2(x-9)", "2(x-3)²"],
+      "error_explanation": "Primero sacamos factor común '2', quedando 2(x²-9). Luego aplicamos diferencia de cuadrados a (x²-9)."
+    },
+    {
+      "val1": "Descomposición de:",
+      "val2": "30030",
+      "correct": "2*3*5*7*11*13",
+      "distractors": ["2*3*5*7*11^2", "2^2*3*5*7*13", "30*1001"],
+      "error_explanation": "Es el producto de los 6 primeros números primos (Primorial de 13)."
+    }
+  ]
+}
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="../../../components/layout.js"
+    onerror="this.onerror=null; let s=document.createElement('script'); s.src='https://ccarmox.github.io/sandbox2/components/layout.js'; document.head.appendChild(s);"></script>
+    <script>
+        // Le decimos al script que cargue los datos de 'uno'
+        loadPageConfig(document.getElementById('database').textContent);
+    </script>
+</body>
+
+</html>

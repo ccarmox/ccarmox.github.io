@@ -49,7 +49,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 0px;
+            padding: 20px;
         }
 
         .game-container {
@@ -142,8 +142,6 @@ button.option-btn:active {
         }
 
         .feedback-modal {
-            box-sizing: border-box;
-            padding: 30px;
             position: absolute;
             top: 0;
             left: 0;
@@ -191,7 +189,7 @@ button.option-btn:active {
 
         .context-area {
             background-color: #f8f9fa;
-            padding: 35px 30px;
+            padding: 15px 20px;
             border-bottom: 1px solid #e0e0e0;
             text-align: start;
         }
@@ -210,13 +208,6 @@ button.option-btn:active {
             color: #7f8c8d;
             line-height: 1.4;
         }
-
-        .play-area {
-    position: relative; /* CRUCIAL: Esto atrapa al modal absoluto */
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* Para llenar el espacio restante si es necesario */
-}
     </style>
 </head>
 <body>
@@ -237,8 +228,6 @@ button.option-btn:active {
         <p id="help-desc">Selecciona la opción correcta.</p>
     </div>
 
-    <div class="play-area">
-    
     <div class="question-area">
         <div class="instruction" id="instruction">Selecciona la respuesta correcta:</div>
         <div class="chemical-formula" id="display">Cargando...</div>
@@ -256,8 +245,6 @@ button.option-btn:active {
             <button id="share-btn" class="modal-btn share-btn" onclick="shareScore()">📤 Compartir</button>
         </div>
     </div>
-
-</div>
 </div>
 
 <script>
@@ -478,7 +465,7 @@ function obtenerMensajeFinVidas() {
             title.innerText = "¡Incorrecto!";
             title.style.color = "var(--error)";
             let correctText = currentQuestion.correct + (currentQuestion.error_explanation ? " " + currentQuestion.error_explanation : "");
-            msg.innerHTML = formatear(`La respuesta correcta era: <strong>${correctText}</strong><br><br>¡Era tu última vida! 💔`);
+            msg.innerHTML = `La respuesta correcta era: <strong>${correctText}</strong><br><br>¡Era tu última vida! 💔`;
             
             actionBtn.innerText = "Ver Puntuación Final";
             actionBtn.onclick = () => showFinalScore(); // Nueva función
@@ -498,7 +485,7 @@ function obtenerMensajeFinVidas() {
             title.innerText = "Incorrecto";
             title.style.color = "var(--error)";
             let correctText = currentQuestion.correct + (currentQuestion.error_explanation ? " " + currentQuestion.error_explanation : "");
-            msg.innerHTML = formatear(`La respuesta correcta era: <strong>${correctText}</strong><br><br>${obtenerMensajeAnimo()}`);
+            msg.innerHTML = `La respuesta correcta era: <strong>${correctText}</strong><br><br>${obtenerMensajeAnimo()}`;
             actionBtn.innerText = "Siguiente Pregunta";
             actionBtn.onclick = nextQuestion;
         }

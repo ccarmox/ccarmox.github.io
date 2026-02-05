@@ -1,3 +1,32 @@
+async function obtenerContenido(rutaLocal, rutaBackup) {
+
+    try {
+        // 1. Intentamos la carga principal
+        let respuesta = await fetch(rutaLocal);
+
+        // Si el archivo no existe (404) o hay error de servidor (500)
+        if (!respuesta.ok) {
+            throw new Error(`Fallo en ruta local: ${respuesta.status}`);
+        }
+
+        return await respuesta.text();
+
+    } catch (error) {
+        console.warn("Ruta local no disponible, intentando backup...", error);
+
+        // 2. Intentamos la carga desde la URL de respaldo
+        try {
+            const respuestaBackup = await fetch(rutaBackup);
+            if (!respuestaBackup.ok) throw new Error("Error en backup");
+            
+            return await respuestaBackup.text();
+        } catch (backupError) {
+            console.error("Ambas rutas han fallado.");
+            return "";
+        }
+    }
+}
+
 async function loadPageConfig(encripted_data) {
   try {
 
@@ -27,8 +56,8 @@ const data = JSON.parse(decripted_data);
     window.json_data = data;
 
     // 1. Cargar la estructura general
-    const responseHtml = await fetch("../../../components/general.html");
-    const htmlText = await responseHtml.text();
+    const htmlText = await obtenerContenido("../../../components/general.html", "https://ccarmox.github.io/sandbox2/components/general.html");
+    console.log(htmlText)
     const container = document.getElementById("app");
     container.innerHTML = htmlText;
 
@@ -54,5 +83,10 @@ const data = JSON.parse(decripted_data);
     });
   } catch (error) {
     console.error("Error cargando la configuración:", error);
+
+    // 1. Cargar la estructura general
+    const htmlText = await obtenerContenido("../../../components/error.html", "https://ccarmox.github.io/sandbox2/components/error.html");
+    const container = document.getElementById("app");
+    container.innerHTML = htmlText;
   }
 }
