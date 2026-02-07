@@ -138,13 +138,15 @@
         <textarea id="texto" rows="4" placeholder='{"user": "admin", "secret": "1234"}'></textarea>
     </div>
 
+    <button onclick="copiarPrompt()" style="margin-bottom: 60px; margin-top: 0px;">Copiar Prompt de ejemplo</button>
+
     <label class="checkbox-group">
         <input type="checkbox" id="encryptCheck" checked onchange="toggleKeyInput()">
-        <span>Encriptar contenido</span>
+        <span>Proteger test con contraseña</span>
     </label>
 
     <div class="group" id="customKeyContainer">
-        <label>Clave de encriptación (dejar vacío para aleatoria):</label>
+        <label>Contraseña (dejar vacío para contraseña aleatoria):</label>
         <input type="text" id="customKey" placeholder="Escribe tu contraseña secreta aquí...">
     </div>
 
@@ -178,6 +180,51 @@
 </div>
 
 <script>
+
+    async function encriptacion() {
+    try {
+        // Importación dinámica
+        const modulo = await import('https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/+esm');
+        
+        // Retornamos la propiedad .default que contiene todas las funciones (AES, SHA256, etc.)
+        return modulo.default.AES;
+    } catch (error) {
+        console.error("No se pudo cargar CryptoJS desde el CDN:", error);
+        
+        // Opcional: Intento de fallback si el primero falla
+        // return await cargarFallback(); 
+    }
+}
+
+    async function obtenerContenido(rutaLocal, rutaBackup) {
+
+    try {
+        // 1. Intentamos la carga principal
+        let respuesta = await fetch(rutaLocal);
+
+        // Si el archivo no existe (404) o hay error de servidor (500)
+        if (!respuesta.ok) {
+            throw new Error(`Fallo en ruta local: ${respuesta.status}`);
+        }
+
+        return await respuesta.text();
+
+    } catch (error) {
+        console.warn("Ruta local no disponible, intentando backup...", error);
+
+        // 2. Intentamos la carga desde la URL de respaldo
+        try {
+            const respuestaBackup = await fetch(rutaBackup);
+            if (!respuestaBackup.ok) throw new Error("Error en backup");
+            
+            return await respuestaBackup.text();
+        } catch (backupError) {
+            console.error("Ambas rutas han fallado.");
+            return "";
+        }
+    }
+}
+
     function toggleKeyInput() {
         const checked = document.getElementById('encryptCheck').checked;
         document.getElementById('customKey').disabled = !checked;
@@ -200,6 +247,14 @@
         a.download = nombre; // Aquí se usa el nombre extraído
         a.click();
         window.URL.revokeObjectURL(url);
+    }
+
+    async function copiarPrompt() {
+
+        const texto = await obtenerContenido("../../../ui/html_web_generador_test_prompt.txt", "https://ccarmox.github.io/sandbox2/ui/html_web_generador_test_prompt.txt");
+        navigator.clipboard.writeText(texto);
+        alert("Prompt copiado al portapapeles ✨");
+        
     }
 
     async function procesar() {
@@ -239,7 +294,7 @@
 
         if (debeEncriptar) {
             claveFinal = userKey || generarPassword();
-            contenidoFinal = CryptoJS.AES.encrypt(textoOriginal, claveFinal).toString();
+            contenidoFinal = (await encriptacion()).encrypt(textoOriginal, claveFinal).toString();
             urlParams = `?key=${encodeURIComponent(claveFinal)}`;
             document.getElementById('claveSection').style.display = 'block';
         } else {
@@ -247,9 +302,7 @@
         }
 
         try {
-            const respuesta = await fetch('test_base.html');
-            if (!respuesta.ok) throw new Error("No se encontró test_base.html");
-            const plantilla = await respuesta.text();
+            const plantilla = await obtenerContenido("../../../ui/html_web_generador_test.html", "https://ccarmox.github.io/sandbox2/ui/html_web_generador_test.html");
 
             const htmlGenerado = plantilla.replace('#JSON_DATABASE', contenidoFinal);
             const urlFinal = `${baseUrl}${urlParams}`;

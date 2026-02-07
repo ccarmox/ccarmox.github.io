@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Denegado | Plataforma Educativa</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --error: #e74c3c;
+            --text: #2c3e50;
+            --bg: #f4f7f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 450px;
+            width: 90%;
+        }
+
+        .icon {
+            font-size: 50px;
+            color: var(--error);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Estilos nuevos para el formulario de clave */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+            text-align: center;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background 0.3s;
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            background-color: #357abd;
+        }
+
+        /* Animación simple */
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container shake">
+        <div class="icon">🔒</div>
+        <h1>¡Ups! Falta algo importante</h1>
+        <p>Parece que el enlace no incluye la <span class="highlight">clave de acceso</span>. Si la conoces, puedes escribirla manualmente a continuación:</p>
+        
+        <div class="input-group">
+            <input type="text" id="claveInput" placeholder="Escribe la clave aquí..." autocomplete="off">
+            <button class="btn" onclick="aplicarClave()">Entrar al Cuestionario</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Función para recargar la página con el parámetro Key
+        function aplicarClave() {
+            const inputVal = document.getElementById('claveInput').value.trim();
+            
+            if (inputVal === "") {
+                alert("Por favor, escribe una clave.");
+                return;
+            }
+
+            // Obtenemos la URL actual
+            const url = new URL(window.location.href);
+            
+            // Establecemos (o sobrescribimos) el parámetro 'Key'
+            url.searchParams.set('key', inputVal);
+            
+            // Recargamos la página con la nueva URL
+            window.location.href = url.toString();
+        }
+
+        // Permitir pulsar "Enter" en el input para enviar
+        document.getElementById('claveInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                aplicarClave();
+            }
+        });
+
+        window.onload = () => {
+            console.log("Estado: Esperando entrada manual de clave.");
+            const urlParams = new URLSearchParams(window.location.search);
+            // Si ya hay una Key en la URL (quizás incorrecta), la ponemos en el input para editarla fácil
+            if (urlParams.has('Key')) {
+                document.getElementById('claveInput').value = urlParams.get('Key');
+            }
+        };
+    </script>
+</body>
+</html>

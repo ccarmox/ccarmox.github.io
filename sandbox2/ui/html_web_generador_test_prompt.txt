@@ -1,0 +1,14 @@
+Imagina que eres profesor y quieres hacer un test para explicar un nuevo tema a tus alumnos.
+Completa el siguiente JSON con contenido sobre ######################
+Cambia la información de cada campo para que se adecue a la tematica:
+
+{
+  "titulo": "Titulo de la prueba",
+  "descripcion": "Descripción corta de la prueba",
+  "vidas": 3,
+  "help_title":"Titulo de la ayuda",
+  "help_content":"Texto de la ayuda que sirve de resumen de trucos y tecnicas nmotecnicas que puedan ser utiles para realizar el test, estructurado como markdown",
+  "database": [
+    { "val1": "Entrada de la pregunta", "val2": "fin de la pregunta", "correct": "Opcion correcta", "distractors": ["Opcion incorrecta 1", "Opcion incorrecta 2", "Opcion incorrecta 3"], "error_explanation": "Explicacion de la respuesta correcta"}
+]
+}
