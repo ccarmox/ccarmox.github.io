@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cargando...</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script id="database" type="application/json">
+  {
+  "titulo": "El Maestro de la Sintaxis: Reto de Subordinadas",
+  "descripcion": "Identifica y clasifica correctamente las oraciones subordinadas sustantivas, adjetivas y adverbiales.",
+  "vidas": 3,
+  "help_title": "Kit de Supervivencia Sintáctica",
+  "help_content": "### 💡 Trucos de Oro para no fallar\n\n1. **Subordinadas Sustantivas:** Intenta sustituir toda la proposición por el pronombre **'ESTO'**. Si la frase sigue teniendo sentido, ¡es sustantiva!\n   * *Ejemplo:* 'Quiero que vengas' -> 'Quiero **esto**'.\n\n2. **Subordinadas Adjetivas:** Sustituye el nexo 'que' por **'el cual / la cual'**. Si encaja perfectamente, es adjetiva y el 'que' actúa como relativo.\n   * *Ejemplo:* 'La casa que ves' -> 'La casa **la cual** ves'.\n\n3. **Subordinadas Adverbiales:**\n   * **De lugar:** Sustituye por el adverbio **'allí'**.\n   * **De tiempo:** Sustituye por el adverbio **'entonces'**.\n   * **De modo:** Sustituye por el adverbio **'así'**.\n\n4. **¡Cuidado con el 'SI'!**: No siempre es condicional. Si puedes decir 'Dime **esto**', es una sustantiva (interrogativa indirecta).",
+  "database": [
+    {
+      "val1": "En la frase 'Espero",
+      "val2": "que apruebes el examen', la parte subrayada es:",
+      "correct": "Sustantiva de CD",
+      "distractors": ["Sustantiva de Sujeto", "Adjetiva de Relativo", "Adverbial Final"],
+      "error_explanation": "Es sustantiva porque puedes decir 'Espero ESTO'. Es de Complemento Directo porque puedes sustituirla por 'LO': 'Lo espero'."
+    },
+    {
+      "val1": "La película",
+      "val2": "que vimos ayer fue muy aburrida.",
+      "correct": "Adjetiva (o de Relativo)",
+      "distractors": ["Sustantiva de Sujeto", "Adverbial de Tiempo", "Sustantiva de CD"],
+      "error_explanation": "El nexo 'que' tiene como antecedente a 'película'. Puedes decir 'La película LA CUAL vimos ayer', lo que confirma que es adjetiva."
+    },
+    {
+      "val1": "He colocado el cuadro",
+      "val2": "donde me indicaste.",
+      "correct": "Adverbial de Lugar",
+      "distractors": ["Adjetiva de Relativo", "Sustantiva de CD", "Adverbial de Modo"],
+      "error_explanation": "Indica el lugar de la acción principal y puede sustituirse por un adverbio de lugar: 'He colocado el cuadro ALLÍ'."
+    },
+    {
+      "val1": "Me gusta",
+      "val2": "que siempre digas la verdad.",
+      "correct": "Sustantiva de Sujeto",
+      "distractors": ["Sustantiva de CD", "Adjetiva de Relativo", "Adverbial Concesiva"],
+      "error_explanation": "Si aplicamos el truco: 'Me gusta ESTO'. Si lo pasamos a plural: 'Me gustan ESTAS COSAS'. Al cambiar el número del verbo, confirmamos que es el Sujeto."
+    },
+    {
+      "val1": "Iré a tu casa",
+      "val2": "cuando termine mis deberes.",
+      "correct": "Adverbial de Tiempo",
+      "distractors": ["Adverbial de Modo", "Adjetiva de Relativo", "Sustantiva de CD"],
+      "error_explanation": "La proposición indica el momento en que se realiza la acción. Puedes decir: 'Iré a tu casa ENTONCES'."
+    }
+  ]
+}
+    </script>
+
+    <script>
+        function initApp() {
+            loadPageConfig(document.getElementById('database').textContent);
+        }
+
+        function handleFallback(error) {
+            console.warn("Cargando layout.js desde el backup...");
+            let s = document.createElement('script');
+            s.src = 'https://ccarmox.github.io/sandbox2/ui/game.js';
+            // Solo ejecutamos la config cuando el backup termine de cargar
+            s.onload = initApp;
+            document.head.appendChild(s);
+        }
+    </script>
+
+    <script src="../../../ui/game.js" onload="initApp()" onerror="handleFallback()">
+    </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+
+</html>

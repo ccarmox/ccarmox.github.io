@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,7 +29,7 @@
             background: white;
             padding: 2rem;
             border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             max-width: 450px;
             width: 90%;
         }
@@ -100,19 +101,31 @@
         }
 
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
         }
     </style>
 </head>
+
 <body>
 
     <div class="container shake">
         <div class="icon">🔒</div>
         <h1>¡Ups! Falta algo importante</h1>
-        <p>Parece que el enlace no incluye la <span class="highlight">clave de acceso</span>. Si la conoces, puedes escribirla manualmente a continuación:</p>
-        
+        <p>Parece que el enlace no incluye la <span class="highlight">clave de acceso</span>. Si la conoces, puedes
+            escribirla manualmente a continuación:</p>
+
         <div class="input-group">
             <input type="text" id="claveInput" placeholder="Escribe la clave aquí..." autocomplete="off">
             <button class="btn" onclick="aplicarClave()">Entrar al Cuestionario</button>
@@ -124,7 +137,7 @@
         // Función para recargar la página con el parámetro Key
         function aplicarClave() {
             const inputVal = document.getElementById('claveInput').value.trim();
-            
+
             if (inputVal === "") {
                 alert("Por favor, escribe una clave.");
                 return;
@@ -132,10 +145,10 @@
 
             // Obtenemos la URL actual
             const url = new URL(window.location.href);
-            
+
             // Establecemos (o sobrescribimos) el parámetro 'Key'
             url.searchParams.set('key', inputVal);
-            
+
             // Recargamos la página con la nueva URL
             window.location.href = url.toString();
         }
@@ -147,14 +160,20 @@
             }
         });
 
-        window.onload = () => {
-            console.log("Estado: Esperando entrada manual de clave.");
-            const urlParams = new URLSearchParams(window.location.search);
-            // Si ya hay una Key en la URL (quizás incorrecta), la ponemos en el input para editarla fácil
-            if (urlParams.has('Key')) {
-                document.getElementById('claveInput').value = urlParams.get('Key');
+        const urlParams = new URLSearchParams(window.location.search);
+        const keyParam = urlParams.get('key');
+
+        if (keyParam) {
+            const input = document.getElementById('claveInput');
+            if (input) {
+                input.value = keyParam;
+                console.log("Key insertada con éxito:", keyParam);
+            } else {
+                console.error("Error: No se encontró el elemento 'claveInput' en el DOM.");
             }
-        };
+        }
+        
     </script>
 </body>
+
 </html>

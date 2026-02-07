@@ -7,7 +7,7 @@ Cambia la información de cada campo para que se adecue a la tematica:
   "descripcion": "Descripción corta de la prueba",
   "vidas": 3,
   "help_title":"Titulo de la ayuda",
-  "help_content":"Texto de la ayuda que sirve de resumen de trucos y tecnicas nmotecnicas que puedan ser utiles para realizar el test, estructurado como markdown",
+  "help_content":"Texto de la ayuda que sirve de resumen de trucos y tecnicas mnemotecnicas que puedan ser utiles para realizar el test, estructurado como markdown",
   "database": [
     { "val1": "Entrada de la pregunta", "val2": "fin de la pregunta", "correct": "Opcion correcta", "distractors": ["Opcion incorrecta 1", "Opcion incorrecta 2", "Opcion incorrecta 3"], "error_explanation": "Explicacion de la respuesta correcta"}
 ]

@@ -31,7 +31,7 @@ async function encriptacion() {
         const modulo = await import('https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/+esm');
         
         // Retornamos la propiedad .default que contiene todas las funciones (AES, SHA256, etc.)
-        return modulo.default.AES;
+        return modulo.default;
     } catch (error) {
         console.error("No se pudo cargar CryptoJS desde el CDN:", error);
         
@@ -54,8 +54,10 @@ async function loadPageConfig(encripted_data) {
       // Leer el valor de 'key'
       const miClave = params.get("key");
 
+      const CryptoJS = await encriptacion();
+
       // Proceso de desencriptación
-      const bytes = encriptacion().decrypt(encripted_data.trim().trim(), miClave);
+      const bytes = CryptoJS.AES.decrypt(encripted_data.trim().trim(), miClave);
 
       // Convertir los bytes a texto legible (UTF-8)
       decripted_data = bytes.toString(CryptoJS.enc.Utf8);

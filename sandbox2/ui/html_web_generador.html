@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,16 +30,29 @@
             border-radius: 16px;
             width: 100%;
             max-width: 600px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        h1 { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--accent); text-align: center; }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            text-align: center;
+        }
 
-        .group { margin-bottom: 1.2rem; }
+        .group {
+            margin-bottom: 1.2rem;
+        }
 
-        label { display: block; font-size: 0.9rem; margin-bottom: 0.5rem; color: #94a3b8; }
+        label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: #94a3b8;
+        }
 
-        input, textarea {
+        input,
+        textarea {
             width: 100%;
             padding: 12px;
             background: #334155;
@@ -49,9 +63,16 @@
             font-family: inherit;
         }
 
-        input:disabled { opacity: 0.5; cursor: not-allowed; }
+        input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
-        .row-flex { display: flex; gap: 10px; align-items: flex-end; }
+        .row-flex {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
 
         .checkbox-group {
             display: flex;
@@ -66,9 +87,15 @@
             transition: 0.2s;
         }
 
-        .checkbox-group:hover { border-color: var(--primary); }
+        .checkbox-group:hover {
+            border-color: var(--primary);
+        }
 
-        .checkbox-group input { width: auto; cursor: pointer; margin: 0; }
+        .checkbox-group input {
+            width: auto;
+            cursor: pointer;
+            margin: 0;
+        }
 
         button {
             width: 100%;
@@ -84,7 +111,10 @@
             margin-top: 10px;
         }
 
-        button:hover { background: #4338ca; transform: translateY(-1px); }
+        button:hover {
+            background: #4338ca;
+            transform: translateY(-1px);
+        }
 
         .output-box {
             margin-top: 2rem;
@@ -123,209 +153,211 @@
         }
     </style>
 </head>
+
 <body>
 
-<div class="card">
-    <h1>🚀 Generador de Enlaces</h1>
-    
-    <div class="group">
-        <label>URL de destino:</label>
-        <input type="url" id="baseUrl" placeholder="https://tusitio.com/ver">
-    </div>
+    <div class="card">
+        <h1>🚀 Generador de Enlaces</h1>
 
-    <div class="group">
-        <label>Contenido (Texto o JSON):</label>
-        <textarea id="texto" rows="4" placeholder='{"user": "admin", "secret": "1234"}'></textarea>
-    </div>
-
-    <button onclick="copiarPrompt()" style="margin-bottom: 60px; margin-top: 0px;">Copiar Prompt de ejemplo</button>
-
-    <label class="checkbox-group">
-        <input type="checkbox" id="encryptCheck" checked onchange="toggleKeyInput()">
-        <span>Proteger test con contraseña</span>
-    </label>
-
-    <div class="group" id="customKeyContainer">
-        <label>Contraseña (dejar vacío para contraseña aleatoria):</label>
-        <input type="text" id="customKey" placeholder="Escribe tu contraseña secreta aquí...">
-    </div>
-
-    <button onclick="procesar()">Generar y Descargar Archivo</button>
-
-    <div id="output" class="output-box">
-        <div class="group" id="claveSection">
-            <label>Contraseña Utilizada:</label>
-            <div class="result-item">
-                <p id="resClave"></p>
-                <span class="copy-badge" onclick="copiar('resClave')">Copiar</span>
-            </div>
+        <div class="group">
+            <label>URL de destino:</label>
+            <input type="url" id="baseUrl" placeholder="https://tusitio.com/ver">
         </div>
 
         <div class="group">
-            <label>Contenido del HTML generado:</label>
-            <div class="result-item">
-                <p id="resContenido"></p>
-                <span class="copy-badge" onclick="copiar('resContenido')">Copiar</span>
-            </div>
+            <label>Contenido (Texto o JSON):</label>
+            <textarea id="texto" rows="4" placeholder='{"user": "admin", "secret": "1234"}'></textarea>
         </div>
 
-        <div class="group">
-            <label>URL Final con parámetros:</label>
-            <div class="result-item">
-                <p id="resUrl"></p>
-                <span class="copy-badge" onclick="copiar('resUrl')">Copiar</span>
+        <button onclick="copiarPrompt()" style="margin-bottom: 60px; margin-top: 0px;">Copiar Prompt de ejemplo</button>
+
+        <label class="checkbox-group">
+            <input type="checkbox" id="encryptCheck" checked onchange="toggleKeyInput()">
+            <span>Proteger test con contraseña</span>
+        </label>
+
+        <div class="group" id="customKeyContainer">
+            <label>Contraseña (dejar vacío para contraseña aleatoria):</label>
+            <input type="text" id="customKey" placeholder="Escribe tu contraseña secreta aquí...">
+        </div>
+
+        <button onclick="procesar()">Generar y Descargar Archivo</button>
+
+        <div id="output" class="output-box">
+            <div class="group" id="claveSection">
+                <label>Contraseña Utilizada:</label>
+                <div class="result-item">
+                    <p id="resClave"></p>
+                    <span class="copy-badge" onclick="copiar('resClave')">Copiar</span>
+                </div>
+            </div>
+
+            <div class="group">
+                <label>Contenido del HTML generado:</label>
+                <div class="result-item">
+                    <p id="resContenido"></p>
+                    <span class="copy-badge" onclick="copiar('resContenido')">Copiar</span>
+                </div>
+            </div>
+
+            <div class="group">
+                <label>URL Final con parámetros:</label>
+                <div class="result-item">
+                    <p id="resUrl"></p>
+                    <span class="copy-badge" onclick="copiar('resUrl')">Copiar</span>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
+    <script>
 
-    async function encriptacion() {
-    try {
-        // Importación dinámica
-        const modulo = await import('https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/+esm');
-        
-        // Retornamos la propiedad .default que contiene todas las funciones (AES, SHA256, etc.)
-        return modulo.default.AES;
-    } catch (error) {
-        console.error("No se pudo cargar CryptoJS desde el CDN:", error);
-        
-        // Opcional: Intento de fallback si el primero falla
-        // return await cargarFallback(); 
-    }
-}
+        async function encriptacion() {
+            try {
+                // Importación dinámica
+                const modulo = await import('https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/+esm');
 
-    async function obtenerContenido(rutaLocal, rutaBackup) {
+                // Retornamos la propiedad .default que contiene todas las funciones (AES, SHA256, etc.)
+                return modulo.default;
+            } catch (error) {
+                console.error("No se pudo cargar CryptoJS desde el CDN:", error);
 
-    try {
-        // 1. Intentamos la carga principal
-        let respuesta = await fetch(rutaLocal);
-
-        // Si el archivo no existe (404) o hay error de servidor (500)
-        if (!respuesta.ok) {
-            throw new Error(`Fallo en ruta local: ${respuesta.status}`);
-        }
-
-        return await respuesta.text();
-
-    } catch (error) {
-        console.warn("Ruta local no disponible, intentando backup...", error);
-
-        // 2. Intentamos la carga desde la URL de respaldo
-        try {
-            const respuestaBackup = await fetch(rutaBackup);
-            if (!respuestaBackup.ok) throw new Error("Error en backup");
-            
-            return await respuestaBackup.text();
-        } catch (backupError) {
-            console.error("Ambas rutas han fallado.");
-            return "";
-        }
-    }
-}
-
-    function toggleKeyInput() {
-        const checked = document.getElementById('encryptCheck').checked;
-        document.getElementById('customKey').disabled = !checked;
-    }
-
-    function generarPassword(longitud = 16) {
-        const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let pass = '';
-        for (let i = 0; i < longitud; i++) {
-            pass += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
-        }
-        return pass;
-    }
-
-    function descargarArchivo(nombre, contenido) {
-        const blob = new Blob([contenido], { type: 'text/html' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = nombre; // Aquí se usa el nombre extraído
-        a.click();
-        window.URL.revokeObjectURL(url);
-    }
-
-    async function copiarPrompt() {
-
-        const texto = await obtenerContenido("../../../ui/html_web_generador_test_prompt.txt", "https://ccarmox.github.io/sandbox2/ui/html_web_generador_test_prompt.txt");
-        navigator.clipboard.writeText(texto);
-        alert("Prompt copiado al portapapeles ✨");
-        
-    }
-
-    async function procesar() {
-        const baseUrl = document.getElementById('baseUrl').value.trim();
-        const textoOriginal = document.getElementById('texto').value;
-        const debeEncriptar = document.getElementById('encryptCheck').checked;
-        const userKey = document.getElementById('customKey').value.trim();
-
-        if (!baseUrl || !textoOriginal) {
-            alert("Por favor completa los campos de URL y Contenido.");
-            return;
-        }
-
-        // --- LÓGICA PARA EXTRAER NOMBRE DE ARCHIVO ---
-        let nombreArchivo = "index.html"; // Nombre por defecto
-        try {
-            const urlObj = new URL(baseUrl);
-            const pathname = urlObj.pathname;
-            // Extraer la última parte de la ruta
-            const lastSegment = pathname.substring(pathname.lastIndexOf('/') + 1);
-            
-            // Si el segmento tiene contenido y parece un nombre de archivo, lo usamos
-            if (lastSegment && lastSegment.includes('.')) {
-                nombreArchivo = lastSegment;
-            } else if (lastSegment) {
-                // Si hay texto pero no tiene extensión, le ponemos .html
-                nombreArchivo = lastSegment + ".html";
+                // Opcional: Intento de fallback si el primero falla
+                // return await cargarFallback(); 
             }
-        } catch (e) {
-            console.error("URL no válida para extraer nombre, usando index.html");
-        }
-        // --------------------------------------------
-
-        let contenidoFinal = textoOriginal;
-        let claveFinal = "";
-        let urlParams = "";
-
-        if (debeEncriptar) {
-            claveFinal = userKey || generarPassword();
-            contenidoFinal = (await encriptacion()).encrypt(textoOriginal, claveFinal).toString();
-            urlParams = `?key=${encodeURIComponent(claveFinal)}`;
-            document.getElementById('claveSection').style.display = 'block';
-        } else {
-            document.getElementById('claveSection').style.display = 'none';
         }
 
-        try {
-            const plantilla = await obtenerContenido("../../../ui/html_web_generador_test.html", "https://ccarmox.github.io/sandbox2/ui/html_web_generador_test.html");
+        async function obtenerContenido(rutaLocal, rutaBackup) {
 
-            const htmlGenerado = plantilla.replace('#JSON_DATABASE', contenidoFinal);
-            const urlFinal = `${baseUrl}${urlParams}`;
+            try {
+                // 1. Intentamos la carga principal
+                let respuesta = await fetch(rutaLocal);
 
-            document.getElementById('resClave').innerText = claveFinal || "(no encriptado)";
-            document.getElementById('resContenido').innerText = htmlGenerado;
-            document.getElementById('resUrl').innerText = urlFinal;
-            document.getElementById('output').style.display = 'block';
+                // Si el archivo no existe (404) o hay error de servidor (500)
+                if (!respuesta.ok) {
+                    throw new Error(`Fallo en ruta local: ${respuesta.status}`);
+                }
 
-            // Descarga usando el nombre extraído dinámicamente
-            descargarArchivo(nombreArchivo, htmlGenerado);
-            
-        } catch (error) {
-            alert("Error: " + error.message);
+                return await respuesta.text();
+
+            } catch (error) {
+                console.warn("Ruta local no disponible, intentando backup...", error);
+
+                // 2. Intentamos la carga desde la URL de respaldo
+                try {
+                    const respuestaBackup = await fetch(rutaBackup);
+                    if (!respuestaBackup.ok) throw new Error("Error en backup");
+
+                    return await respuestaBackup.text();
+                } catch (backupError) {
+                    console.error("Ambas rutas han fallado.");
+                    return "";
+                }
+            }
         }
-    }
 
-    function copiar(id) {
-        const texto = document.getElementById(id).innerText;
-        navigator.clipboard.writeText(texto);
-        alert("Copiado al portapapeles ✨");
-    }
-</script>
+        function toggleKeyInput() {
+            const checked = document.getElementById('encryptCheck').checked;
+            document.getElementById('customKey').disabled = !checked;
+        }
+
+        function generarPassword(longitud = 16) {
+            const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let pass = '';
+            for (let i = 0; i < longitud; i++) {
+                pass += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+            }
+            return pass;
+        }
+
+        function descargarArchivo(nombre, contenido) {
+            const blob = new Blob([contenido], { type: 'text/html' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = nombre; // Aquí se usa el nombre extraído
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        async function copiarPrompt() {
+
+            const texto = await obtenerContenido("../../../ui/html_web_generador_test_prompt.txt", "https://ccarmox.github.io/sandbox2/ui/html_web_generador_test_prompt.txt");
+            navigator.clipboard.writeText(texto);
+            alert("Prompt copiado al portapapeles ✨");
+
+        }
+
+        async function procesar() {
+            const baseUrl = document.getElementById('baseUrl').value.trim();
+            const textoOriginal = document.getElementById('texto').value;
+            const debeEncriptar = document.getElementById('encryptCheck').checked;
+            const userKey = document.getElementById('customKey').value.trim();
+
+            if (!baseUrl || !textoOriginal) {
+                alert("Por favor completa los campos de URL y Contenido.");
+                return;
+            }
+
+            // --- LÓGICA PARA EXTRAER NOMBRE DE ARCHIVO ---
+            let nombreArchivo = "index.html"; // Nombre por defecto
+            try {
+                const urlObj = new URL(baseUrl);
+                const pathname = urlObj.pathname;
+                // Extraer la última parte de la ruta
+                const lastSegment = pathname.substring(pathname.lastIndexOf('/') + 1);
+
+                // Si el segmento tiene contenido y parece un nombre de archivo, lo usamos
+                if (lastSegment && lastSegment.includes('.')) {
+                    nombreArchivo = lastSegment;
+                } else if (lastSegment) {
+                    // Si hay texto pero no tiene extensión, le ponemos .html
+                    nombreArchivo = lastSegment + ".html";
+                }
+            } catch (e) {
+                console.error("URL no válida para extraer nombre, usando index.html");
+            }
+            // --------------------------------------------
+
+            let contenidoFinal = textoOriginal;
+            let claveFinal = "";
+            let urlParams = "";
+
+            if (debeEncriptar) {
+                claveFinal = userKey || generarPassword();
+                contenidoFinal = (await encriptacion()).AES.encrypt(textoOriginal, claveFinal).toString();
+                urlParams = `?key=${encodeURIComponent(claveFinal)}`;
+                document.getElementById('claveSection').style.display = 'block';
+            } else {
+                document.getElementById('claveSection').style.display = 'none';
+            }
+
+            try {
+                const plantilla = await obtenerContenido("../../../ui/html_web_generador_test.html", "https://ccarmox.github.io/sandbox2/ui/html_web_generador_test.html");
+
+                const htmlGenerado = plantilla.replace('#JSON_DATABASE', contenidoFinal);
+                const urlFinal = `${baseUrl}${urlParams}`;
+
+                document.getElementById('resClave').innerText = claveFinal || "(no encriptado)";
+                document.getElementById('resContenido').innerText = htmlGenerado;
+                document.getElementById('resUrl').innerText = urlFinal;
+                document.getElementById('output').style.display = 'block';
+
+                // Descarga usando el nombre extraído dinámicamente
+                descargarArchivo(nombreArchivo, htmlGenerado);
+
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        }
+
+        function copiar(id) {
+            const texto = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(texto);
+            alert("Copiado al portapapeles ✨");
+        }
+    </script>
 
 </body>
+
 </html>
