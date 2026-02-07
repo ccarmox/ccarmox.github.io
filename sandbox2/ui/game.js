@@ -70,8 +70,8 @@ async function loadPageConfig(encripted_data) {
 
     // 1. Cargar la estructura general
     const htmlText = await obtenerContenido(
-      "../../../components/html_ui_game.html",
-      "https://ccarmox.github.io/sandbox2/components/html_ui_game.html",
+      "../../../ui/html_ui_game.html",
+      "https://ccarmox.github.io/sandbox2/ui/html_ui_game.html",
     );
     container.innerHTML = htmlText;
 
@@ -84,8 +84,8 @@ async function loadPageConfig(encripted_data) {
 
     // 1. Cargar la estructura general
     const htmlText = await obtenerContenido(
-      "../../../components/html_ui_error.html",
-      "https://ccarmox.github.io/sandbox2/components/html_ui_error.html",
+      "../../../ui/html_ui_error.html",
+      "https://ccarmox.github.io/sandbox2/ui/html_ui_error.html",
     );
     container.innerHTML = htmlText;
   }
