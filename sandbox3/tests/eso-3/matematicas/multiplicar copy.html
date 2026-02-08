@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Cargando...</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script id="database" type="application/json">
+{
+  "titulo": "Maratón de Tablas de Multiplicar",
+  "descripcion": "El test definitivo de todas las tablas del 1 al 9.",
+  "vidas": 3,
+  "help_title": "Manual del Maestro de las Matemáticas",
+  "help_content": "Para dominar las tablas, recuerda estos tres pilares:\n\n### 1. Los Dobles y Mitades\nSi sabes que 2 * 6 = 12, entonces 4 * 6 será el doble (24), y 8 * 6 será el doble de eso (48).\n\n### 2. La Propiedad Conmutativa\nSi te cuesta recordar 7 * 3, piensa en 3 * 7. El resultado es el mismo: (21). ¡Solo tienes que aprenderte la mitad de la tabla!\n\n### 3. Patrones Visuales\n* **Tabla del 9:** Las unidades bajan (9, 8, 7...) y las decenas suben (0, 1, 2...).\n* **Tabla del 5:** Siempre termina en 5 (si el número es impar) o en 0 (si es par).\n* **Tabla del 6:** Al multiplicar por un número par, el resultado termina en ese mismo número (ej: 6 * 4 = 24, 6 * 8 = 48).",
+  "database": [
+    { "val1": "¿Cuánto es...?", "val2": "1 x 1", "correct": "1", "distractors": ["2", "0", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 2", "correct": "2", "distractors": ["1", "6", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 3", "correct": "3", "distractors": ["2", "5", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 4", "correct": "4", "distractors": ["3", "4", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 5", "correct": "5", "distractors": ["4", "3", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 6", "correct": "6", "distractors": ["5", "2", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 7", "correct": "7", "distractors": ["6", "1", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 8", "correct": "8", "distractors": ["7", "9", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 9", "correct": "9", "distractors": ["7", "8", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." }
+    ]
+}
+    </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script>
+    function initApp() {
+      loadPageConfig(document.getElementById('database').textContent);
+    }
+
+    function handleFallback(error) {
+      console.warn("Cargando layout.js desde el backup...");
+      let s = document.createElement('script');
+      s.src = 'https://ccarmox.github.io/sandbox3/ui/game.js';
+      // Solo ejecutamos la config cuando el backup termine de cargar
+      s.onload = initApp;
+      document.head.appendChild(s);
+    }
+  </script>
+
+  <script src="../../../ui/game.js" onload="initApp()" onerror="handleFallback()">
+  </script>
+</body>
+
+</html>

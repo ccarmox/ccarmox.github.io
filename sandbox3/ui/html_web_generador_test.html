@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cargando...</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script id="database" type="application/json">
+  #JSON_DATABASE
+    </script>
+
+    <script>
+        function initApp() {
+            loadPageConfig(document.getElementById('database').textContent);
+        }
+
+        function handleFallback(error) {
+            console.warn("Cargando layout.js desde el backup...");
+            let s = document.createElement('script');
+            s.src = 'https://ccarmox.github.io/sandbox3/ui/game.js';
+            // Solo ejecutamos la config cuando el backup termine de cargar
+            s.onload = initApp;
+            document.head.appendChild(s);
+        }
+    </script>
+
+    <script src="../../../ui/game.js" onload="initApp()" onerror="handleFallback()">
+    </script>
+</body>
+
+</html>

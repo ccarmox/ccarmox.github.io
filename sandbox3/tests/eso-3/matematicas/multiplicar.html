@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cargando...</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script id="database" type="application/json">
+{
+  "titulo": "Maratón de Tablas de Multiplicar",
+  "descripcion": "El test definitivo de todas las tablas del 1 al 9.",
+  "vidas": 3,
+  "help_title": "Manual del Maestro de las Matemáticas",
+  "help_content": "Para dominar las tablas, recuerda estos tres pilares:\n\n### 1. Los Dobles y Mitades\nSi sabes que 2 * 6 = 12, entonces 4 * 6 será el doble (24), y 8 * 6 será el doble de eso (48).\n\n### 2. La Propiedad Conmutativa\nSi te cuesta recordar 7 * 3, piensa en 3 * 7. El resultado es el mismo: (21). ¡Solo tienes que aprenderte la mitad de la tabla!\n\n### 3. Patrones Visuales\n* **Tabla del 9:** Las unidades bajan (9, 8, 7...) y las decenas suben (0, 1, 2...).\n* **Tabla del 5:** Siempre termina en 5 (si el número es impar) o en 0 (si es par).\n* **Tabla del 6:** Al multiplicar por un número par, el resultado termina en ese mismo número (ej: 6 * 4 = 24, 6 * 8 = 48).",
+  "database": [
+    { "val1": "¿Cuánto es...?", "val2": "1 x 1", "correct": "1", "distractors": ["2", "0", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 2", "correct": "2", "distractors": ["1", "6", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 3", "correct": "3", "distractors": ["2", "5", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 4", "correct": "4", "distractors": ["3", "4", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 5", "correct": "5", "distractors": ["4", "3", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 6", "correct": "6", "distractors": ["5", "2", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 7", "correct": "7", "distractors": ["6", "1", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 8", "correct": "8", "distractors": ["7", "9", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+    { "val1": "¿Cuánto es...?", "val2": "1 x 9", "correct": "9", "distractors": ["7", "8", "11"], "error_explanation": "Cualquier número multiplicado por 1 se queda igual." },
+
+    { "val1": "¿Cuánto es...?", "val2": "2 x 1", "correct": "2", "distractors": ["1", "3", "4"], "error_explanation": "Todo número multiplicado por 1 da como resultado el mismo número." },
+  { "val1": "¿Cuánto es...?", "val2": "2 x 2", "correct": "4", "distractors": ["2", "6", "8"], "error_explanation": "2 x 2 es lo mismo que sumar 2 + 2." },
+  { "val1": "¿Cuánto es...?", "val2": "2 x 3", "correct": "6", "distractors": ["5", "4", "8"], "error_explanation": "Tres veces dos es 6. Es un número par." },
+  { "val1": "¿Cuánto es...?", "val2": "2 x 4", "correct": "8", "distractors": ["6", "10", "12"], "error_explanation": "El doble de 4 es 8." },
+  { "val1": "¿Cuánto es...?", "val2": "2 x 5", "correct": "10", "distractors": ["15", "5", "12"], "error_explanation": "Dos veces cinco suma una decena exacta: 10." },
+  { "val1": "¿Cuánto es...?", "val2": "2 x 6", "correct": "12", "distractors": ["14", "10", "16"], "error_explanation": "El doble de 6 es 12. Piensa en una docena." },
+  { "val1": "¿Cuánto es...?", "val2": "2 x 7", "correct": "14", "distractors": ["12", "16", "15"], "error_explanation": "Siete más siete son 14." },
+  { "val1": "¿Cuánto es...?", "val2": "2 x 8", "correct": "16", "distractors": ["18", "14", "12"], "error_explanation": "Dos veces ocho es 16." },
+  { "val1": "¿Cuánto es...?", "val2": "2 x 9", "correct": "18", "distractors": ["19", "20", "17"], "error_explanation": "El doble de 9 es 18. Casi llegamos a 20 (que sería 2 x 10)." },
+
+  { "val1": "¿Cuánto es...?", "val2": "3 x 1", "correct": "3", "distractors": ["1", "6", "0"], "error_explanation": "Todo número multiplicado por 1 da como resultado el mismo número." },
+  { "val1": "¿Cuánto es...?", "val2": "3 x 2", "correct": "6", "distractors": ["5", "8", "4"], "error_explanation": "3 veces 2 es lo mismo que 2 veces 3, es decir, el doble de 3." },
+  { "val1": "¿Cuánto es...?", "val2": "3 x 3", "correct": "9", "distractors": ["6", "12", "10"], "error_explanation": "3 veces 3 es 9. Es el cuadrado de 3." },
+  { "val1": "¿Cuánto es...?", "val2": "3 x 4", "correct": "12", "distractors": ["14", "11", "15"], "error_explanation": "3 veces 4 es 12. Un truco es sumar 3 al resultado anterior (9 + 3)." },
+  { "val1": "¿Cuánto es...?", "val2": "3 x 5", "correct": "15", "distractors": ["12", "18", "20"], "error_explanation": "3 veces 5 es 15. Las multiplicaciones por 5 siempre terminan en 0 o 5." },
+  { "val1": "¿Cuánto es...?", "val2": "3 x 6", "correct": "18", "distractors": ["16", "21", "20"], "error_explanation": "3 veces 6 es 18. También puedes pensar en el doble de 3 x 3." },
+  { "val1": "¿Cuánto es...?", "val2": "3 x 7", "correct": "21", "distractors": ["24", "18", "22"], "error_explanation": "3 veces 7 es 21. Es una de las combinaciones que más se suelen olvidar, ¡memorízala!" },
+  { "val1": "¿Cuánto es...?", "val2": "3 x 8", "correct": "24", "distractors": ["26", "28", "22"], "error_explanation": "3 veces 8 es 24. Es el triple de 8." },
+  { "val1": "¿Cuánto es...?", "val2": "3 x 9", "correct": "27", "distractors": ["24", "30", "29"], "error_explanation": "3 veces 9 es 27. Nota que la suma de sus cifras (2 + 7) es igual a 9." },
+
+  { "val1": "¿Cuánto es...?", "val2": "4 x 1", "correct": "4", "distractors": ["1", "5", "8"], "error_explanation": "Todo número multiplicado por 1 da como resultado el mismo número." },
+  { "val1": "¿Cuánto es...?", "val2": "4 x 2", "correct": "8", "distractors": ["6", "10", "4"], "error_explanation": "4 x 2 es el doble de 4, es decir, 4 + 4 = 8." },
+  { "val1": "¿Cuánto es...?", "val2": "4 x 3", "correct": "12", "distractors": ["14", "16", "9"], "error_explanation": "Tres veces cuatro suma 12. También puedes pensar en 4 x 2 + 4." },
+  { "val1": "¿Cuánto es...?", "val2": "4 x 4", "correct": "16", "distractors": ["12", "20", "18"], "error_explanation": "4 x 4 es un cuadrado perfecto. Es el doble de 8." },
+  { "val1": "¿Cuánto es...?", "val2": "4 x 5", "correct": "20", "distractors": ["15", "25", "24"], "error_explanation": "Cualquier número par multiplicado por 5 siempre termina en 0." },
+  { "val1": "¿Cuánto es...?", "val2": "4 x 6", "correct": "24", "distractors": ["28", "22", "26"], "error_explanation": "Cuatro veces seis es 24. Un truco es hacer el doble de 6 (12) y luego doblarlo otra vez." },
+  { "val1": "¿Cuánto es...?", "val2": "4 x 7", "correct": "28", "distractors": ["24", "32", "21"], "error_explanation": "4 x 7 es 28. Piensa en las cuatro semanas que suele tener un mes." },
+  { "val1": "¿Cuánto es...?", "val2": "4 x 8", "correct": "32", "distractors": ["36", "30", "34"], "error_explanation": "4 x 8 es 32. Es el doble de 4 x 4 (16 + 16)." },
+  { "val1": "¿Cuánto es...?", "val2": "4 x 9", "correct": "36", "distractors": ["40", "32", "38"], "error_explanation": "4 x 9 es 36. Recuerda que 3 + 6 suman 9, como en todos los resultados de la tabla del 9." },
+
+  { 
+    "val1": "¿Cuánto es...?", 
+    "val2": "5 x 1", 
+    "correct": "5", 
+    "distractors": ["1", "10", "0"], 
+    "error_explanation": "Todo número multiplicado por 1 da como resultado el mismo número." 
+  },
+  { 
+    "val1": "¿Cuánto es...?", 
+    "val2": "5 x 2", 
+    "correct": "10", 
+    "distractors": ["7", "12", "15"], 
+    "error_explanation": "5 x 2 es lo mismo que el doble de 5 (5 + 5)." 
+  },
+  { 
+    "val1": "¿Cuánto es...?", 
+    "val2": "5 x 3", 
+    "correct": "15", 
+    "distractors": ["12", "20", "18"], 
+    "error_explanation": "Tres veces cinco es 15. Los resultados de la tabla del 5 siempre terminan en 0 o 5." 
+  },
+  { 
+    "val1": "¿Cuánto es...?", 
+    "val2": "5 x 4", 
+    "correct": "20", 
+    "distractors": ["25", "15", "24"], 
+    "error_explanation": "Cinco por cuatro es 20. Al multiplicar 5 por un número par, el resultado siempre termina en 0." 
+  },
+  { 
+    "val1": "¿Cuánto es...?", 
+    "val2": "5 x 5", 
+    "correct": "25", 
+    "distractors": ["20", "30", "35"], 
+    "error_explanation": "Cinco veces cinco es 25. Es el cuadrado de 5." 
+  },
+  { 
+    "val1": "¿Cuánto es...?", 
+    "val2": "5 x 6", 
+    "correct": "30", 
+    "distractors": ["35", "25", "40"], 
+    "error_explanation": "Cinco por seis es 30. Un truco es sacar la mitad al 6 (3) y añadirle un cero." 
+  },
+  { 
+    "val1": "¿Cuánto es...?", 
+    "val2": "5 x 7", 
+    "correct": "35", 
+    "distractors": ["40", "30", "45"], 
+    "error_explanation": "Cinco por siete es 35. Como 7 es impar, el resultado debe terminar en 5." 
+  },
+  { 
+    "val1": "¿Cuánto es...?", 
+    "val2": "5 x 8", 
+    "correct": "40", 
+    "distractors": ["45", "35", "50"], 
+    "error_explanation": "Cinco por ocho es 40. Es el doble de 5 x 4." 
+  },
+  { 
+    "val1": "¿Cuánto es...?", 
+    "val2": "5 x 9", 
+    "correct": "45", 
+    "distractors": ["50", "40", "55"], 
+    "error_explanation": "Cinco por nueve es 45. Es 5 menos que 5 x 10 (50)." 
+  },
+
+
+  { "val1": "¿Cuánto es...?", "val2": "6 x 1", "correct": "6", "distractors": ["1", "12", "0"], "error_explanation": "Todo número multiplicado por 1 da como resultado el mismo número." },
+  { "val1": "¿Cuánto es...?", "val2": "6 x 2", "correct": "12", "distractors": ["10", "14", "18"], "error_explanation": "6 x 2 es el doble de 6, es decir, 6 + 6 = 12." },
+  { "val1": "¿Cuánto es...?", "val2": "6 x 3", "correct": "18", "distractors": ["16", "21", "24"], "error_explanation": "Seis veces tres es 18. También puedes pensar en 6 x 2 (12) y sumarle otros 6." },
+  { "val1": "¿Cuánto es...?", "val2": "6 x 4", "correct": "24", "distractors": ["20", "28", "26"], "error_explanation": "Un truco: cuando multiplicas 6 por un número par (4), el resultado termina en esa misma cifra (4)." },
+  { "val1": "¿Cuánto es...?", "val2": "6 x 5", "correct": "30", "distractors": ["25", "35", "40"], "error_explanation": "La mitad de 6 es 3, y le añadimos un cero. ¡La tabla del 5 siempre es sencilla!" },
+  { "val1": "¿Cuánto es...?", "val2": "6 x 6", "correct": "36", "distractors": ["30", "42", "34"], "error_explanation": "Seis por seis, treinta y seis. ¡Es una rima que nunca falla!" },
+  { "val1": "¿Cuánto es...?", "val2": "6 x 7", "correct": "42", "distractors": ["48", "44", "40"], "error_explanation": "6 x 7 es 42. Es una de las combinaciones que más se suelen olvidar, ¡memorízala bien!" },
+  { "val1": "¿Cuánto es...?", "val2": "6 x 8", "correct": "48", "distractors": ["54", "42", "46"], "error_explanation": "Otro truco de pares: 6 multiplicado por 8 termina en 8. El resultado es 48." },
+  { "val1": "¿Cuánto es...?", "val2": "6 x 9", "correct": "54", "distractors": ["63", "45", "56"], "error_explanation": "Puedes calcular 6 x 10 (60) y restarle 6. El resultado es 54." },
+
+  { "val1": "¿Cuánto es...?", "val2": "7 x 1", "correct": "7", "distractors": ["1", "14", "0"], "error_explanation": "Cualquier número multiplicado por 1 da como resultado el mismo número." },
+    { "val1": "¿Cuánto es...?", "val2": "7 x 2", "correct": "14", "distractors": ["12", "16", "21"], "error_explanation": "7 x 2 es el doble de 7, es decir, 7 + 7 = 14." },
+    { "val1": "¿Cuánto es...?", "val2": "7 x 3", "correct": "21", "distractors": ["24", "18", "28"], "error_explanation": "7 x 3 es 21. Un truco es recordar que es una unidad más que 20." },
+    { "val1": "¿Cuánto es...?", "val2": "7 x 4", "correct": "28", "distractors": ["24", "32", "26"], "error_explanation": "7 x 4 es 28. Puedes pensar en el doble de 14." },
+    { "val1": "¿Cuánto es...?", "val2": "7 x 5", "correct": "35", "distractors": ["30", "40", "45"], "error_explanation": "Cualquier número impar multiplicado por 5 siempre termina en 5." },
+    { "val1": "¿Cuánto es...?", "val2": "7 x 6", "correct": "42", "distractors": ["48", "36", "44"], "error_explanation": "7 x 6 es 42. No la confundas con 6 x 8, que es 48." },
+    { "val1": "¿Cuánto es...?", "val2": "7 x 7", "correct": "49", "distractors": ["56", "42", "48"], "error_explanation": "7 x 7 es 49. Es el cuadrado de 7." },
+    { "val1": "¿Cuánto es...?", "val2": "7 x 8", "correct": "56", "distractors": ["54", "63", "58"], "error_explanation": "Un truco para recordar 7 x 8 = 56 es la serie numérica 5, 6, 7, 8." },
+    { "val1": "¿Cuánto es...?", "val2": "7 x 9", "correct": "63", "distractors": ["72", "61", "64"], "error_explanation": "En la tabla del 9, la suma de las cifras siempre es 9 (6 + 3 = 9)." },
+
+
+    { "val1": "¿Cuánto es...?", "val2": "8 x 1", "correct": "8", "distractors": ["1", "16", "0"], "error_explanation": "Todo número multiplicado por 1 da como resultado el mismo número." },
+    { "val1": "¿Cuánto es...?", "val2": "8 x 2", "correct": "16", "distractors": ["14", "18", "12"], "error_explanation": "8 x 2 es el doble de 8, es decir, 8 + 8 = 16." },
+    { "val1": "¿Cuánto es...?", "val2": "8 x 3", "correct": "24", "distractors": ["22", "26", "28"], "error_explanation": "Tres veces ocho son 24. Puedes pensar en 16 + 8." },
+    { "val1": "¿Cuánto es...?", "val2": "8 x 4", "correct": "32", "distractors": ["34", "30", "36"], "error_explanation": "8 x 4 es el doble de 16, lo que da 32." },
+    { "val1": "¿Cuánto es...?", "val2": "8 x 5", "correct": "40", "distractors": ["45", "35", "50"], "error_explanation": "Multiplicar por 5 es como sacar la mitad a 80. Siempre termina en 0 o 5." },
+    { "val1": "¿Cuánto es...?", "val2": "8 x 6", "correct": "48", "distractors": ["42", "46", "54"], "error_explanation": "Recuerda la rima: seis por ocho, cuarenta y ocho." },
+    { "val1": "¿Cuánto es...?", "val2": "8 x 7", "correct": "56", "distractors": ["54", "62", "58"], "error_explanation": "Un truco para recordar 7 x 8 es la serie numérica: 5, 6, 7, 8 (56 = 7 x 8)." },
+    { "val1": "¿Cuánto es...?", "val2": "8 x 8", "correct": "64", "distractors": ["62", "66", "72"], "error_explanation": "8 al cuadrado es 64. Es un número muy común en informática (bytes)." },
+    { "val1": "¿Cuánto es...?", "val2": "8 x 9", "correct": "72", "distractors": ["81", "63", "74"], "error_explanation": "En la tabla del 9, 7 + 2 suman 9. También puedes restar 8 a 80." },
+
+
+    { "val1": "¿Cuánto es...?", "val2": "9 x 1", "correct": "9", "distractors": ["1", "10", "18"], "error_explanation": "Todo número multiplicado por 1 es igual al mismo número." },
+    { "val1": "¿Cuánto es...?", "val2": "9 x 2", "correct": "18", "distractors": ["16", "20", "27"], "error_explanation": "9 veces 2 es 18. Fíjate que 1 + 8 = 9." },
+    { "val1": "¿Cuánto es...?", "val2": "9 x 3", "correct": "27", "distractors": ["24", "30", "36"], "error_explanation": "9 veces 3 es 27. La cifra de las decenas (2) es 3 menos 1." },
+    { "val1": "¿Cuánto es...?", "val2": "9 x 4", "correct": "36", "distractors": ["32", "40", "45"], "error_explanation": "9 x 4 es 36. La suma de sus cifras (3+6) da 9." },
+    { "val1": "¿Cuánto es...?", "val2": "9 x 5", "correct": "45", "distractors": ["50", "40", "54"], "error_explanation": "9 x 5 es 45. Es la mitad de 9 x 10." },
+    { "val1": "¿Cuánto es...?", "val2": "9 x 6", "correct": "54", "distractors": ["56", "63", "48"], "error_explanation": "9 x 6 es 54. Nota que es el inverso de 9 x 5 (45)." },
+    { "val1": "¿Cuánto es...?", "val2": "9 x 7", "correct": "63", "distractors": ["64", "72", "56"], "error_explanation": "9 x 7 es 63. Las decenas (6) es 7 menos 1." },
+    { "val1": "¿Cuánto es...?", "val2": "9 x 8", "correct": "72", "distractors": ["81", "70", "64"], "error_explanation": "9 x 8 es 72. Las cifras suman 9 y las unidades bajan a 2." },
+    { "val1": "¿Cuánto es...?", "val2": "9 x 9", "correct": "81", "distractors": ["90", "89", "72"], "error_explanation": "9 x 9 es 81. Es el último paso antes de llegar al 90 (9x10)." },
+
+
+    { "val1": "¿Cuánto es...?", "val2": "10 x 1", "correct": "10", "distractors": ["1", "100", "20"], "error_explanation": "Cualquier número multiplicado por 1 es el mismo número, en este caso 10." },
+    { "val1": "¿Cuánto es...?", "val2": "10 x 2", "correct": "20", "distractors": ["12", "22", "30"], "error_explanation": "10 veces 2 es 20. Es como poner un 0 detrás del 2." },
+    { "val1": "¿Cuánto es...?", "val2": "10 x 3", "correct": "30", "distractors": ["13", "33", "40"], "error_explanation": "10 veces 3 es 30. Solo tienes que añadir un 0 al 3." },
+    { "val1": "¿Cuánto es...?", "val2": "10 x 4", "correct": "40", "distractors": ["14", "44", "50"], "error_explanation": "10 veces 4 es 40. ¿Ves el patrón? El número se convierte en decenas." },
+    { "val1": "¿Cuánto es...?", "val2": "10 x 5", "correct": "50", "distractors": ["15", "55", "60"], "error_explanation": "10 veces 5 es 50. Es la mitad de 100." },
+    { "val1": "¿Cuánto es...?", "val2": "10 x 6", "correct": "60", "distractors": ["16", "66", "70"], "error_explanation": "10 veces 6 es 60. Seis decenas equivalen a sesenta." },
+    { "val1": "¿Cuánto es...?", "val2": "10 x 7", "correct": "70", "distractors": ["17", "77", "80"], "error_explanation": "10 veces 7 es 70. Siete grupos de diez." },
+    { "val1": "¿Cuánto es...?", "val2": "10 x 8", "correct": "80", "distractors": ["18", "88", "90"], "error_explanation": "10 veces 8 es 80. Solo añade el 0 al final del 8." },
+    { "val1": "¿Cuánto es...?", "val2": "10 x 9", "correct": "90", "distractors": ["19", "99", "100"], "error_explanation": "10 veces 9 es 90. Es el paso previo a llegar al 100." }
+]
+}
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+    function initApp() {
+        loadPageConfig(document.getElementById('database').textContent);
+    }
+
+    function handleFallback(error) {
+        console.warn("Cargando layout.js desde el backup...");
+        let s = document.createElement('script');
+        s.src = 'https://ccarmox.github.io/sandbox3/ui/game.js';
+        // Solo ejecutamos la config cuando el backup termine de cargar
+        s.onload = initApp; 
+        document.head.appendChild(s);
+    }
+</script>
+
+<script src="../../../ui/game.js" 
+        onload="initApp()" 
+        onerror="handleFallback()">
+</script>
+</body>
+
+</html>

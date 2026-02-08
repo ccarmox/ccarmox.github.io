@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cargando...</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script id="database" type="application/json">
+  U2FsdGVkX1/TiEW9O85KQJRblBvbW/FSWui1XHGrCU06MDH8JYNx25H06OLJ/4qz/lehPYznGkPXNWap4P/yosV6U+Lsq+8IavivGiXL8qYLUXnUNuy7HTFM2ZCylAaeyfobxjqsWLK52tmTLFATq4LNUNkAJQ/9T90vcGVwPd8Eb9D3STUQ+u7AiHvRQ2cFbAbK6vo5q8mMX0IozCLu6iu+93FVo719ZB8fE37a2j0L5msach303Azp/hrHMWsQY1I00sLXmWGBtWzAuqnZv3jnP+C/HobNnjcDX+LZV3wUwdE/e/NW2E6CSAUcj++HFedOgoILR0YK8UMSSOn1h9+46szeESMO0bbR+8ayCifLH8a5/jDkCYF4XUM61fqdcyrmNIuaEkDwySYX88ngCfuOYsLg95CqyKV6E1BZ+xHPosOmBUjtCNmLZsuA/Cp4ru+nrU1JAQB2Gym2CFcmmVPCxr8ja992PWviW97D4pbqT6ilqpGHmldmZzvtpEa/72+34sHsuQLhMmHQIPV5agbiDK90S8oGq9UFm6lbHvJz2aDnww5doMU2+fZLkZnBQT5QSOTP+0lBMEIoZjOk1XtPrX7gYl74usRDQfv+zJP7ckl5upWAVVHsko9xuXPjY902Kr0082t3O/9UbbDkenCo7R8SdjVTDfXTgqHFgntsTRi91UH2y3U+QqWj1BPsP3qrsYOQ71sfJTyYkcjQCd5d7OM/ef5qz1LNWvIcoV5RpZPXs0gqYX1hHmHfkAudBEo7dv1mWqyUM88UAtYfOw==
+    </script>
+
+    <script>
+        function initApp() {
+            loadPageConfig(document.getElementById('database').textContent);
+        }
+
+        function handleFallback(error) {
+            console.warn("Cargando layout.js desde el backup...");
+            let s = document.createElement('script');
+            s.src = 'https://ccarmox.github.io/sandbox3/ui/game.js';
+            // Solo ejecutamos la config cuando el backup termine de cargar
+            s.onload = initApp;
+            document.head.appendChild(s);
+        }
+    </script>
+
+    <script src="../../../ui/game.js" onload="initApp()" onerror="handleFallback()">
+    </script>
+
+</body>
+
+</html>
