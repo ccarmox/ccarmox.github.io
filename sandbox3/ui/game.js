@@ -43,15 +43,12 @@ async function loadPageConfig(encripted_data) {
   // Estilos para integración total (hace que el iframe sea imperceptible)
   Object.assign(iframe.style, {
     width: "100%",
-    height: "100vh",
+    height: "100%",        // Cambiamos a 100% para que dependa del padre
+    minHeight: "100vh",    // Forzamos el mínimo de pantalla
     border: "none",
     margin: "0",
     padding: "0",
-    display: "block", // Elimina el espacio extra que los elementos inline dejan debajo
-    overflow: "hidden", // Evita barras de scroll dobles si el hijo tiene el suyo
-    position: "absolute", // Opcional: asegura que empiece desde el borde superior/izquierdo
-    top: "0",
-    left: "0",
+    display: "block"
   });
 
   // Atributos adicionales de limpieza
