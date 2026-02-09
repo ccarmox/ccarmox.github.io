@@ -3,9 +3,9 @@ Completa el siguiente JSON con contenido sobre ######################
 Cambia la información de cada campo para que se adecue a la tematica:
 
 {
-  "titulo": "Titulo de la prueba",
-  "descripcion": "Descripción corta de la prueba",
-  "vidas": 3,
+  "title": "Titulo de la prueba",
+  "description": "Descripción corta de la prueba",
+  "lives": 3,
   "help_title":"Titulo de la ayuda",
   "help_content":"Texto de la ayuda que sirve de resumen de trucos y tecnicas mnemotecnicas que puedan ser utiles para realizar el test, estructurado como markdown",
   "database": [

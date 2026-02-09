@@ -298,11 +298,12 @@
             // Clonamos la base de datos para el pool de preguntas
             questionsPool = [...data];
             totalQuestions = questionsPool.length;
-            lives = (window.json_data && window.json_data.vidas) ? window.json_data.vidas : 3;
+            lives = (window.json_data && window.json_data.lives) ? window.json_data.lives : 3;
 
             if (window.json_data) {
                 document.getElementById('help-title').innerHTML = formatear(window.json_data.help_title) || "Tema";
                 document.getElementById('help-desc').innerHTML = formatear(window.json_data.help_content) || "Instrucción";
+                document.getElementById('main-description').innerHTML = formatear(window.json_data.title) || "Título";
             }
 
             updateStats();
