@@ -27,6 +27,7 @@ window.addEventListener("message", (event) => {
 });
 
 async function loadPageConfig(encripted_data) {
+
   const container = document.getElementById("app");
   
   // RESET DEL CONTENEDOR PADRE (Crucial para el scroll)
@@ -87,7 +88,7 @@ async function loadPageConfig(encripted_data) {
 
     iframe.src = urlValida;
     container.appendChild(iframe);
-    document.title = data.titulo;
+    document.title = data.title;
 
   } catch (error) {
     console.error("Error cargando configuración, mostrando error UI.");
@@ -105,5 +106,6 @@ async function loadPageConfig(encripted_data) {
 
     iframe.src = urlError;
     container.appendChild(iframe);
+    document.title = "🔒";
   }
 }

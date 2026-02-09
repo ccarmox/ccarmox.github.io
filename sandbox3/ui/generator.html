@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador Pro de Enlaces y Archivos + Editor Visual</title>
+    <title>Generador de test + editor</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
         :root {
@@ -47,15 +47,27 @@
             border-color: var(--accent);
         }
 
-        h1, h2, h3 {
+        h1,
+        h2,
+        h3 {
             color: var(--accent);
             margin-top: 0;
         }
-        
-        h1 { text-align: center; margin-bottom: 1.5rem; }
-        h3 { font-size: 1.1rem; margin-bottom: 10px; color: #cbd5e1; }
 
-        .group { margin-bottom: 1.2rem; }
+        h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #cbd5e1;
+        }
+
+        .group {
+            margin-bottom: 1.2rem;
+        }
 
         label {
             display: block;
@@ -64,7 +76,9 @@
             color: #94a3b8;
         }
 
-        input, textarea, select {
+        input,
+        textarea,
+        select {
             width: 100%;
             padding: 12px;
             background: #334155;
@@ -76,7 +90,8 @@
             transition: border-color 0.2s;
         }
 
-        input:focus, textarea:focus {
+        input:focus,
+        textarea:focus {
             border-color: var(--primary);
             outline: none;
         }
@@ -98,8 +113,10 @@
             padding-bottom: 20px;
             border-bottom: 1px solid var(--border);
         }
-        
-        .visual-section.full-width { grid-template-columns: 1fr; }
+
+        .visual-section.full-width {
+            grid-template-columns: 1fr;
+        }
 
         .question-card {
             background: #1e293b;
@@ -134,20 +151,27 @@
             margin: 0;
             font-size: 1.2rem;
         }
-        .btn-icon:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+
+        .btn-icon:hover {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
 
         .btn-add {
             background: var(--success);
             margin-top: 10px;
         }
-        .btn-add:hover { background: #059669; }
+
+        .btn-add:hover {
+            background: #059669;
+        }
 
         .distractor-item {
             display: flex;
             gap: 10px;
             margin-bottom: 5px;
         }
-        
+
         .json-status {
             font-size: 0.8rem;
             text-align: right;
@@ -155,8 +179,14 @@
             margin-bottom: 5px;
             min-height: 1.2em;
         }
-        .status-ok { color: var(--success); }
-        .status-err { color: var(--danger); }
+
+        .status-ok {
+            color: var(--success);
+        }
+
+        .status-err {
+            color: var(--danger);
+        }
 
         /* --- FIN ESTILOS EDITOR --- */
 
@@ -173,8 +203,15 @@
             transition: 0.2s;
         }
 
-        .checkbox-group:hover { border-color: var(--primary); }
-        .checkbox-group input { width: auto; cursor: pointer; margin: 0; }
+        .checkbox-group:hover {
+            border-color: var(--primary);
+        }
+
+        .checkbox-group input {
+            width: auto;
+            cursor: pointer;
+            margin: 0;
+        }
 
         button {
             width: 100%;
@@ -190,7 +227,10 @@
             margin-top: 10px;
         }
 
-        button:hover { background: #4338ca; transform: translateY(-1px); }
+        button:hover {
+            background: #4338ca;
+            transform: translateY(-1px);
+        }
 
         .output-box {
             margin-top: 2rem;
@@ -234,12 +274,13 @@
             color: #64748b;
             margin-top: 10px;
         }
-        
+
         .tabs {
             display: flex;
             gap: 10px;
             margin-bottom: 10px;
         }
+
         .tab {
             padding: 8px 16px;
             background: #334155;
@@ -248,13 +289,16 @@
             font-size: 0.9rem;
             user-select: none;
         }
+
         .tab.active {
             background: var(--accent);
             color: #1e1b4b;
             font-weight: bold;
         }
-        
-        .hidden { display: none; }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 
@@ -270,7 +314,7 @@
 
         <div class="group">
             <label>Contenido del Test:</label>
-            
+
             <div class="tabs">
                 <div class="tab active" onclick="switchTab('visual')">Editor Visual</div>
                 <div class="tab" onclick="switchTab('code')">JSON Crudo</div>
@@ -283,12 +327,13 @@
             <div id="jsonEditorContainer" class="hidden">
                 <div class="json-status" id="jsonStatus">JSON Válido</div>
                 <textarea id="texto" rows="15" placeholder='{"title": "..."}' spellcheck="false"></textarea>
-                <button onclick="copiarPrompt()" style="margin-bottom: 10px; background: #334155;">Copiar Prompt de ejemplo</button>
+                <button onclick="copiarPrompt()" style="margin-bottom: 10px; background: #334155;">Copiar Prompt de
+                    ejemplo</button>
             </div>
         </div>
 
         <label class="checkbox-group">
-            <input type="checkbox" id="encryptCheck" checked onchange="toggleKeyInput()">
+            <input type="checkbox" id="encryptCheck" onchange="toggleKeyInput()">
             <span>Protegido con contraseña</span>
         </label>
 
@@ -336,11 +381,11 @@
             "help_title": "Ayuda",
             "help_content": "Consejos...",
             "database": [
-                { 
-                    "val1": "¿Pregunta?", 
-                    "val2": "", 
-                    "correct": "Respuesta Correcta", 
-                    "distractors": ["Incorrecta 1", "Incorrecta 2"], 
+                {
+                    "val1": "¿Pregunta?",
+                    "val2": "",
+                    "correct": "Respuesta Correcta",
+                    "distractors": ["Incorrecta 1", "Incorrecta 2", "Incorrecta 3"],
                     "error_explanation": "Explicación"
                 }
             ]
@@ -352,7 +397,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const textArea = document.getElementById('texto');
             textArea.value = JSON.stringify(DEFAULT_JSON, null, 2);
-            
+
             // Render inicial
             renderVisualEditor(DEFAULT_JSON);
 
@@ -381,11 +426,11 @@
                 codeDiv.classList.add('hidden');
                 tabs[0].classList.add('active');
                 tabs[1].classList.remove('active');
-                
+
                 // Asegurar que el visual esté al día si se editó el código
                 try {
                     renderVisualEditor(JSON.parse(document.getElementById('texto').value));
-                } catch(e) {}
+                } catch (e) { }
 
             } else {
                 visualDiv.classList.add('hidden');
@@ -399,7 +444,7 @@
 
         function updateJsonFromVisual() {
             isUpdatingFromVisual = true;
-            
+
             // Recopilar datos Globales
             const newData = {
                 title: document.getElementById('v-titulo').value,
@@ -420,10 +465,10 @@
                     error_explanation: card.querySelector('.q-explanation').value,
                     distractors: []
                 };
-                
+
                 // Recopilar Distractores
                 card.querySelectorAll('.d-input').forEach(inp => {
-                    if(inp.value.trim() !== "") q.distractors.push(inp.value);
+                    if (inp.value.trim() !== "") q.distractors.push(inp.value);
                 });
 
                 newData.database.push(q);
@@ -431,7 +476,7 @@
 
             // Actualizar Textarea
             document.getElementById('texto').value = JSON.stringify(newData, null, 2);
-            
+
             // Pequeño timeout para liberar flag
             setTimeout(() => { isUpdatingFromVisual = false; }, 50);
         }
@@ -492,7 +537,7 @@
         function createQuestionCard(q, index) {
             const card = document.createElement('div');
             card.className = 'question-card';
-            
+
             // Construir HTML interno
             let distractorsHtml = '';
             (q.distractors || []).forEach(d => {
@@ -553,25 +598,25 @@
         }
 
         // Helpers del DOM para el editor
-        window.removeQuestion = function(btn) {
-            if(confirm('¿Borrar esta pregunta?')) {
+        window.removeQuestion = function (btn) {
+            if (confirm('¿Borrar esta pregunta?')) {
                 btn.closest('.question-card').remove();
                 updateJsonFromVisual();
             }
         };
 
-        window.addDistractor = function(btn) {
+        window.addDistractor = function (btn) {
             const container = btn.previousElementSibling;
             const div = document.createElement('div');
             div.innerHTML = createDistractorInput("");
             const newItem = div.firstElementChild;
             container.appendChild(newItem);
-            
+
             newItem.querySelector('input').addEventListener('input', updateJsonFromVisual);
             updateJsonFromVisual(); // Actualizar estructura vacía
         };
 
-        window.removeDistractor = function(btn) {
+        window.removeDistractor = function (btn) {
             btn.closest('.distractor-item').remove();
             updateJsonFromVisual();
         };
@@ -645,12 +690,12 @@
                 }
 
                 document.getElementById('texto').value = jsonStr;
-                
+
                 // Intentar renderizar visualmente tras cargar
                 try {
                     const jsonObj = JSON.parse(jsonStr);
                     renderVisualEditor(jsonObj);
-                } catch(e) {
+                } catch (e) {
                     console.log("El contenido cargado no es JSON válido para el editor visual");
                 }
 
@@ -687,9 +732,20 @@
         }
 
         function toggleKeyInput() {
-            const checked = document.getElementById('encryptCheck').checked;
-            document.getElementById('customKey').disabled = !checked;
+            const isChecked = document.getElementById("encryptCheck").checked;
+            const container = document.getElementById("customKeyContainer");
+            const input = document.getElementById("customKey");
+
+            if (isChecked) {
+                container.style.display = "block"; // Muestra el grupo
+                input.disabled = false;           // Habilita el input
+            } else {
+                container.style.display = "none";  // Oculta el grupo
+                input.disabled = true;            // Lo deshabilita (útil para formularios)
+            }
         }
+
+        toggleKeyInput();
 
         function generarPassword(longitud = 16) {
             const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -730,18 +786,18 @@
             // Validar JSON antes de procesar
             try {
                 JSON.parse(textoOriginal);
-            } catch(e) {
-                if(!confirm("El JSON parece inválido. ¿Generar de todas formas?")) return;
+            } catch (e) {
+                if (!confirm("El JSON parece inválido. ¿Generar de todas formas?")) return;
             }
 
             let nombreArchivo = "index.html";
             try {
-                if(baseUrl) {
+                if (baseUrl) {
                     const urlObj = new URL(baseUrl);
                     const lastSegment = urlObj.pathname.substring(urlObj.pathname.lastIndexOf('/') + 1);
                     nombreArchivo = lastSegment.includes('.') ? lastSegment : (lastSegment ? lastSegment + ".html" : "index.html");
                 }
-            } catch (e) {}
+            } catch (e) { }
 
             let contenidoFinal = textoOriginal;
             let claveFinal = "";
@@ -759,7 +815,7 @@
 
             try {
                 const plantilla = await obtenerContenido("../../../ui/html_web_generador_test.html", "https://ccarmox.github.io/sandbox3/ui/html_web_generador_test.html");
-                
+
                 const htmlGenerado = plantilla.replace('#JSON_DATABASE', contenidoFinal);
                 const urlFinal = baseUrl ? `${baseUrl}${urlParams}` : "(Solo archivo local)";
 
@@ -782,4 +838,5 @@
     </script>
 
 </body>
+
 </html>
