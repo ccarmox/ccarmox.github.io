@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Trigonometría Interactiva</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    padding:30px;
+    color:#222;
+}
+
+.container{
+    max-width:1300px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:15px;
+    font-size:42px;
+}
+
+.descripcion{
+    text-align:center;
+    margin-bottom:30px;
+    color:#555;
+    font-size:18px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns: 1fr 420px;
+    gap:30px;
+}
+
+.panel{
+    background:white;
+    border-radius:16px;
+    padding:25px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
+}
+
+svg{
+    width:100%;
+    height:auto;
+}
+
+.controls{
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+}
+
+.control{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+label{
+    font-weight:bold;
+    font-size:18px;
+}
+
+input[type="range"]{
+    width:100%;
+    cursor:pointer;
+}
+
+.valor{
+    color:#0066cc;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.info{
+    margin-top:10px;
+}
+
+.caja{
+    margin-top:20px;
+    background:#eef6ff;
+    border:2px solid #d8e8ff;
+    border-radius:12px;
+    padding:20px;
+}
+
+.formula{
+    font-size:24px;
+    margin:14px 0;
+}
+
+.highlight{
+    color:#d10000;
+    font-weight:bold;
+}
+
+h2{
+    margin-bottom:15px;
+}
+
+h3{
+    margin-bottom:10px;
+}
+
+.medida{
+    margin:8px 0;
+    font-size:18px;
+}
+
+.explicacion{
+    margin-top:20px;
+    line-height:1.7;
+    color:#444;
+}
+
+@media(max-width:950px){
+
+    .layout{
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Trigonometría Interactiva</h1>
+
+    <p class="descripcion">
+        Manipula los sliders para entender visualmente
+        cómo funcionan el seno, coseno y tangente
+        en un triángulo rectángulo.
+    </p>
+
+    <div class="layout">
+
+        <!-- TRIÁNGULO -->
+        <div class="panel">
+
+            <svg viewBox="0 0 900 550">
+
+                <!-- BASE -->
+                <line id="base"
+                      x1="100"
+                      y1="450"
+                      x2="450"
+                      y2="450"
+                      stroke="#ff4444"
+                      stroke-width="6"/>
+
+                <!-- ALTURA -->
+                <line id="altura"
+                      x1="450"
+                      y1="450"
+                      x2="450"
+                      y2="200"
+                      stroke="#ff4444"
+                      stroke-width="6"/>
+
+                <!-- HIPOTENUSA -->
+                <line id="hipotenusa"
+                      x1="100"
+                      y1="450"
+                      x2="450"
+                      y2="200"
+                      stroke="#0066ff"
+                      stroke-width="6"/>
+
+                <!-- ANGULO RECTO -->
+                <rect id="anguloRecto"
+                      x="420"
+                      y="420"
+                      width="30"
+                      height="30"
+                      fill="none"
+                      stroke="#d4a000"
+                      stroke-width="4"/>
+
+                <!-- ETIQUETAS -->
+                <text id="textoB"
+                      x="260"
+                      y="490"
+                      font-size="32"
+                      fill="#111">b</text>
+
+                <text id="textoA"
+                      x="470"
+                      y="330"
+                      font-size="32"
+                      fill="#111">a</text>
+
+                <text id="textoC"
+                      x="260"
+                      y="300"
+                      font-size="32"
+                      fill="#0066ff">c</text>
+
+                <!-- VERTICES -->
+                <text id="verticeA"
+                      x="70"
+                      y="460"
+                      font-size="30"
+                      fill="#111">A</text>
+
+                <text id="verticeB"
+                      x="460"
+                      y="190"
+                      font-size="30"
+                      fill="#111">B</text>
+
+                <text id="verticeC"
+                      x="460"
+                      y="470"
+                      font-size="30"
+                      fill="#111">C</text>
+
+                <!-- ARCO ANGULO -->
+                <path id="anguloArc"
+                      d=""
+                      fill="none"
+                      stroke="#ff9900"
+                      stroke-width="5"/>
+
+                <!-- TEXTO ANGULO -->
+                <text id="anguloTexto"
+                      x="170"
+                      y="410"
+                      font-size="28"
+                      fill="#ff9900"></text>
+
+            </svg>
+
+        </div>
+
+        <!-- CONTROLES -->
+        <div class="panel controls">
+
+            <!-- ANGULO -->
+            <div class="control">
+
+                <label>Ángulo A</label>
+
+                <input type="range"
+                       min="5"
+                       max="85"
+                       value="35"
+                       id="anguloSlider">
+
+                <div class="valor">
+                    <span id="anguloValor">35</span>°
+                </div>
+
+            </div>
+
+            <!-- HIPOTENUSA -->
+            <div class="control">
+
+                <label>Hipotenusa c</label>
+
+                <input type="range"
+                       min="150"
+                       max="424"
+                       value="300"
+                       id="hipotenusaSlider">
+
+                <div class="valor">
+                    <span id="hipotenusaValor">300</span>
+                </div>
+
+            </div>
+
+            <!-- CATETO A -->
+            <div class="control">
+
+                <label>Cateto a</label>
+
+                <input type="range"
+                       min="20"
+                       max="300"
+                       value="172"
+                       id="ladoASlider">
+
+                <div class="valor">
+                    <span id="ladoAValor">172</span>
+                </div>
+
+            </div>
+
+            <!-- CATETO B -->
+            <div class="control">
+
+                <label>Cateto b</label>
+
+                <input type="range"
+                       min="20"
+                       max="300"
+                       value="245"
+                       id="ladoBSlider">
+
+                <div class="valor">
+                    <span id="ladoBValor">245</span>
+                </div>
+
+            </div>
+
+            <!-- INFO -->
+            <div class="info">
+
+                <div class="caja">
+
+                    <h2>Relaciones Trigonométricas</h2>
+
+                    <div class="formula">
+                        sen(A) =
+                        <span class="highlight">a / c</span>
+                        =
+                        <strong id="senValor"></strong>
+                    </div>
+
+                    <div class="formula">
+                        cos(A) =
+                        <span class="highlight">b / c</span>
+                        =
+                        <strong id="cosValor"></strong>
+                    </div>
+
+                    <div class="formula">
+                        tan(A) =
+                        <span class="highlight">a / b</span>
+                        =
+                        <strong id="tanValor"></strong>
+                    </div>
+
+                </div>
+
+                <div class="caja">
+
+                    <h3>Medidas del triángulo</h3>
+
+                    <div class="medida">
+                        Cateto opuesto (a):
+                        <strong id="ladoA"></strong>
+                    </div>
+
+                    <div class="medida">
+                        Cateto adyacente (b):
+                        <strong id="ladoB"></strong>
+                    </div>
+
+                    <div class="medida">
+                        Hipotenusa (c):
+                        <strong id="ladoC"></strong>
+                    </div>
+
+                </div>
+
+                <div class="caja explicacion">
+
+                    <h3>¿Qué está pasando?</h3>
+
+                    <p>
+                        • El <strong>seno</strong> relaciona
+                        el cateto opuesto con la hipotenusa.
+                    </p>
+
+                    <p>
+                        • El <strong>coseno</strong> relaciona
+                        el cateto adyacente con la hipotenusa.
+                    </p>
+
+                    <p>
+                        • La <strong>tangente</strong> relaciona
+                        ambos catetos.
+                    </p>
+
+                    <p>
+                        Cuando cambias un lado o el ángulo,
+                        todo el triángulo se recalcula automáticamente.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+// =========================
+// ELEMENTOS
+// =========================
+
+const anguloSlider =
+    document.getElementById("anguloSlider");
+
+const hipotenusaSlider =
+    document.getElementById("hipotenusaSlider");
+
+const ladoASlider =
+    document.getElementById("ladoASlider");
+
+const ladoBSlider =
+    document.getElementById("ladoBSlider");
+
+let actualizando = false;
+
+// =========================
+// EVENTOS
+// =========================
+
+// ANGULO
+anguloSlider.addEventListener("input", () => {
+
+    if(actualizando) return;
+
+    actualizando = true;
+
+    const angulo =
+        parseFloat(anguloSlider.value);
+
+    const c =
+        parseFloat(hipotenusaSlider.value);
+
+    const rad =
+        angulo * Math.PI / 180;
+
+    const a =
+        c * Math.sin(rad);
+
+    const b =
+        c * Math.cos(rad);
+
+    ladoASlider.value = a;
+    ladoBSlider.value = b;
+
+    actualizarTriangulo();
+
+    actualizando = false;
+});
+
+// HIPOTENUSA
+hipotenusaSlider.addEventListener("input", () => {
+
+    if(actualizando) return;
+
+    actualizando = true;
+
+    const angulo =
+        parseFloat(anguloSlider.value);
+
+    const c =
+        parseFloat(hipotenusaSlider.value);
+
+    const rad =
+        angulo * Math.PI / 180;
+
+    const a =
+        c * Math.sin(rad);
+
+    const b =
+        c * Math.cos(rad);
+
+    ladoASlider.value = a;
+    ladoBSlider.value = b;
+
+    actualizarTriangulo();
+
+    actualizando = false;
+});
+
+// LADO A
+ladoASlider.addEventListener("input", () => {
+
+    if(actualizando) return;
+
+    actualizando = true;
+
+    const a =
+        parseFloat(ladoASlider.value);
+
+    const b =
+        parseFloat(ladoBSlider.value);
+
+    recalcularDesdeCatetos(a, b);
+
+    actualizando = false;
+});
+
+// LADO B
+ladoBSlider.addEventListener("input", () => {
+
+    if(actualizando) return;
+
+    actualizando = true;
+
+    const a =
+        parseFloat(ladoASlider.value);
+
+    const b =
+        parseFloat(ladoBSlider.value);
+
+    recalcularDesdeCatetos(a, b);
+
+    actualizando = false;
+});
+
+// =========================
+// RECALCULAR
+// =========================
+
+function recalcularDesdeCatetos(a, b){
+
+    const c =
+        Math.sqrt(a*a + b*b);
+
+    const angulo =
+        Math.atan(a / b) * 180 / Math.PI;
+
+    hipotenusaSlider.value = c;
+    anguloSlider.value = angulo;
+
+    actualizarTriangulo();
+}
+
+// =========================
+// ACTUALIZAR
+// =========================
+
+function actualizarTriangulo(){
+
+    const angulo =
+        parseFloat(anguloSlider.value);
+
+    const a =
+        parseFloat(ladoASlider.value);
+
+    const b =
+        parseFloat(ladoBSlider.value);
+
+    const c =
+        parseFloat(hipotenusaSlider.value);
+
+    // Mostrar sliders
+    document.getElementById("anguloValor")
+        .textContent = angulo.toFixed(1);
+
+    document.getElementById("hipotenusaValor")
+        .textContent = c.toFixed(1);
+
+    document.getElementById("ladoAValor")
+        .textContent = a.toFixed(1);
+
+    document.getElementById("ladoBValor")
+        .textContent = b.toFixed(1);
+
+    // Escala visual
+    const escala = 1.5;
+
+    // Coordenadas
+    const origenX = 100;
+    const origenY = 450;
+
+    const puntoBX =
+        origenX + (b * escala);
+
+    const puntoBY =
+        origenY;
+
+    const puntoCX =
+        puntoBX;
+
+    const puntoCY =
+        origenY - (a * escala);
+
+    // BASE
+    document.getElementById("base")
+        .setAttribute("x2", puntoBX);
+
+    // ALTURA
+    document.getElementById("altura")
+        .setAttribute("x1", puntoBX);
+
+    document.getElementById("altura")
+        .setAttribute("x2", puntoCX);
+
+    document.getElementById("altura")
+        .setAttribute("y2", puntoCY);
+
+    // HIPOTENUSA
+    document.getElementById("hipotenusa")
+        .setAttribute("x2", puntoCX);
+
+    document.getElementById("hipotenusa")
+        .setAttribute("y2", puntoCY);
+
+    // ANGULO RECTO
+    const rect =
+        document.getElementById("anguloRecto");
+
+    rect.setAttribute("x", puntoBX - 30);
+    rect.setAttribute("y", puntoBY - 30);
+
+    // =========================
+    // TEXTOS LADOS
+    // =========================
+
+    document.getElementById("textoB")
+        .setAttribute(
+            "x",
+            (origenX + puntoBX)/2
+        );
+
+    document.getElementById("textoB")
+        .setAttribute(
+            "y",
+            origenY + 40
+        );
+
+    document.getElementById("textoA")
+        .setAttribute(
+            "x",
+            puntoBX + 20
+        );
+
+    document.getElementById("textoA")
+        .setAttribute(
+            "y",
+            (puntoBY + puntoCY)/2
+        );
+
+    document.getElementById("textoC")
+        .setAttribute(
+            "x",
+            (origenX + puntoCX)/2 - 20
+        );
+
+    document.getElementById("textoC")
+        .setAttribute(
+            "y",
+            (origenY + puntoCY)/2 - 10
+        );
+
+    // =========================
+    // VERTICES
+    // =========================
+
+    document.getElementById("verticeA")
+        .setAttribute("x", origenX - 30);
+
+    document.getElementById("verticeA")
+        .setAttribute("y", origenY + 10);
+
+    document.getElementById("verticeB")
+        .setAttribute("x", puntoCX + 10);
+
+    document.getElementById("verticeB")
+        .setAttribute("y", puntoCY - 10);
+
+    document.getElementById("verticeC")
+        .setAttribute("x", puntoBX + 10);
+
+    document.getElementById("verticeC")
+        .setAttribute("y", puntoBY + 25);
+
+    // =========================
+    // ARCO ANGULO
+    // =========================
+
+    const rad =
+        angulo * Math.PI / 180;
+
+    const radio = 70;
+
+    const arcX =
+        origenX + radio * Math.cos(rad);
+
+    const arcY =
+        origenY - radio * Math.sin(rad);
+
+    const path = `
+        M ${origenX + radio} ${origenY}
+        A ${radio} ${radio} 0 0 0 ${arcX} ${arcY}
+    `;
+
+    document.getElementById("anguloArc")
+        .setAttribute("d", path);
+
+    // TEXTO ANGULO
+    document.getElementById("anguloTexto")
+        .setAttribute("x", origenX + 85);
+
+    document.getElementById("anguloTexto")
+        .setAttribute("y", origenY - 25);
+
+    document.getElementById("anguloTexto")
+        .textContent =
+            angulo.toFixed(1) + "°";
+
+    // =========================
+    // TRIGONOMETRIA
+    // =========================
+
+    document.getElementById("senValor")
+        .textContent =
+            (a/c).toFixed(4);
+
+    document.getElementById("cosValor")
+        .textContent =
+            (b/c).toFixed(4);
+
+    document.getElementById("tanValor")
+        .textContent =
+            (a/b).toFixed(4);
+
+    // =========================
+    // MEDIDAS
+    // =========================
+
+    document.getElementById("ladoA")
+        .textContent =
+            a.toFixed(2);
+
+    document.getElementById("ladoB")
+        .textContent =
+            b.toFixed(2);
+
+    document.getElementById("ladoC")
+        .textContent =
+            c.toFixed(2);
+}
+
+// INICIO
+actualizarTriangulo();
+
+</script>
+
+</body>
+</html>
