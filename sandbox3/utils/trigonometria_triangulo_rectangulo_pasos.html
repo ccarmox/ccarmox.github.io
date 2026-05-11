@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resolutor de Triángulos Rectángulos</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    body {
+      margin: 0;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      width: 900px;
+      max-width: 100%;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+    .content {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .triangle {
+      flex: 1;
+      min-width: 280px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    svg {
+      width: 100%;
+      max-width: 350px;
+    }
+    .formulario {
+      flex: 1;
+      min-width: 280px;
+    }
+    .grupo {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      background: #0077ff;
+      color: white;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #005fd1;
+    }
+    .resultado {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f0f7ff;
+      border-radius: 8px;
+      border: 1px solid #c9e2ff;
+    }
+    .resultado ul {
+      padding-left: 20px;
+    }
+    .resultado li {
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .resultado hr {
+      border: none;
+      border-top: 1px solid #c9e2ff;
+      margin: 15px 0;
+    }
+    .nota {
+      margin-top: 15px;
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Resolutor de Triángulos Rectángulos</h1>
+    <div class="content">
+      <!-- DIBUJO -->
+      <div class="triangle">
+        <svg viewBox="0 0 400 250">
+          <!-- Triángulo -->
+          <line x1="50" y1="200" x2="300" y2="200" stroke="red" stroke-width="4"/>
+          <line x1="300" y1="200" x2="300" y2="50" stroke="red" stroke-width="4"/>
+          <line x1="50" y1="200" x2="300" y2="50" stroke="red" stroke-width="4"/>
+          <!-- Ángulo recto -->
+          <rect x="275" y="175" width="25" height="25" fill="none" stroke="#d4aa00" stroke-width="3"/>
+          <!-- Etiquetas -->
+          <text x="160" y="220" fill="blue" font-size="24">b</text>
+          <text x="315" y="130" fill="blue" font-size="24">a</text>
+          <text x="170" y="120" fill="blue" font-size="24">c</text>
+          <text x="35" y="215" fill="blue" font-size="24">A</text>
+          <text x="305" y="45" fill="blue" font-size="24">B</text>
+          <text x="305" y="220" fill="blue" font-size="24">C</text>
+          <text x="80" y="190" fill="#aa8800" font-size="24">α</text>
+        </svg>
+      </div>
+      <!-- FORMULARIO -->
+      <div class="formulario">
+        <div class="grupo">
+          <label>Lado a</label>
+          <input type="number" id="a" step="any">
+        </div>
+        <div class="grupo">
+          <label>Lado b</label>
+          <input type="number" id="b" step="any">
+        </div>
+        <div class="grupo">
+          <label>Hipotenusa c</label>
+          <input type="number" id="c" step="any">
+        </div>
+        <div class="grupo">
+          <label>Ángulo A (grados)</label>
+          <input type="number" id="A" step="any">
+        </div>
+        <div class="grupo">
+          <label>Ángulo B (grados)</label>
+          <input type="number" id="B" step="any">
+        </div>
+        <div class="grupo">
+          <label>Ángulo C (grados)</label>
+          <input type="number" id="C" value="90" readonly>
+        </div>
+        <button onclick="resolver()">Resolver</button>
+        <div class="resultado" id="resultado">
+          Introduce al menos:
+          <ul>
+            <li>2 lados</li>
+            <li>o 1 lado + 1 ángulo</li>
+          </ul>
+        </div>
+        <div class="nota">
+          El triángulo es rectángulo, por lo tanto C = 90°.
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+function resolver() {
+  let a = parseFloat(document.getElementById("a").value);
+  let b = parseFloat(document.getElementById("b").value);
+  let c = parseFloat(document.getElementById("c").value);
+  let A = parseFloat(document.getElementById("A").value);
+  let B = parseFloat(document.getElementById("B").value);
+
+  let lados = [a,b,c].filter(x => !isNaN(x)).length;
+  let angulos = [A,B].filter(x => !isNaN(x)).length;
+  let pasos = []; // Array para guardar la explicación
+
+  try {
+    // =========================
+    // CASO 1: DOS LADOS (Usando Trigonometría Inversa en vez de Pitágoras)
+    // =========================
+    if(lados >= 2){
+      if(!isNaN(a) && !isNaN(b)){
+        A = radToDeg(Math.atan(a/b));
+        pasos.push(`<strong>Cálculo de A:</strong> Usamos tangente (tan(A) = a/b). A = arctan(${a}/${b}) = ${redondear(A)}°`);
+        
+        B = 180 - 90 - A;
+        pasos.push(`<strong>Cálculo de B:</strong> Suma de ángulos (180°). B = 180° - 90° - ${redondear(A)}° = ${redondear(B)}°`);
+        
+        c = a / Math.sin(degToRad(A));
+        pasos.push(`<strong>Cálculo de c:</strong> Usamos seno (sen(A) = a/c). c = a / sen(A) = ${a} / sen(${redondear(A)}°) = ${redondear(c)}`);
+      }
+      else if(!isNaN(a) && !isNaN(c)){
+        A = radToDeg(Math.asin(a/c));
+        pasos.push(`<strong>Cálculo de A:</strong> Usamos seno (sen(A) = a/c). A = arcsen(${a}/${c}) = ${redondear(A)}°`);
+        
+        B = 180 - 90 - A;
+        pasos.push(`<strong>Cálculo de B:</strong> Suma de ángulos (180°). B = 180° - 90° - ${redondear(A)}° = ${redondear(B)}°`);
+        
+        b = c * Math.cos(degToRad(A));
+        pasos.push(`<strong>Cálculo de b:</strong> Usamos coseno (cos(A) = b/c). b = c * cos(A) = ${c} * cos(${redondear(A)}°) = ${redondear(b)}`);
+      }
+      else if(!isNaN(b) && !isNaN(c)){
+        A = radToDeg(Math.acos(b/c));
+        pasos.push(`<strong>Cálculo de A:</strong> Usamos coseno (cos(A) = b/c). A = arccos(${b}/${c}) = ${redondear(A)}°`);
+        
+        B = 180 - 90 - A;
+        pasos.push(`<strong>Cálculo de B:</strong> Suma de ángulos (180°). B = 180° - 90° - ${redondear(A)}° = ${redondear(B)}°`);
+        
+        a = c * Math.sin(degToRad(A));
+        pasos.push(`<strong>Cálculo de a:</strong> Usamos seno (sen(A) = a/c). a = c * sen(A) = ${c} * sen(${redondear(A)}°) = ${redondear(a)}`);
+      }
+    }
+    // =========================
+    // CASO 2: UN LADO + UN ÁNGULO
+    // =========================
+    else if(lados >= 1 && angulos >= 1){
+      if(isNaN(A)){
+        A = 180 - 90 - B;
+        pasos.push(`<strong>Cálculo de A:</strong> Suma de ángulos (180°). A = 180° - 90° - ${B}° = ${redondear(A)}°`);
+      } else if(isNaN(B)){
+        B = 180 - 90 - A;
+        pasos.push(`<strong>Cálculo de B:</strong> Suma de ángulos (180°). B = 180° - 90° - ${A}° = ${redondear(B)}°`);
+      }
+
+      // Si conocemos hipotenusa
+      if(!isNaN(c)){
+        a = c * Math.sin(degToRad(A));
+        pasos.push(`<strong>Cálculo de a:</strong> Usamos seno (sen(A) = a/c). a = c * sen(A) = ${c} * sen(${redondear(A)}°) = ${redondear(a)}`);
+        
+        b = c * Math.cos(degToRad(A));
+        pasos.push(`<strong>Cálculo de b:</strong> Usamos coseno (cos(A) = b/c). b = c * cos(A) = ${c} * cos(${redondear(A)}°) = ${redondear(b)}`);
+      }
+      // Si conocemos cateto a
+      else if(!isNaN(a)){
+        c = a / Math.sin(degToRad(A));
+        pasos.push(`<strong>Cálculo de c:</strong> Usamos seno (sen(A) = a/c). c = a / sen(A) = ${a} / sen(${redondear(A)}°) = ${redondear(c)}`);
+        
+        b = a / Math.tan(degToRad(A));
+        pasos.push(`<strong>Cálculo de b:</strong> Usamos tangente (tan(A) = a/b). b = a / tan(A) = ${a} / tan(${redondear(A)}°) = ${redondear(b)}`);
+      }
+      // Si conocemos cateto b
+      else if(!isNaN(b)){
+        c = b / Math.cos(degToRad(A));
+        pasos.push(`<strong>Cálculo de c:</strong> Usamos coseno (cos(A) = b/c). c = b / cos(A) = ${b} / cos(${redondear(A)}°) = ${redondear(c)}`);
+        
+        a = b * Math.tan(degToRad(A));
+        pasos.push(`<strong>Cálculo de a:</strong> Usamos tangente (tan(A) = a/b). a = b * tan(A) = ${b} * tan(${redondear(A)}°) = ${redondear(a)}`);
+      }
+    } else {
+      throw "Datos insuficientes.";
+    }
+
+    // Actualizar inputs
+    document.getElementById("a").value = redondear(a);
+    document.getElementById("b").value = redondear(b);
+    document.getElementById("c").value = redondear(c);
+    document.getElementById("A").value = redondear(A);
+    document.getElementById("B").value = redondear(B);
+
+    // Formatear los pasos a HTML
+    let pasosHTML = pasos.map(paso => `<li>${paso}</li>`).join("");
+
+    // Mostrar resultados y pasos
+    document.getElementById("resultado").innerHTML = `
+      <h3 style="margin-top: 0;">Resultado Final</h3>
+      <p><strong>a:</strong> ${redondear(a)} | <strong>b:</strong> ${redondear(b)} | <strong>c:</strong> ${redondear(c)}</p>
+      <p><strong>A:</strong> ${redondear(A)}° | <strong>B:</strong> ${redondear(B)}° | <strong>C:</strong> 90°</p>
+      <hr>
+      <h3>Pasos de resolución</h3>
+      <ul>${pasosHTML}</ul>
+    `;
+
+  } catch(error){
+    document.getElementById("resultado").innerHTML = "<strong>Error:</strong> " + error + " Introduce valores válidos.";
+  }
+}
+
+function degToRad(grados){
+  return grados * Math.PI / 180;
+}
+
+function radToDeg(rad){
+  return rad * 180 / Math.PI;
+}
+
+function redondear(num){
+  return Number(num.toFixed(4));
+}
+</script>
+</body>
+</html>
