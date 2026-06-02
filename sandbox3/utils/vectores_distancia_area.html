@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometría Analítica - 4º ESO</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --accent: #0f172a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-left: 5px solid var(--primary);
+            padding-left: 10px;
+        }
+
+        h3 {
+            margin: 20px 0 10px 0;
+            color: var(--primary);
+        }
+
+        .formula {
+            background-color: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px dashed var(--border);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .input-group input:focus {
+            outline: 2px solid var(--primary);
+        }
+
+        button.calc-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+
+        button.calc-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .resultado-box {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f0fdf4;
+            border-left: 5px solid #22c55e;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .paso {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #bbf7d0;
+        }
+
+        .paso:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .final-ans {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #15803d;
+            margin-top: 10px;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Geometría Analítica Interactiva</h1>
+        <p>Material de Apoyo y Solucionador Paso a Paso para 4º de ESO</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('distancia-puntos')">Distancia Puntos</button>
+            <button class="tab-btn" onclick="switchTab('distancia-recta')">Punto a Recta</button>
+            <button class="tab-btn" onclick="switchTab('area-triangulo')">Área Triángulo</button>
+        </div>
+
+        <div id="distancia-puntos" class="tab-content active">
+            <div class="card">
+                <h2>Distancia entre dos Puntos</h2>
+                <p>La distancia entre dos puntos <strong>A(x₀, y₀)</strong> y <strong>B(x₁, y₁)</strong> equivale al módulo del vector que los une. Se calcula aplicando el teorema de Pitágoras sobre sus coordenadas:</p>
+                
+                <div class="formula">
+                    d(A, B) = |AB| = √[ (x₁ - x₀)² + (y₁ - y₀)² ]
+                </div>
+
+                <h3>Solucionador Automático</h3>
+                <p style="margin-bottom: 15px; color: var(--text-light)">Introduce las coordenadas de tus puntos A y B para ver la resolución analítica:</p>
+                
+                <div class="grid-inputs">
+                    <div class="input-group">
+                        <label>A (x₀)</label>
+                        <input type="number" id="dp-x0" value="2">
+                    </div>
+                    <div class="input-group">
+                        <label>A (y₀)</label>
+                        <input type="number" id="dp-y0" value="3">
+                    </div>
+                    <div class="input-group">
+                        <label>B (x₁)</label>
+                        <input type="number" id="dp-x1" value="3">
+                    </div>
+                    <div class="input-group">
+                        <label>B (y₁)</label>
+                        <input type="number" id="dp-y1" value="-1">
+                    </div>
+                </div>
+
+                <button class="calc-btn" onclick="calcularDistanciaPuntos()">Calcular Paso a Paso</button>
+
+                <div id="res-distancia-puntos" class="resultado-box"></div>
+            </div>
+        </div>
+
+        <div id="distancia-recta" class="tab-content">
+            <div class="card">
+                <h2>Distancia de un Punto a una Recta</h2>
+                <p>Dada una recta en su ecuación general <strong>r: Ax + By + C = 0</strong> y un punto <strong>P(x₀, y₀)</strong>, la distancia se define como la longitud del segmento perpendicular a la recta desde dicho punto:</p>
+                
+                <div class="formula">
+                    d(P, r) = |A·x₀ + B·y₀ + C| / √(A² + B²)
+                </div>
+
+                <h3>Solucionador Automático</h3>
+                <div class="grid-inputs">
+                    <div class="input-group">
+                        <label>Punto P (x₀)</label>
+                        <input type="number" id="dpr-x0" value="1">
+                    </div>
+                    <div class="input-group">
+                        <label>Punto P (y₀)</label>
+                        <input type="number" id="dpr-y0" value="-5">
+                    </div>
+                    <div class="input-group">
+                        <label>Recta A</label>
+                        <input type="number" id="dpr-A" value="2">
+                    </div>
+                    <div class="input-group">
+                        <label>Recta B</label>
+                        <input type="number" id="dpr-B" value="-1">
+                    </div>
+                    <div class="input-group">
+                        <label>Recta C</label>
+                        <input type="number" id="dpr-C" value="3">
+                    </div>
+                </div>
+
+                <button class="calc-btn" onclick="calcularDistanciaPuntoRecta()">Calcular Paso a Paso</button>
+
+                <div id="res-distancia-recta" class="resultado-box"></div>
+            </div>
+        </div>
+
+        <div id="area-triangulo" class="tab-content">
+            <div class="card">
+                <h2>Área de un Triángulo por Vértices</h2>
+                <p>Para hallar el área de un triángulo conociendo sus tres vértices <strong>A</strong>, <strong>B</strong> y <strong>C</strong>, seguimos tres pasos esenciales:</p>
+                <ol>
+                    <li>Calculamos la longitud de la base como la distancia entre dos puntos, por ejemplo <strong>d(A, B)</strong>.</li>
+                    <li>Hallamos la ecuación general de la recta que pasa por <strong>A</strong> y <strong>B</strong>.</li>
+                    <li>La altura será la distancia del tercer punto <strong>C</strong> a la recta <strong>r_AB</strong>. Finalmente aplicamos <code>(Base · Altura) / 2</code>.</li>
+                </ol>
+
+                <h3>Solucionador Automático</h3>
+                <div class="grid-inputs">
+                    <div class="input-group"><label>A (x)</label><input type="number" id="at-ax" value="1"></div>
+                    <div class="input-group"><label>A (y)</label><input type="number" id="at-ay" value="-5"></div>
+                    <div class="input-group"><label>B (x)</label><input type="number" id="at-bx" value="4"></div>
+                    <div class="input-group"><label>B (y)</label><input type="number" id="at-by" value="2"></div>
+                    <div class="input-group"><label>C (x)</label><input type="number" id="at-cx" value="-3"></div>
+                    <div class="input-group"><label>C (y)</label><input type="number" id="at-cy" value="3"></div>
+                </div>
+
+                <button class="calc-btn" onclick="calcularAreaTriangulo()">Calcular Paso a Paso</button>
+
+                <div id="res-area-triangulo" class="resultado-box"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Sistema de Pestañas
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Simplificador básico de raíces para estética visual
+        function formatRaiz(num) {
+            if (num < 0) return "NaN";
+            let raizExacta = Math.sqrt(num);
+            if (Number.isInteger(raizExacta)) return raizExacta.toString();
+            
+            // Intento de extraer factores (ej: √58)
+            return `√${num} (≈ ${raizExacta.toFixed(2)})`;
+        }
+
+        // 1. Lógica Distancia entre dos puntos
+        function calcularDistanciaPuntos() {
+            let x0 = parseFloat(document.getElementById('dp-x0').value);
+            let y0 = parseFloat(document.getElementById('dp-y0').value);
+            let x1 = parseFloat(document.getElementById('dp-x1').value);
+            let y1 = parseFloat(document.getElementById('dp-y1').value);
+
+            let compX = x1 - x0;
+            let compY = y1 - y0;
+            let sumCuadrados = (compX * compX) + (compY * compY);
+            let resultado = Math.sqrt(sumCuadrados);
+
+            let html = `
+                <div class="paso"><strong>Paso 1:</strong> Hallar el vector de unión AB = (x₁ - x₀, y₁ - y₀)</div>
+                <div class="paso">AB = (${x1} - (${x0}), ${y1} - (${y0})) = <strong>(${compX}, ${compY})</strong></div>
+                <div class="paso"><strong>Paso 2:</strong> Aplicar la fórmula del módulo</div>
+                <div class="paso">d(A, B) = √[ (${compX})² + (${compY})² ] = √[ ${compX*compX} + ${compY*compY} ] = √${sumCuadrados}</div>
+                <div class="final-ans">Resultado final: ${resultado.toFixed(3)} unidades</div>
+            `;
+            
+            let box = document.getElementById('res-distancia-puntos');
+            box.innerHTML = html;
+            box.style.display = 'block';
+        }
+
+        // 2. Lógica Distancia Punto a Recta
+        function calcularDistanciaPuntoRecta() {
+            let x0 = parseFloat(document.getElementById('dpr-x0').value);
+            let y0 = parseFloat(document.getElementById('dpr-y0').value);
+            let A = parseFloat(document.getElementById('dpr-A').value);
+            let B = parseFloat(document.getElementById('dpr-B').value);
+            let C = parseFloat(document.getElementById('dpr-C').value);
+
+            let numerador = Math.abs((A * x0) + (B * y0) + C);
+            let denominadorCuadrado = (A * A) + (B * B);
+            let denominador = Math.sqrt(denominadorCuadrado);
+            let resultado = numerador / denominador;
+
+            let html = `
+                <div class="paso"><strong>Paso 1:</strong> Sustituir el punto P(${x0}, ${y0}) en el numerador en valor absoluto</div>
+                <div class="paso">|A·x₀ + B·y₀ + C| = |${A}·(${x0}) + (${B})·(${y0}) + (${C})| = |${(A*x0) + (B*y0) + C}| = <strong>${numerador}</strong></div>
+                <div class="paso"><strong>Paso 2:</strong> Calcular el módulo del vector normal del denominador</div>
+                <div class="paso">√(A² + B²) = √(${A}² + (${B})²) = √(${A*A} + ${B*B}) = √${denominadorCuadrado}</div>
+                <div class="paso"><strong>Paso 3:</strong> Dividir los términos</div>
+                <div class="paso">d(P, r) = ${numerador} / √${denominadorCuadrado}</div>
+                <div class="final-ans">Resultado final: ${resultado.toFixed(3)} unidades</div>
+            `;
+
+            let box = document.getElementById('res-distancia-recta');
+            box.innerHTML = html;
+            box.style.display = 'block';
+        }
+
+        // 3. Lógica Completa Área de Triángulo
+        function calcularAreaTriangulo() {
+            let ax = parseFloat(document.getElementById('at-ax').value);
+            let ay = parseFloat(document.getElementById('at-ay').value);
+            let bx = parseFloat(document.getElementById('at-bx').value);
+            let by = parseFloat(document.getElementById('at-by').value);
+            let cx = parseFloat(document.getElementById('at-cx').value);
+            let cy = parseFloat(document.getElementById('at-cy').value);
+
+            // Base = Distancia AB
+            let abx = bx - ax;
+            let aby = by - ay;
+            let baseCuadrada = (abx * abx) + (aby * aby);
+            let base = Math.sqrt(baseCuadrada);
+
+            // Recta AB: Ecuación continua (x - ax)/abx = (y - ay)/aby
+            // General: aby*(x - ax) - abx*(y - ay) = 0 -> (aby)x + (-abx)y + (-aby*ax + abx*ay) = 0
+            let rA = aby;
+            let rB = -abx;
+            let rC = (-aby * ax) + (abx * ay);
+
+            // Altura = Distancia de C a Recta AB
+            let numAltura = Math.abs((rA * cx) + (rB * cy) + rC);
+            let denAlturaCuadrado = (rA * rA) + (rB * rB); // Notar que denAlturaCuadrado siempre es igual a baseCuadrada
+            let denAltura = Math.sqrt(denAlturaCuadrado);
+            let altura = numAltura / denAltura;
+
+            // Área = (base * altura) / 2
+            let area = (base * altura) / 2;
+
+            let html = `
+                <div class="paso"><strong>Paso 1: Longitud de la Base (Distancia AB)</strong><br>
+                Vector AB = (${bx} - ${ax}, ${by} - ${ay}) = (${abx}, ${aby})<br>
+                Base = |AB| = √(${abx}² + ${aby}²) = √${baseCuadrada} ≈ <strong>${base.toFixed(3)}</strong></div>
+                
+                <div class="paso"><strong>Paso 2: Ecuación implícita/general de la recta AB</strong><br>
+                A partir del punto A(${ax}, ${ay}) y vector director (${abx}, ${aby}):<br>
+                Recta AB: <strong>${rA}x + (${rB})y + (${rC}) = 0</strong></div>
+                
+                <div class="paso"><strong>Paso 3: Altura (Distancia del vértice C(${cx}, ${cy}) a la recta)</strong><br>
+                Altura = |${rA}·(${cx}) + (${rB})·(${cy}) + (${rC})| / √(${rA}² + (${rB})²)<br>
+                Altura = |${(rA*cx) + (rB*cy) + rC}| / √${denAlturaCuadrado} = ${numAltura} / √${denAlturaCuadrado} ≈ <strong>${altura.toFixed(3)}</strong></div>
+                
+                <div class="paso"><strong>Paso 4: Cálculo del Área</strong><br>
+                Área = (Base · Altura) / 2 = (√${baseCuadrada} · [${numAltura} / √${denAlturaCuadrado}]) / 2 <br>
+                *Nota: Las raíces se cancelan mutuamente en este proceso analítico.<br>
+                Área = ${numAltura} / 2 = <strong>${area}</strong></div>
+                
+                <div class="final-ans">Área del Triángulo: ${area.toFixed(2)} unidades cuadradas</div>
+            `;
+
+            let box = document.getElementById('res-area-triangulo');
+            box.innerHTML = html;
+            box.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

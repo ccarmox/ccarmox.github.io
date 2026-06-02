@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometría Analítica - 4º ESO</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --accent: #059669;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        h2 {
+            color: #1e3a8a;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            margin-top: 15px;
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .formula {
+            background-color: #f1f5f9;
+            padding: 12px;
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .ejemplo {
+            background-color: #fef3c7;
+            padding: 12px;
+            border-left: 4px solid #d97706;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-size: 0.95rem;
+        }
+
+        /* Estilos del Solucionador */
+        .solucionador {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .solucionador h3 {
+            color: var(--text);
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .point-input {
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .point-input label {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        input[type="number"] {
+            width: 60px;
+            padding: 6px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .resultado {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #ecfdf5;
+            border-left: 4px solid var(--accent);
+            border-radius: 4px;
+            display: none;
+        }
+
+        .paso {
+            margin-bottom: 8px;
+            font-family: inherit;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #e0e7ff;
+            color: #3730a3;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Geometría Analítica</h1>
+        <p>Departamento de Matemáticas — IES Val Do Tea (4º ESO)</p>
+    </header>
+
+    <div class="grid">
+
+        <div class="card">
+            <h2>1. Coordenadas de un Vector que Une Dos Puntos</h2>
+            <p>Supongamos que tenemos dos puntos <strong>A(x₁, y₁)</strong> e <strong>B(x₂, y₂)</strong>. El vector <span class="badge">AB</span> se calcula restando a las coordenadas del punto de destino (final) las coordenadas del punto de origen (inicial):</p>
+            
+            <div class="formula">
+                ⃗AB = ⃗OB − ⃗OA = (x₂ − x₁, y₂ − y₁)
+            </div>
+
+            <div class="ejemplo">
+                <strong>Ejemplo:</strong> Dados M(7, −5) y N(−2, −11):<br>
+                ⃗MN = N − M = (−2 − 7, −11 − (−5)) = <strong>(−9, −6)</strong><br>
+                ⃗NM = M − N = (7 − (−2), −5 − (−11)) = <strong>(9, 6)</strong>
+            </div>
+
+            <div class="solucionador">
+                <h3>🧮 Solucionador: Calcular Vector ⃗AB</h3>
+                <div class="input-group">
+                    <div class="point-input">
+                        <label>A:</label>
+                        (<input type="number" id="ax" value="7">, <input type="number" id="ay" value="-5">)
+                    </div>
+                    <div class="point-input">
+                        <label>B:</label>
+                        (<input type="number" id="bx" value="-2">, <input type="number" id="by" value="-11">)
+                    </div>
+                    <button onclick="calcularVector()">Calcular Vector</button>
+                </div>
+                <div id="res-vector" class="resultado"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>2. Condición para que Tres Puntos estén Alineados</h2>
+            <p>Para que tres puntos <strong>A</strong>, <strong>B</strong> y <strong>C</strong> estén alineados, los vectores <strong>⃗AB</strong> y <strong>⃗BC</strong> tienen que tener la misma dirección. Es decir, sus coordenadas tienen que ser proporcionales:</p>
+            
+            <div class="formula">
+                (x₂ − x₁) / (x₃ − x₂) = (y₂ − y₁) / (y₃ − y₂)
+            </div>
+
+            <div class="ejemplo">
+                <strong>Ejemplo:</strong> ¿P(7,11), Q(4,−3) y R(10,25) están alineados?<br>
+                ⃗PQ = (−3, −14) y ⃗QR = (6, 28). Como ⃗QR = −2 · ⃗PQ (son proporcionales), <strong>SÍ están alineados</strong>.
+            </div>
+
+            <div class="solucionador">
+                <h3>🧮 Solucionador: ¿Están alineados A, B y C?</h3>
+                <div class="input-group">
+                    <div class="point-input"><label>A:</label> (<input type="number" id="alx" value="0">, <input type="number" id="aly" value="3">)</div>
+                    <div class="point-input"><label>B:</label> (<input type="number" id="blx" value="2">, <input type="number" id="bly" value="2">)</div>
+                    <div class="point-input"><label>C:</label> (<input type="number" id="clx" value="4">, <input type="number" id="cly" value="1">)</div>
+                    <button onclick="comprobarAlineacion()">Comprobar</button>
+                </div>
+                <div id="res-alineados" class="resultado"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>3. Punto Medio de un Segmento</h2>
+            <p>Las coordenadas del punto medio <strong>M</strong> de un segmento de extremos <strong>A(x₁, y₁)</strong> y <strong>B(x₂, y₂)</strong> se obtienen calculando la media aritmética de las coordenadas de sus extremos:</p>
+            
+            <div class="formula">
+                M = ( (x₁ + x₂)/2 , (y₁ + y₂)/2 )
+            </div>
+
+            <div class="ejemplo">
+                <strong>Ejemplo:</strong> Dados A(2, 3) y B(4, 5):<br>
+                M = ( (2+4)/2 , (3+5)/2 ) = (6/2, 8/2) = <strong>(3, 4)</strong>
+            </div>
+
+            <div class="solucionador">
+                <h3>🧮 Solucionador: Calcular Punto Medio</h3>
+                <div class="input-group">
+                    <div class="point-input"><label>A:</label> (<input type="number" id="pmax" value="3">, <input type="number" id="pmay" value="9">)</div>
+                    <div class="point-input"><label>B:</label> (<input type="number" id="pmbx" value="8">, <input type="number" id="pmby" value="-1">)</div>
+                    <button onclick="calcularPuntoMedio()">Calcular M</button>
+                </div>
+                <div id="res-medio" class="resultado"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // 1. Lógica del cálculo de Vectores
+    function calcularVector() {
+        const ax = parseFloat(document.getElementById('ax').value);
+        const ay = parseFloat(document.getElementById('ay').value);
+        const bx = parseFloat(document.getElementById('bx').value);
+        const by = parseFloat(document.getElementById('by').value);
+
+        const vx = bx - ax;
+        const vy = by - ay;
+
+        const resDiv = document.getElementById('res-vector');
+        resDiv.style.display = 'block';
+        resDiv.innerHTML = `
+            <h4>Solución paso a paso:</h4>
+            <div class="paso"><strong>Paso 1:</strong> Planteamos la fórmula restando Destino menos Origen: ⃗AB = (bx − ax, by − ay)</div>
+            <div class="paso"><strong>Paso 2:</strong> Sustituimos los valores dados: ⃗AB = (${bx} − (${ax}), ${by} − (${ay}))</div>
+            <div class="paso"><strong>Paso 3:</strong> Operamos las coordenadas: ⃗AB = (${bx - ax}, ${by - ay})</div>
+            <div class="paso" style="margin-top:10px;"><strong>Resultado:</strong> 💡 <strong>⃗AB = (${vx}, ${vy})</strong></div>
+        `;
+    }
+
+    // 2. Lógica de Comprobación de Alineación
+    function comprobarAlineacion() {
+        const ax = parseFloat(document.getElementById('alx').value);
+        const ay = parseFloat(document.getElementById('aly').value);
+        const bx = parseFloat(document.getElementById('blx').value);
+        const by = parseFloat(document.getElementById('bly').value);
+        const cx = parseFloat(document.getElementById('clx').value);
+        const cy = parseFloat(document.getElementById('cly').value);
+
+        // Vector AB
+        const abx = bx - ax;
+        const aby = by - ay;
+        // Vector BC
+        const bcx = cx - bx;
+        const bcy = cy - by;
+
+        // Comprobación de proporcionalidad: abx / bcx == aby / bcy -> abx * bcy == aby * bcx
+        // Usamos productos cruzados para evitar la división por cero si algún componente es 0.
+        const cruzado1 = abx * bcy;
+        const cruzado2 = aby * bcx;
+        const alineados = Math.abs(cruzado1 - cruzado2) < 0.0001;
+
+        const resDiv = document.getElementById('res-alineados');
+        resDiv.style.display = 'block';
+        
+        let HTMLtext = `
+            <h4>Solución paso a paso:</h4>
+            <div class="paso"><strong>Paso 1:</strong> Calculamos el vector ⃗AB: (${bx} − (${ax}), ${by} − (${ay})) = <strong>(${abx}, ${aby})</strong></div>
+            <div class="paso"><strong>Paso 2:</strong> Calculamos el vector ⃗BC: (${cx} − (${bx}), ${cy} − (${bly})) = <strong>(${bcx}, ${bcy})</strong></div>
+            <div class="paso"><strong>Paso 3:</strong> Comprobamos si sus coordenadas son proporcionales:</div>
+        `;
+
+        if (bcx === 0 || bcy === 0) {
+            HTMLtext += `<div class="paso">Usamos productos cruzados para evitar divisiones por cero: ${abx} · ${bcy} y ${aby} · ${bcx}</div>`;
+            HTMLtext += `<div class="paso">¿ ${cruzado1} es igual a ${cruzado2}?</div>`;
+        } else {
+            HTMLtext += `<div class="paso">Planteamos la proporción: ${abx}/${bcx} = ${aby}/${bcy} ➔ ${ (abx/bcx).toFixed(2) } = ${ (aby/bcy).toFixed(2) }</div>`;
+        }
+
+        if (alineados) {
+            resDiv.style.backgroundColor = '#ecfdf5';
+            resDiv.style.borderColor = '#059669';
+            HTMLtext += `<div class="paso" style="margin-top:10px;"><strong>Resultado:</strong> 🟢 Las coordenadas son proporcionales. <strong>Los puntos A, B y C están ALINEADOS.</strong></div>`;
+        } else {
+            resDiv.style.backgroundColor = '#fef2f2';
+            resDiv.style.borderColor = '#dc2626';
+            HTMLtext += `<div class="paso" style="margin-top:10px;"><strong>Resultado:</strong> 🔴 Las coordenadas NO son proporcionales. <strong>Los puntos A, B y C NO están alineados.</strong></div>`;
+        }
+
+        resDiv.innerHTML = HTMLtext;
+    }
+
+    // 3. Lógica del Cálculo de Punto Medio
+    function calcularPuntoMedio() {
+        const ax = parseFloat(document.getElementById('pmax').value);
+        const ay = parseFloat(document.getElementById('pmay').value);
+        const bx = parseFloat(document.getElementById('pmbx').value);
+        const by = parseFloat(document.getElementById('pmby').value);
+
+        const mx = (ax + bx) / 2;
+        const my = (ay + by) / 2;
+
+        const resDiv = document.getElementById('res-medio');
+        resDiv.style.display = 'block';
+        resDiv.innerHTML = `
+            <h4>Solución paso a paso:</h4>
+            <div class="paso"><strong>Paso 1:</strong> Sumamos las componentes correspondientes de ambos puntos y dividimos entre 2.</div>
+            <div class="paso">Componente X: (${ax} + ${bx}) / 2 = ${ax + bx} / 2 = <strong>${mx}</strong></div>
+            <div class="paso">Componente Y: (${ay} + (${by})) / 2 = ${ay + by} / 2 = <strong>${my}</strong></div>
+            <div class="paso" style="margin-top:10px;"><strong>Resultado:</strong> 💡 <strong>Punto Medio M = (${mx}, ${my})</strong></div>
+        `;
+    }
+</script>
+
+</body>
+</html>

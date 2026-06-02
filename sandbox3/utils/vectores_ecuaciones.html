@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometría Analítica: La Recta en el Plano</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary: #0f172a;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #334155;
+            --text-light: #64748b;
+            --accent: #e2e8f0;
+            --success: #16a34a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: 1.2fr 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--accent);
+        }
+
+        h2 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.3rem;
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            color: var(--primary);
+            margin: 1rem 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .formula {
+            background-color: #f1f5f9;
+            padding: 0.75rem;
+            border-left: 4px solid var(--primary);
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+
+        .observation {
+            background-color: #fef3c7;
+            border-left: 4px solid #d97706;
+            padding: 0.75rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--text-light);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid var(--text-light);
+            border-radius: 6px;
+            background-color: white;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        #output {
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .step {
+            background-color: #fafafa;
+            border: 1px solid var(--accent);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-title::before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        ul {
+            padding-left: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Geometría Analítica en el Plano</h1>
+    <p>Estudio Teórico y Solucionador de Ecuaciones de la Recta (4º ESO)</p>
+</header>
+
+<div class="container">
+    
+    <div class="card">
+        <h2>Conceptos Fundamentales</h2>
+        <div class="observation">
+            <strong>Observaciones iniciales:</strong>
+            <ul>
+                <li>Por un único punto pasan infinitas rectas.</li>
+                <li>Para cada vector existen infinitas rectas (todas ellas paralelas entre sí).</li>
+            </ul>
+        </div>
+
+        <h3>1. Ecuación Vectorial</h3>
+        <p>Una recta queda determinada por un punto P(p₁, p₂) y un vector director d = (d₁, d₂). Si X(x, y) es un punto genérico de la recta:</p>
+        <div class="formula">OX = OP + λ · d &rArr; (x, y) = (p₁, p₂) + λ(d₁, d₂)</div>
+
+        <h3>2. Ecuaciones Paramétricas</h3>
+        <p>Separando las componentes de los ejes X e Y de forma independiente:</p>
+        <div class="formula">
+            x = p₁ + λ · d₁<br>
+            y = p₂ + λ · d₂
+        </div>
+
+        <h3>3. Ecuación Continua</h3>
+        <p>Despejando el parámetro λ en ambas ecuaciones e igualando los resultados:</p>
+        <div class="formula">(x - p₁) / d₁ = (y - p₂) / d₂</div>
+
+        <h3>4. Ecuación General o Implícita</h3>
+        <p>Operando los productos cruzados de la ecuación continua agrupando todo en un miembro:</p>
+        <div class="formula">Ax + By + C = 0</div>
+        <p>Donde el vector normal (perpendicular) es n = (A, B) = (d₂, -d₁). Por tanto, el vector director asociado es d = (-B, A).</p>
+
+        <h3>5. Ecuación Explícita</h3>
+        <p>Despejando completamente la variable y (válido si la recta no es paralela al eje Y):</p>
+        <div class="formula">y = m·x + n</div>
+        <p>Donde <strong>m</strong> representa la pendiente (m = d₂ / d₁) y <strong>n</strong> la ordenada en el origen.</p>
+
+        <h3>6. Ecuación Punto-Pendiente</h3>
+        <p>Partiendo de un punto conocido P(x₀, y₀) y la pendiente m:</p>
+        <div class="formula">y - y₀ = m · (x - x₀)</div>
+    </div>
+
+    <div class="card">
+        <h2>Solucionador Paso a Paso</h2>
+        <p style="margin-bottom: 1rem; color: var(--text-light)">Introduce los datos para calcular todas las ecuaciones desarrolladas.</p>
+        
+        <label for="calcMode">Selecciona los datos conocidos:</label>
+        <select id="calcMode" onchange="toggleInputs()">
+            <option value="pointVector">Punto y Vector Director</option>
+            <option value="twoPoints">Dos Puntos</option>
+        </select>
+
+        <div id="formPointVector">
+            <div class="form-group">
+                <label>Punto P (p₁, p₂):</label>
+                <div class="input-row">
+                    <input type="number" id="p1" value="2" placeholder="p1">
+                    <input type="number" id="p2" value="-5" placeholder="p2">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Vector Director d (d₁, d₂):</label>
+                <div class="input-row">
+                    <input type="number" id="d1" value="2" placeholder="d1">
+                    <input type="number" id="d2" value="-1" placeholder="d2">
+                </div>
+            </div>
+        </div>
+
+        <div id="formTwoPoints" style="display: none;">
+            <div class="form-group">
+                <label>Punto P (p₁, p₂):</label>
+                <div class="input-row">
+                    <input type="number" id="A1" value="2" placeholder="p1">
+                    <input type="number" id="A2" value="-5" placeholder="p2">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Punto Q (q₁, q₂):</label>
+                <div class="input-row">
+                    <input type="number" id="B1" value="-7" placeholder="q1">
+                    <input type="number" id="B2" value="2" placeholder="q2">
+                </div>
+            </div>
+        </div>
+
+        <button onclick="calcularRecta()">Calcular Ecuaciones Paso a Paso</button>
+
+        <div id="output">
+            <h2 style="margin-top: 1.5rem;">Solución Desarrollada</h2>
+            <div id="pasos"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleInputs() {
+    const mode = document.getElementById("calcMode").value;
+    if (mode === "pointVector") {
+        document.getElementById("formPointVector").style.display = "block";
+        document.getElementById("formTwoPoints").style.display = "none";
+    } else {
+        document.getElementById("formPointVector").style.display = "none";
+        document.getElementById("formTwoPoints").style.display = "block";
+    }
+}
+
+function formatSign(num) {
+    return num >= 0 ? `+ ${num}` : `- ${Math.abs(num)}`;
+}
+
+function formatSignX(num) {
+    if (num === 1) return "";
+    if (num === -1) return "-";
+    return num;
+}
+
+function simplificarFraccion(num, den) {
+    if (den === 0) return [num, den];
+    const gcd = (a, b) => b ? gcd(b, a % b) : Math.abs(a);
+    const divisor = gcd(num, den);
+    let n = num / divisor;
+    let d = den / divisor;
+    if (d < 0) { n = -n; d = -d; }
+    return [n, d];
+}
+
+function formatFrac(n, d) {
+    if (d === 1) return `${n}`;
+    if (d === 0) return "Indefinido";
+    return `${n}/${d}`;
+}
+
+function calcularRecta() {
+    const mode = document.getElementById("calcMode").value;
+    let p1, p2, d1, d2, q1, q2;
+    let pasosHtml = "";
+
+    if (mode === "pointVector") {
+        p1 = parseFloat(document.getElementById("p1").value);
+        p2 = parseFloat(document.getElementById("p2").value);
+        d1 = parseFloat(document.getElementById("d1").value);
+        d2 = parseFloat(document.getElementById("d2").value);
+        
+        pasosHtml += `<div class="step">
+            <div class="step-title">Datos iniciales</div>
+            <p>Punto base P(${p1}, ${p2}) y Vector director d = (${d1}, ${d2}).</p>
+        </div>`;
+    } else {
+        p1 = parseFloat(document.getElementById("A1").value);
+        p2 = parseFloat(document.getElementById("A2").value);
+        q1 = parseFloat(document.getElementById("B1").value);
+        q2 = parseFloat(document.getElementById("B2").value);
+        
+        d1 = q1 - p1;
+        d2 = q2 - p2;
+
+        pasosHtml += `<div class="step">
+            <div class="step-title">Paso 1: Calcular el Vector Director</div>
+            <p>A partir de los puntos P(${p1}, ${p2}) y Q(${q1}, ${q2}), calculamos las componentes de d como la diferencia de coordenadas:</p>
+            <p>d = PQ = (q₁ - p₁, q₂ - p₂) = (${q1} - (${p1}), ${q2} - (${p2})) = (${d1}, ${d2})</p>
+        </div>`;
+    }
+
+    if (d1 === 0 && d2 === 0) {
+        alert("El vector director no puede ser nulo (0,0). Introduce dos puntos diferentes.");
+        return;
+    }
+
+    // 1. Vectorial
+    pasosHtml += `<div class="step">
+        <div class="step-title">Ecuación Vectorial</div>
+        <p>Fórmula estándar: (x, y) = (p₁, p₂) + λ(d₁, d₂)</p>
+        <div class="formula">(x, y) = (${p1}, ${p2}) + λ(${d1}, ${d2})</div>
+    </div>`;
+
+    // 2. Paramétricas
+    let lamX = d1 >= 0 ? `+ ${d1}λ` : `- ${Math.abs(d1)}λ`;
+    let lamY = d2 >= 0 ? `+ ${d2}λ` : `- ${Math.abs(d2)}λ`;
+    // Si la componente es 1 o -1, limpiamos el formato visual de lambda
+    if (d1 === 1) lamX = "+ λ";
+    if (d1 === -1) lamX = "- λ";
+    if (d1 === 0) lamX = "";
+    if (d2 === 1) lamY = "+ λ";
+    if (d2 === -1) lamY = "- λ";
+    if (d2 === 0) lamY = "";
+
+    pasosHtml += `<div class="step">
+        <div class="step-title">Ecuaciones Paramétricas</div>
+        <p>Desglosando los componentes cartesianos por separado:</p>
+        <div class="formula">
+            x = ${p1} ${lamX}<br>
+            y = ${p2} ${lamY}
+        </div>
+    </div>`;
+
+    // 3. Continua
+    let contX = p1 >= 0 ? `x - ${p1}` : `x + ${Math.abs(p1)}`;
+    let contY = p2 >= 0 ? `y - ${p2}` : `y + ${Math.abs(p2)}`;
+    if (p1 === 0) contX = "x";
+    if (p2 === 0) contY = "y";
+
+    if (d1 !== 0 && d2 !== 0) {
+        pasosHtml += `<div class="step">
+            <div class="step-title">Ecuación Continua</div>
+            <p>Despejando λ en ambas coordenadas e igualando las fracciones:</p>
+            <div class="formula">(${contX}) / ${d1} = (${contY}) / ${d2}</div>
+        </div>`;
+    } else {
+        pasosHtml += `<div class="step">
+            <div class="step-title">Ecuación Continua</div>
+            <p>No se puede expresar en forma continua estándar porque una de las componentes del vector director es 0 (provocaría una división por cero).</p>
+        </div>`;
+    }
+
+    // 4. General / Implícita
+    let A = d2;
+    let B = -d1;
+    let C = -(d2 * p1) + (d1 * p2);
+    
+    let genStr = `${A === 0 ? '' : formatSignX(A)+'x'} ${B === 0 ? '' : formatSign(B)+'y'} ${C === 0 ? '' : formatSign(C)} = 0`.trim();
+    if(genStr.startsWith("+ ")) genStr = genStr.substring(2);
+
+    pasosHtml += `<div class="step">
+        <div class="step-title">Ecuación General o Implícita (Ax + By + C = 0)</div>
+        <p>Operando los productos cruzados e igualando el polinomio a cero:</p>
+        <div class="formula">${genStr}</div>
+        <p><strong>Vector Normal de la recta (Perpendicular):</strong> n = (A, B) = (${A}, ${B})</p>
+    </div>`;
+
+    // 5. Explícita y Punto Pendiente
+    if (d1 !== 0) {
+        let mFrac = simplificarFraccion(d2, d1);
+        let mStr = formatFrac(mFrac[0], mFrac[1]);
+        
+        let nFrac = simplificarFraccion(p2 * d1 - d2 * p1, d1);
+        let nStr = formatFrac(nFrac[0], nFrac[1]);
+        let nSign = nFrac[0] >= 0 ? `+ ${nStr}` : `- ${Math.abs(nFrac[0])}/${nFrac[1]}`;
+        if(nFrac[1] === 1) nSign = nFrac[0] >= 0 ? `+ ${nFrac[0]}` : `- ${Math.abs(nFrac[0])}`;
+        if(nFrac[0] === 0) nSign = "";
+
+        pasosHtml += `<div class="step">
+            <div class="step-title">Ecuación en Forma Punto-Pendiente</div>
+            <p>Calculamos la pendiente (m = d₂ / d₁): m = ${d2} / ${d1} = ${mStr}</p>
+            <div class="formula">${contY} = ${mStr === '1' ? '' : mStr === '-1' ? '-' : mStr}·(${contX})</div>
+        </div>`;
+
+        let mxTerm = mStr === '1' ? 'x' : mStr === '-1' ? '-x' : mStr + 'x';
+        pasosHtml += `<div class="step">
+            <div class="step-title">Ecuación Explícita (y = mx + n)</div>
+            <p>Despejando por completo la variable y:</p>
+            <div class="formula">y = ${mxTerm} ${nSign}</div>
+            <p>Donde la pendiente es <strong>m = ${mStr}</strong> y la ordenada en el origen es <strong>n = ${nStr}</strong>.</p>
+        </div>`;
+    } else {
+        pasosHtml += `<div class="step">
+            <div class="step-title">Ecuaciones Explícita y Punto-Pendiente</div>
+            <p>Al ser d₁ = 0, se trata de una <strong>recta vertical</strong> (paralela al eje Y). Su pendiente es indefinida.</p>
+            <p>La ecuación reducida final para esta recta es directamente:</p>
+            <div class="formula">x = ${p1}</div>
+        </div>`;
+    }
+
+    document.getElementById("pasos").innerHTML = pasosHtml;
+    document.getElementById("output").style.display = "block";
+}
+</script>
+
+</body>
+</html>
