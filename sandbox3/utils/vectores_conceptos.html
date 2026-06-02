@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Interactivo de Vectores</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --primary: #3b82f6;
+            --secondary: #10b981;
+            --accent: #ef4444;
+            --grid-line: #e2e8f0;
+            --axis-line: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #e2e8f0;
+            padding: 5px;
+            border-radius: 8px;
+        }
+
+        .tab-btn {
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 600;
+            background: transparent;
+            color: #475569;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--card-bg);
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1100px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .canvas-container {
+            position: relative;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: crosshair;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .panel-controls {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-width: 300px;
+        }
+
+        .info-box {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .info-box h3 {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .info-box p {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .math {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #0f172a;
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .legend {
+            margin-top: auto;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .color-box {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Geometría Analítica: Vectores</h1>
+        <p>Entiende módulo, dirección, sentido y operaciones de forma visual</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('basico')">1. Conceptos Básicos</button>
+        <button class="tab-btn" onclick="switchTab('escalar')">2. Producto Escalar (k·u)</button>
+        <button class="tab-btn" onclick="switchTab('suma')">3. Suma y Resta</button>
+    </div>
+
+    <div class="container">
+        <div class="canvas-container">
+            <canvas id="vectorCanvas" width="600" height="600"></canvas>
+        </div>
+
+        <div class="panel-controls">
+            <div id="panel-basico" class="tab-content">
+                <div class="info-box">
+                    <h3>Vector Fijo AB</h3>
+                    <p>Arrastra el origen <b>A</b> o el extremo <b>B</b> en el plano.</p>
+                    <p>• <b>Componentes:</b> <span id="comp-ab" class="math">(0, 0)</span></p>
+                    <p>• <b>Módulo:</b> <span id="mod-ab" class="math">0</span> (Longitud del segmento)</p>
+                    <p>• <b>Dirección:</b> Recta que pasa por A y B (Ángulo: <span id="ang-ab" class="math">0°</span>)</p>
+                    <p>• <b>Sentido:</b> Indicado por la punta de la flecha (de A hacia B).</p>
+                </div>
+                <div class="info-box" style="margin-top:10px; border-left-color: var(--secondary)">
+                    <h3>Equipolencia</h3>
+                    <p>El vector gris es <b>equipolente</b> a AB. Tiene el mismo módulo, dirección y sentido, pero está en otra posición. ¡Todos ellos forman el <b>Vector Libre</b>!</p>
+                </div>
+            </div>
+
+            <div id="panel-escalar" class="tab-content" style="display:none;">
+                <div class="info-box" style="border-left-color: var(--secondary);">
+                    <h3>Producto por un Escalar (k · u)</h3>
+                    <p>Modifica el valor del número <span class="math">k</span> con el deslizador inferior.</p>
+                    <p>• Si <span class="math">k > 0</span>, mantiene el sentido.</p>
+                    <p>• Si <span class="math">k < 0</span>, el sentido se vuelve opuesto.</p>
+                    <p>• Si <span class="math">k = 0</span>, obtenemos el vector nulo.</p>
+                </div>
+                <div class="control-group">
+                    <label for="escalar-k">Escalar (k): <span id="val-k" class="math">1.5</span></label>
+                    <input type="range" id="escalar-k" min="-3" max="3" step="0.1" value="1.5">
+                </div>
+                <div class="info-box">
+                    <p>Vector original <b>u</b>: <span id="comp-u-esc" class="math">(2, 3)</span></p>
+                    <p>Resultado <b>k·u</b>: <span id="comp-ku" class="math">(3, 4.5)</span></p>
+                    <p>Nuevo Módulo: <span id="mod-ku" class="math">0</span></p>
+                </div>
+            </div>
+
+            <div id="panel-suma" class="tab-content" style="display:none;">
+                <div class="info-box" style="border-left-color: var(--accent);">
+                    <h3>Operaciones con Vectores</h3>
+                    <p>Arrastra los extremos de los vectores libres <b>u</b> y <b>v</b> para ver su interacción (Método del paralelogramo/polígono).</p>
+                </div>
+                <div class="control-group">
+                    <label>Operación:</label>
+                    <select id="op-type" style="padding:5px; border-radius:4px;">
+                        <option value="suma">Suma: u + v</option>
+                        <option value="resta">Resta: u - v (u + (-v))</option>
+                    </select>
+                </div>
+                <div class="info-box">
+                    <p>• Vector <b>u</b>: <span id="comp-u" class="math">(0,0)</span></p>
+                    <p>• Vector <b>v</b>: <span id="comp-v" class="math">(0,0)</span></p>
+                    <p>• <b>Resultado</b>: <span id="comp-res" class="math">(0,0)</span></p>
+                    <p>• Módulo Resultado: <span id="mod-res" class="math">0</span></p>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item"><div class="color-box" style="background: var(--primary);"></div> <span id="leg-1">Vector u (o AB)</span></div>
+                <div class="legend-item" id="leg-item-2"><div class="color-box" style="background: var(--secondary);"></div> <span id="leg-2">Vector v (o Equipolente)</span></div>
+                <div class="legend-item" id="leg-item-3" style="display:none;"><div class="color-box" style="background: var(--accent);"></div> <span id="leg-3">Resultado</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('vectorCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Configuración de la cuadrícula
+        const gridSize = 30; // Píxeles por unidad astronómica del gráfico
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        let activeTab = 'basico';
+
+        // Estado de los vectores (coordenadas cartesianas matemáticas ordinarias)
+        let state = {
+            basico: {
+                A: { x: -3, y: -2 },
+                B: { x: 2, y: 3 }
+            },
+            escalar: {
+                u: { x: 3, y: 2 },
+                k: 1.5
+            },
+            suma: {
+                u: { x: 4, y: 1 },
+                v: { x: -2, y: 3 },
+                type: 'suma'
+            }
+        };
+
+        let draggingPoint = null;
+
+        // Convertir coordenadas matemáticas a píxeles de pantalla
+        function toScreen(x, y) {
+            return {
+                x: centerX + x * gridSize,
+                y: centerY - y * gridSize
+            };
+        }
+
+        // Convertir píxeles a coordenadas matemáticas (redondeado a 0.5 para facilidad)
+        function toMath(screenX, screenY) {
+            let mx = (screenX - centerX) / gridSize;
+            let my = (centerY - screenY) / gridSize;
+            return {
+                x: Math.round(mx * 2) / 2,
+                y: Math.round(my * 2) / 2
+            };
+        }
+
+        // Dibujar flecha (vector)
+        function drawArrow(x1, y1, x2, y2, color, label, width = 3) {
+            const p1 = toScreen(x1, y1);
+            const p2 = toScreen(x2, y2);
+
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.stroke();
+
+            // Punta de la flecha
+            const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+            ctx.beginPath();
+            ctx.moveTo(p2.x, p2.y);
+            ctx.lineTo(p2.x - 15 * Math.cos(angle - Math.PI / 6), p2.y - 15 * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(p2.x - 15 * Math.cos(angle + Math.PI / 6), p2.y - 15 * Math.sin(angle + Math.PI / 6));
+            ctx.fillStyle = color;
+            ctx.fill();
+
+            // Etiqueta del vector o punto
+            if (label) {
+                ctx.font = "bold 14px Arial";
+                ctx.fillStyle = "#1e293b";
+                ctx.fillText(label, p2.x + 8, p2.y - 8);
+            }
+        }
+
+        function drawPoint(x, y, color, label) {
+            const p = toScreen(x, y);
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 6, 0, 2 * Math.PI);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            if (label) {
+                ctx.font = "bold 14px Arial";
+                ctx.fillStyle = "#1e293b";
+                ctx.fillText(label, p.x - 15, p.y - 10);
+            }
+        }
+
+        function drawGrid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Líneas secundarias
+            ctx.strokeStyle = varColor('--grid-line');
+            ctx.lineWidth = 1;
+            for(let x = 0; x < canvas.width; x += gridSize) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+            }
+            for(let y = 0; y < canvas.height; y += gridSize) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+            }
+
+            // Ejes principales
+            ctx.strokeStyle = varColor('--axis-line');
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(centerX, 0); ctx.lineTo(centerX, canvas.height); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, centerY); ctx.lineTo(canvas.width, centerY); ctx.stroke();
+
+            // Números en los ejes
+            ctx.font = "10px Arial";
+            ctx.fillStyle = "#94a3b8";
+            for(let i = -10; i <= 10; i++) {
+                if(i === 0) continue;
+                let p = toScreen(i, 0);
+                ctx.fillText(i, p.x - 5, centerY + 15);
+                p = toScreen(0, i);
+                ctx.fillText(i, centerX - 18, p.y + 4);
+            }
+        }
+
+        function varColor(name) {
+            return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        }
+
+        // Lógica de Renderizado Principal
+        function render() {
+            drawGrid();
+
+            if (activeTab === 'basico') {
+                const A = state.basico.A;
+                const B = state.basico.B;
+                const vx = B.x - A.x;
+                const vy = B.y - A.y;
+                const mod = Math.sqrt(vx*vx + vy*vy).toFixed(2);
+                let ang = (Math.atan2(vy, vx) * 180 / Math.PI).toFixed(1);
+                if(ang < 0) ang = (parseFloat(ang) + 360).toFixed(1);
+
+                // Dibujar Vector original AB
+                drawArrow(A.x, A.y, B.x, B.y, varColor('--primary'), '⃗AB');
+                drawPoint(A.x, A.y, '#3b82f6', `A(${A.x},${A.y})`);
+                drawPoint(B.x, B.y, '#1d4ed8', `B(${B.x},${B.y})`);
+
+                // Dibujar Vector Libre / Equipolente en otra posición (fijo en el primer cuadrante)
+                if (mod > 0) {
+                    drawArrow(-7, 5, -7 + vx, 5 + vy, '#94a3b8', '⃗u (Equipolente)');
+                }
+
+                // Actualizar Panel
+                document.getElementById('comp-ab').innerText = `(${vx}, ${vy})`;
+                document.getElementById('mod-ab').innerText = mod;
+                document.getElementById('ang-ab').innerText = `${ang}°`;
+
+            } else if (activeTab === 'escalar') {
+                const u = state.escalar.u;
+                const k = state.escalar.k;
+                const ku = { x: u.x * k, y: u.y * k };
+                const modKu = Math.sqrt(ku.x*ku.x + ku.y*ku.y).toFixed(2);
+
+                // Dibujar ku (se dibuja primero si es más grande para que no tape completamente a u si coinciden)
+                drawArrow(0, 0, ku.x, ku.y, varColor('--secondary'), `k·⃗u`, 4);
+                // Dibujar u original
+                drawArrow(0, 0, u.x, u.y, varColor('--primary'), '⃗u', 2);
+                
+                drawPoint(u.x, u.y, varColor('--primary'));
+
+                // Datos panel
+                document.getElementById('comp-u-esc').innerText = `(${u.x}, ${u.y})`;
+                document.getElementById('comp-ku').innerText = `(${ku.x.toFixed(1)}, ${ku.y.toFixed(1)})`;
+                document.getElementById('mod-ku').innerText = modKu;
+
+            } else if (activeTab === 'suma') {
+                const u = state.suma.u;
+                const v = state.suma.v;
+                const type = state.suma.type;
+
+                // Dibujar vectores desde el origen
+                drawArrow(0, 0, u.x, u.y, varColor('--primary'), '⃗u');
+                
+                if (type === 'suma') {
+                    drawArrow(0, 0, v.x, v.y, varColor('--secondary'), '⃗v');
+                    // Paralelogramo (Líneas de proyección discontinua)
+                    ctx.setLineDash([5, 5]);
+                    drawArrow(u.x, u.y, u.x + v.x, u.y + v.y, varColor('--secondary') + '80', '', 1.5);
+                    drawArrow(v.x, v.y, u.x + v.x, u.y + v.y, varColor('--primary') + '80', '', 1.5);
+                    ctx.setLineDash([]);
+                    
+                    // Resultado u + v
+                    const res = { x: u.x + v.x, y: u.y + v.y };
+                    drawArrow(0, 0, res.x, res.y, varColor('--accent'), '⃗u + ⃗v', 4);
+                    
+                    document.getElementById('comp-res').innerText = `(${res.x}, ${res.y})`;
+                    document.getElementById('mod-res').innerText = Math.sqrt(res.x*res.x + res.y*res.y).toFixed(2);
+                } else {
+                    // Resta u - v -> Dibujamos -v
+                    drawArrow(0, 0, v.x, v.y, varColor('--secondary') + '50', '⃗v');
+                    drawArrow(0, 0, -v.x, -v.y, '#65a30d', '-⃗v');
+                    
+                    ctx.setLineDash([5, 5]);
+                    drawArrow(u.x, u.y, u.x - v.x, u.y - v.y, '#65a30d80', '', 1.5);
+                    ctx.setLineDash([]);
+
+                    const res = { x: u.x - v.x, y: u.y - v.y };
+                    drawArrow(0, 0, res.x, res.y, varColor('--accent'), '⃗u - ⃗v', 4);
+
+                    document.getElementById('comp-res').innerText = `(${res.x}, ${res.y})`;
+                    document.getElementById('mod-res').innerText = Math.sqrt(res.x*res.x + res.y*res.y).toFixed(2);
+                }
+
+                drawPoint(u.x, u.y, varColor('--primary'));
+                drawPoint(v.x, v.y, varColor('--secondary'));
+                
+                document.getElementById('comp-u').innerText = `(${u.x}, ${u.y})`;
+                document.getElementById('comp-v').innerText = `(${v.x}, ${v.y})`;
+            }
+        }
+
+        // Gestión de Interacción de Ratón / Movimientos
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mousePos = toMath(e.clientX - rect.left, e.clientY - rect.top);
+
+            if (activeTab === 'basico') {
+                if (Math.hypot(state.basico.A.x - mousePos.x, state.basico.A.y - mousePos.y) < 0.6) draggingPoint = 'A';
+                else if (Math.hypot(state.basico.B.x - mousePos.x, state.basico.B.y - mousePos.y) < 0.6) draggingPoint = 'B';
+            } else if (activeTab === 'escalar') {
+                if (Math.hypot(state.escalar.u.x - mousePos.x, state.escalar.u.y - mousePos.y) < 0.6) draggingPoint = 'u';
+            } else if (activeTab === 'suma') {
+                if (Math.hypot(state.suma.u.x - mousePos.x, state.suma.u.y - mousePos.y) < 0.6) draggingPoint = 'u';
+                else if (Math.hypot(state.suma.v.x - mousePos.x, state.suma.v.y - mousePos.y) < 0.6) draggingPoint = 'v';
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!draggingPoint) return;
+            const rect = canvas.getBoundingClientRect();
+            const mousePos = toMath(e.clientX - rect.left, e.clientY - rect.top);
+
+            // Evitar que se salgan demasiado del plano visible
+            mousePos.x = Math.max(-9, Math.min(9, mousePos.x));
+            mousePos.y = Math.max(-9, Math.min(9, mousePos.y));
+
+            if (activeTab === 'basico') {
+                state.basico[draggingPoint] = mousePos;
+            } else if (activeTab === 'escalar') {
+                state.escalar.u = mousePos;
+            } else if (activeTab === 'suma') {
+                state.suma[draggingPoint] = mousePos;
+            }
+            render();
+        });
+
+        window.addEventListener('mouseup', () => draggingPoint = null);
+
+        // Controladores de eventos de la Interfaz de Usuario (UI)
+        document.getElementById('escalar-k').addEventListener('input', (e) => {
+            state.escalar.k = parseFloat(e.target.value);
+            document.getElementById('val-k').innerText = state.escalar.k;
+            render();
+        });
+
+        document.getElementById('op-type').addEventListener('change', (e) => {
+            state.suma.type = e.target.value;
+            render();
+        });
+
+        function switchTab(tab) {
+            activeTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+            
+            // Ajustar leyendas y vistas según la pestaña activa
+            const legItem2 = document.getElementById('leg-item-2');
+            const legItem3 = document.getElementById('leg-item-3');
+
+            if(tab === 'basico') {
+                event.target.classList.add('active');
+                document.getElementById('panel-basico').style.display = 'block';
+                document.getElementById('leg-1').innerText = "Vector Fijo AB";
+                document.getElementById('leg-2').innerText = "Vector Libre (Equipolente)";
+                legItem2.style.display = 'flex';
+                legItem3.style.style = 'none';
+                legItem3.style.display = 'none';
+            } else if(tab === 'escalar') {
+                event.target.classList.add('active');
+                document.getElementById('panel-escalar').style.display = 'block';
+                document.getElementById('leg-1').innerText = "Vector Original u";
+                document.getElementById('leg-2').innerText = "Resultado k · u";
+                legItem2.style.display = 'flex';
+                legItem3.style.display = 'none';
+            } else if(tab === 'suma') {
+                event.target.classList.add('active');
+                document.getElementById('panel-suma').style.display = 'block';
+                document.getElementById('leg-1').innerText = "Vector u";
+                document.getElementById('leg-2').innerText = "Vector v (ó -v)";
+                document.getElementById('leg-3').innerText = "Resultado Operación";
+                legItem2.style.display = 'flex';
+                legItem3.style.display = 'flex';
+            }
+            render();
+        }
+
+        // Inicialización
+        render();
+    </script>
+</body>
+</html>

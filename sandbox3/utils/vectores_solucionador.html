@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corrector de Vectores Paso a Paso</title>
+    <style>
+        :root {
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text: #0f172a;
+            --u-color: #2563eb;
+            --v-color: #10b981;
+            --res-color: #dc2626;
+            --border: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        h1 { font-size: 1.8rem; color: #1e3a8a; margin-bottom: 5px; }
+        p.subtitle { color: #475569; font-size: 0.95rem; }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        @media (max-width: 850px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 5px;
+            color: #1e293b;
+        }
+
+        .inputs-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .vector-input-box {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            background: #f8fafc;
+        }
+
+        .vector-input-box.u { border-left: 4px solid var(--u-color); }
+        .vector-input-box.v { border-left: 4px solid var(--v-color); }
+
+        .vector-input-box h4 { margin-bottom: 8px; font-size: 0.95rem; }
+
+        .coord-inputs {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .paso-paso {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        canvas {
+            display: block;
+            background: #fafafa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Corrector Analítico y Gráfico de Vectores</h1>
+        <p class="subtitle">Introduce los componentes de los vectores para calcular el desarrollo paso a paso y visualizar su solución geométrica.</p>
+    </header>
+
+    <div class="main-grid">
+        <div class="card">
+            <div class="section-title">1. Configuración de Parámetros</div>
+            
+            <div>
+                <label style="font-weight:600; font-size:0.9rem; display:block; margin-bottom:5px;">Selecciona la Operación:</label>
+                <select id="operacion">
+                    <option value="suma">Suma de vectores ( u + v )</option>
+                    <option value="resta">Resta de vectores ( u - v )</option>
+                    <option value="escalar">Producto por un escalar ( k · u )</option>
+                </select>
+            </div>
+
+            <div class="inputs-group">
+                <div class="vector-input-box u">
+                    <h4>Vector u = (u₁, u₂)</h4>
+                    <div class="coord-inputs">
+                        <span>(</span>
+                        <input type="number" id="ux" value="4" step="0.5">
+                        <span>,</span>
+                        <input type="number" id="uy" value="2" step="0.5">
+                        <span>)</span>
+                    </div>
+                </div>
+
+                <div class="vector-input-box v" id="box-variable">
+                    <h4 id="title-variable">Vector v = (v₁, v₂)</h4>
+                    <div class="coord-inputs" id="inputs-v">
+                        <span>(</span>
+                        <input type="number" id="vx" value="-2" step="0.5">
+                        <span>,</span>
+                        <input type="number" id="vy" value="3" step="0.5">
+                        <span>)</span>
+                    </div>
+                    <div id="inputs-k" style="display: none;">
+                        <input type="number" id="k-scalar" value="-1.5" step="0.1">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">2. Corrección Paso a Paso</div>
+            <div id="resolucion" class="paso-paso">
+                </div>
+        </div>
+
+        <div class="card" style="justify-content: center;">
+            <div class="section-title" style="margin-bottom: 10px;">3. Representación en el Plano Cartesiano</div>
+            <div class="canvas-container">
+                <canvas id="plano" width="500" height="500"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Elementos de la interfaz
+        const opSel = document.getElementById('operacion');
+        const uxIn = document.getElementById('ux');
+        const uyIn = document.getElementById('uy');
+        const vxIn = document.getElementById('vx');
+        const vyIn = document.getElementById('vy');
+        const kIn = document.getElementById('k-scalar');
+        
+        const boxVar = document.getElementById('box-variable');
+        const titleVar = document.getElementById('title-variable');
+        const inputsV = document.getElementById('inputs-v');
+        const inputsK = document.getElementById('inputs-k');
+        const resPanel = document.getElementById('resolucion');
+
+        const canvas = document.getElementById('plano');
+        const ctx = canvas.getContext('2d');
+
+        // Escucha de cambios para actualizar en tiempo real
+        [opSel, uxIn, uyIn, vxIn, vyIn, kIn].forEach(elem => {
+            elem.addEventListener('input', procesar);
+        });
+
+        opSel.addEventListener('change', () => {
+            if(opSel.value === 'escalar') {
+                boxVar.style.borderLeftColor = "#eab308"; // Amarillo para el escalar
+                titleVar.innerText = "Escalar (k)";
+                inputsV.style.display = "none";
+                inputsK.style.display = "block";
+            } else {
+                boxVar.style.borderLeftColor = "var(--v-color)";
+                titleVar.innerText = "Vector v = (v₁, v₂)";
+                inputsV.style.display = "flex";
+                inputsK.style.display = "none";
+            }
+            procesar();
+        });
+
+        function procesar() {
+            // Leer valores de entrada numéricos
+            const ux = parseFloat(uxIn.value) || 0;
+            const uy = parseFloat(uyIn.value) || 0;
+            const vx = parseFloat(vxIn.value) || 0;
+            const vy = parseFloat(vyIn.value) || 0;
+            const k = parseFloat(kIn.value) || 0;
+            const op = opSel.value;
+
+            let rx = 0, ry = 0;
+            let textoHtml = "";
+
+            // --- CÁLCULOS ALGEBRAICOS Y TEXTO PASO A PASO ---
+            if (op === 'suma') {
+                rx = ux + vx;
+                ry = uy + vy;
+                
+                textoHtml += `<b>OPERACIÓN: SUMA ANALÍTICA</b>\n`;
+                textoHtml += `Fórmula: u + v = (u₁ + v₁, u₂ + v₂)\n\n`;
+                textoHtml += `Sustituyendo los componentes:\n`;
+                textoHtml += `u + v = (${ux} + (${vx}), ${uy} + (${vy}))\n`;
+                textoHtml += `u + v = (${ux} ${vx >= 0 ? '+' : '-'} ${Math.abs(vx)}, ${uy} ${vy >= 0 ? '+' : '-'} ${Math.abs(vy)})\n\n`;
+                textoHtml += `<b>RESULTADO: Vector u + v = (${rx}, ${ry})</b>\n\n`;
+                
+                // Módulos paso a paso
+                textoHtml += `<b>MÓDULO DEL RESULTADO:</b>\n`;
+                textoHtml += `|u + v| = √(rx² + ry²)\n`;
+                textoHtml += `|u + v| = √(${rx}² + ${ry}²)\n`;
+                textoHtml += `|u + v| = √(${parseFloat((rx*rx).toFixed(2))} + ${parseFloat((ry*ry).toFixed(2))})\n`;
+                textoHtml += `|u + v| = √${parseFloat((rx*rx + ry*ry).toFixed(2))} ≈ <b>${Math.sqrt(rx*rx + ry*ry).toFixed(3)} u.</b>`;
+            
+            } else if (op === 'resta') {
+                rx = ux - vx;
+                ry = uy - vy;
+
+                textoHtml += `<b>OPERACIÓN: RESTA ANALÍTICA</b>\n`;
+                textoHtml += `Fórmula: u - v = (u₁ - v₁, u₂ + v₂)\n\n`;
+                textoHtml += `Sustituyendo los componentes:\n`;
+                textoHtml += `u - v = (${ux} - (${vx}), ${uy} - (${vy}))\n`;
+                textoHtml += `u - v = (${ux} ${-vx >= 0 ? '+' : '-'} ${Math.abs(vx)}, ${uy} ${-vy >= 0 ? '+' : '-'} ${Math.abs(vy)})\n\n`;
+                textoHtml += `<b>RESULTADO: Vector u - v = (${rx}, ${ry})</b>\n\n`;
+
+                // Módulos paso a paso
+                textoHtml += `<b>MÓDULO DEL RESULTADO:</b>\n`;
+                textoHtml += `|u - v| = √(rx² + ry²)\n`;
+                textoHtml += `|u - v| = √(${rx}² + ${ry}²)\n`;
+                textoHtml += `|u - v| = √(${parseFloat((rx*rx).toFixed(2))} + ${parseFloat((ry*ry).toFixed(2))})\n`;
+                textoHtml += `|u - v| = √${parseFloat((rx*rx + ry*ry).toFixed(2))} ≈ <b>${Math.sqrt(rx*rx + ry*ry).toFixed(3)} u.</b>`;
+
+            } else if (op === 'escalar') {
+                rx = k * ux;
+                ry = k * uy;
+
+                textoHtml += `<b>OPERACIÓN: PRODUCTO POR ESCALAR</b>\n`;
+                textoHtml += `Fórmula: k · u = (k · u₁, k · u₂)\n\n`;
+                textoHtml += `Sustituyendo los valores:\n`;
+                textoHtml += `${k} · (${ux}, ${uy}) = (${k} · ${ux}, ${k} · ${uy})\n\n`;
+                textoHtml += `<b>RESULTADO: Vector k·u = (${rx.toFixed(2)}, ${ry.toFixed(2)})</b>\n\n`;
+
+                // Propiedades del vector resultante
+                textoHtml += `<b>ANÁLISIS GEOMÉTRICO:</b>\n`;
+                textoHtml += `• Dirección: La misma que el vector original u.\n`;
+                if (k > 0) {
+                    textoHtml += `• Sentido: El mismo que u (ya que k = ${k} es positivo).\n`;
+                } else if (k < 0) {
+                    textoHtml += `• Sentido: Opuesto a u (ya que k = ${k} es negativo).\n`;
+                } else {
+                    textoHtml += `• Sentido: Nulo (k = 0, se colapsa en el origen).\n`;
+                }
+                const modU = Math.sqrt(ux*ux + uy*uy);
+                const modKU = Math.sqrt(rx*rx + ry*ry);
+                textoHtml += `• Módulo original |u| = ${modU.toFixed(2)}\n`;
+                textoHtml += `• Módulo nuevo |k·u| = |${k}| · ${modU.toFixed(2)} ≈ <b>${modKU.toFixed(3)} u.</b>`;
+            }
+
+            resPanel.innerHTML = textoHtml;
+
+            // --- RENDERIZADO DEL GRÁFICO (CANVAS) ---
+            graficar(ux, uy, vx, vy, rx, ry, k, op);
+        }
+
+        function graficar(ux, uy, vx, vy, rx, ry, k, op) {
+            // Limpiar lienzo
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Autoescalado adaptativo inteligente para que ningún vector se salga de la pantalla
+            const valores = [Math.abs(ux), Math.abs(uy), Math.abs(rx), Math.abs(ry)];
+            if(op !== 'escalar') {
+                valores.push(Math.abs(vx), Math.abs(vy));
+                if(op === 'resta') { valores.push(Math.abs(-vx), Math.abs(-vy)); }
+            }
+            let maxCoord = Math.max(...valores, 4); // Mínimo zoom establecido en 4 unidades
+            maxCoord += 2; // Margen de holgura perimetral
+
+            const centroX = canvas.width / 2;
+            const centroY = canvas.height / 2;
+            const factorEscala = (canvas.width / 2) / maxCoord;
+
+            // Conversión local a píxeles
+            const aPixel = (x, y) => ({
+                x: centroX + x * factorEscala,
+                y: centroY - y * factorEscala
+            });
+
+            // 1. Dibujar Rejilla de fondo
+            ctx.strokeStyle = "#e2e8f0";
+            ctx.lineWidth = 1;
+            // Intervalo dinámico de líneas según el zoom
+            const intervalo = maxCoord > 15 ? 5 : 1; 
+
+            for (let i = -Math.floor(maxCoord); i <= Math.floor(maxCoord); i += intervalo) {
+                if(i === 0) continue;
+                // Verticales
+                let p1 = aPixel(i, maxCoord); let p2 = aPixel(i, -maxCoord);
+                ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+                // Horizontales
+                p1 = aPixel(-maxCoord, i); p2 = aPixel(maxCoord, i);
+                ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+            }
+
+            // 2. Ejes Coordenados Cartesianos
+            ctx.strokeStyle = "#475569";
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(0, centroY); ctx.lineTo(canvas.width, centroY); ctx.stroke(); // Eje X
+            ctx.beginPath(); ctx.moveTo(centroX, 0); ctx.lineTo(centroX, canvas.height); ctx.stroke(); // Eje Y
+
+            // 3. Dibujar Flechas de Vectores
+            const dibujarFlecha = (xO, yO, xE, yE, color, grosor = 3) => {
+                const pO = aPixel(xO, yO);
+                const pE = aPixel(xE, yE);
+                
+                ctx.beginPath();
+                ctx.moveTo(pO.x, pO.y);
+                ctx.lineTo(pE.x, pE.y);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = grosor;
+                ctx.stroke();
+
+                // Cabeza de flecha ajustable proporcionalmente al zoom
+                const angulo = Math.atan2(pE.y - pO.y, pE.x - pO.x);
+                const longFlecha = 14; 
+                ctx.beginPath();
+                ctx.moveTo(pE.x, pE.y);
+                ctx.lineTo(pE.x - longFlecha * Math.cos(angulo - Math.PI / 6), pE.y - longFlecha * Math.sin(angulo - Math.PI / 6));
+                ctx.lineTo(pE.x - longFlecha * Math.cos(angulo + Math.PI / 6), pE.y - longFlecha * Math.sin(angulo + Math.PI / 6));
+                ctx.fillStyle = color;
+                ctx.fill();
+            };
+
+            // Dibujar proyecciones o guías geométricas auxiliares
+            if (op === 'suma') {
+                // Vector u (Origen)
+                dibujarFlecha(0, 0, ux, uy, "var(--u-color)");
+                // Vector v (Origen)
+                dibujarFlecha(0, 0, vx, vy, "var(--v-color)");
+                // Paralelogramo guías discontinuas
+                ctx.setLineDash([4, 4]);
+                dibujarFlecha(ux, uy, ux + vx, uy + vy, "rgba(16, 185, 129, 0.5)", 1.5); // v encadenado
+                dibujarFlecha(vx, vy, ux + vx, uy + vy, "rgba(37, 99, 218, 0.5)", 1.5);  // u encadenado
+                ctx.setLineDash([]);
+                // Resultado
+                dibujarFlecha(0, 0, rx, ry, "var(--res-color)", 4);
+
+            } else if (op === 'resta') {
+                // Vector u
+                dibujarFlecha(0, 0, ux, uy, "var(--u-color)");
+                // Vector v original atenuado
+                dibujarFlecha(0, 0, vx, vy, "rgba(16, 185, 129, 0.25)", 2);
+                // Vector -v (Opuesto para efectuar la resta geométrica u + (-v))
+                dibujarFlecha(0, 0, -vx, -vy, "#84cc16", 2.5); // Verde lima para -v
+                // Línea discontinua auxiliar
+                ctx.setLineDash([4, 4]);
+                dibujarFlecha(ux, uy, ux - vx, uy - vy, "rgba(132, 204, 22, 0.5)", 1.5);
+                ctx.setLineDash([]);
+                // Resultado
+                dibujarFlecha(0, 0, rx, ry, "var(--res-color)", 4);
+
+            } else if (op === 'escalar') {
+                // Si el vector modificado coincide en recta, el orden evita solapes absolutos invisibles
+                if (Math.abs(k) < 1) {
+                    dibujarFlecha(0, 0, rx, ry, "var(--res-color)", 5);
+                    dibujarFlecha(0, 0, ux, uy, "var(--u-color)", 2);
+                } else {
+                    dibujarFlecha(0, 0, ux, uy, "var(--u-color)", 2);
+                    dibujarFlecha(0, 0, rx, ry, "var(--res-color)", 4);
+                }
+            }
+
+            // Etiquetas textuales sobre el canvas
+            ctx.font = "bold 13px Arial";
+            ctx.fillStyle = "var(--text)";
+            let posU = aPixel(ux, uy); ctx.fillText("u", posU.x + 8, posU.y - 4);
+            if (op !== 'escalar') {
+                let posV = aPixel(vx, vy); ctx.fillText("v", posV.x + 8, posV.y - 4);
+                if(op === 'resta') {
+                    let posMenosV = aPixel(-vx, -vy); ctx.fillText("-v", posMenosV.x + 8, posMenosV.y - 4);
+                }
+            }
+            let posR = aPixel(rx, ry); ctx.fillText("R", posR.x + 10, posR.y + 12);
+        }
+
+        // Ejecución inicial por defecto al arrancar
+        procesar();
+    </script>
+</body>
+</html>
