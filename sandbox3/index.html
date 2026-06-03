@@ -10,7 +10,12 @@
             --bg-color: #f8f9fa;
             --border-color: #e9ecef;
             --primary-color: #007bff;
+            --primary-hover: #0056b3;
             --text-color: #333;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
 
         body {
@@ -19,16 +24,20 @@
             display: flex;
             height: 100vh;
             color: var(--text-color);
+            overflow: hidden;
         }
 
-        /* Sidebar */
+        /* Sidebar (Menú Lateral) */
         #sidebar {
             width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
             border-right: 1px solid var(--border-color);
             background-color: var(--bg-color);
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            transition: transform 0.3s ease;
+            z-index: 100;
         }
 
         .sidebar-header {
@@ -66,6 +75,7 @@
             display: block;
             background-color: #e2e8f0;
             margin-top: 5px;
+            user-select: none;
         }
 
         .group-title:hover {
@@ -98,6 +108,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            width: 100%;
         }
 
         #info-panel {
@@ -107,8 +118,63 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        #info-panel h2 { margin: 0 0 5px 0; font-size: 1.4rem; }
-        #info-panel p { margin: 0; color: #666; font-size: 0.95rem; }
+        .info-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #info-panel h2 { 
+            margin: 0; 
+            font-size: 1.4rem; 
+        }
+
+        #info-panel p { 
+            margin: 0; 
+            color: #666; 
+            font-size: 0.95rem; 
+        }
+
+        /* Botones nuevos */
+        .btn {
+            font-family: inherit;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        #sidebar-toggle {
+            display: none; /* Oculto en escritorio */
+            background: #e2e8f0;
+            color: #333;
+            font-size: 1.2rem;
+            padding: 4px 10px;
+        }
+
+        #open-external-btn {
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        #open-external-btn:hover {
+            background-color: var(--primary-hover);
+        }
 
         #viewer-frame {
             flex-grow: 1;
@@ -117,35 +183,103 @@
             background: #fff;
         }
 
-        .placeholder-text {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: #a0aec0;
-            font-size: 1.2rem;
+        /* Capa oscura de fondo para móviles al abrir el menú */
+        #sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 90;
+        }
+
+        /* Media Query para pantallas medianas/pequeñas (Móviles y Tablets) */
+        @media (max-width: 768px) {
+            #sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                transform: translateX(-100%); /* Escondido por defecto */
+            }
+
+            #sidebar.open {
+                transform: translateX(0); /* Desplegado */
+            }
+
+            #sidebar-toggle {
+                display: block; /* Visible en móvil */
+            }
+
+            #sidebar-overlay.active {
+                display: block; /* Muestra el fondo oscuro */
+            }
+            
+            #info-panel h2 {
+                font-size: 1.1rem;
+            }
+            
+            .btn {
+                font-size: 0.85rem;
+                padding: 4px 8px;
+            }
         }
     </style>
 </head>
 <body>
 
+    <div id="sidebar-overlay"></div>
+
     <div id="sidebar">
         <div class="sidebar-header">
             <h1>📚 Mi Biblioteca Indexada</h1>
         </div>
-        <div id="menu-tree">
-            </div>
+        <div id="menu-tree"></div>
     </div>
 
     <div id="main-content">
         <div id="info-panel">
-            <h2 id="doc-title">Selecciona un documento</h2>
+            <div class="info-header-row">
+                <div class="title-container">
+                    <button id="sidebar-toggle" class="btn" title="Alternar menú">☰</button>
+                    <h2 id="doc-title">Selecciona un documento</h2>
+                </div>
+                <button id="open-external-btn" class="btn" style="display: none;">
+                    <span>↗</span> Abrir
+                </button>
+            </div>
             <p id="doc-desc">Elige cualquier elemento del menú de la izquierda para previsualizarlo aquí.</p>
         </div>
         <iframe id="viewer-frame" src="about:blank"></iframe>
     </div>
 
     <script>
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const openExternalBtn = document.getElementById('open-external-btn');
+        let currentUrl = ""; // Variable global para guardar la URL activa
+
+        // Funciones para controlar el menú lateral en móvil
+        function toggleSidebar() {
+            sidebar.classList.toggle('open');
+            sidebarOverlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('active');
+        }
+
+        sidebarToggle.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // Lógica del botón de apertura externa
+        openExternalBtn.addEventListener('click', () => {
+            if (currentUrl) {
+                window.open(currentUrl, '_blank');
+            }
+        });
+
         // Cargar el JSON e iniciar la renderización
         fetch('biblioteca.json')
             .then(response => response.json())
@@ -163,7 +297,6 @@
                 const li = document.createElement('li');
 
                 if (node.type === 'group') {
-                    // Es un grupo (puede contener hijos)
                     const titleSpan = document.createElement('span');
                     titleSpan.className = 'group-title';
                     titleSpan.textContent = `📁 ${node.title}`;
@@ -171,36 +304,39 @@
                     
                     li.appendChild(titleSpan);
 
-                    // Si tiene hijos, llamamos a la función recursivamente
                     if (node.children && node.children.length > 0) {
                         const childrenUl = createTree(node.children);
                         li.appendChild(childrenUl);
 
-                        // Opcional: Funcionalidad de colapsar/desplegar
                         titleSpan.addEventListener('click', () => {
                             const isHidden = childrenUl.style.display === 'none';
-                            childrenUl.style.style.display = isHidden ? 'block' : 'none';
+                            childrenUl.style.display = isHidden ? 'block' : 'none';
                         });
                     }
                 } else if (node.type === 'item') {
-                    // Es un enlace final
                     const a = document.createElement('a');
                     a.className = 'item-link';
                     a.textContent = `📄 ${node.title}`;
-                    a.href = "#"; // Evitamos navegación real de la página
+                    a.href = "#";
                     
-                    // Evento al hacer clic en el archivo
                     a.addEventListener('click', (e) => {
                         e.preventDefault();
                         
-                        // Quitar clase activa a otros y ponérsela a este
                         document.querySelectorAll('.item-link').forEach(el => el.classList.remove('active'));
                         a.classList.add('active');
 
-                        // Actualizar textos e iframe
+                        // Actualizar textos, iframe y guardar URL actual
                         document.getElementById('doc-title').textContent = node.title;
                         document.getElementById('doc-desc').textContent = node.description || 'Sin descripción disponible.';
                         document.getElementById('viewer-frame').src = node.url;
+                        
+                        currentUrl = node.url; 
+                        openExternalBtn.style.display = 'inline-flex'; // Mostrar el botón externo
+
+                        // Si estamos en móvil, cerrar automáticamente el menú al elegir un documento
+                        if (window.innerWidth <= 768) {
+                            closeSidebar();
+                        }
                     });
 
                     li.appendChild(a);
