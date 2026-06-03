@@ -1,0 +1,71 @@
+[
+  {
+    "type": "group",
+    "title": "Matemáticas 4 ESO",
+    "description": "Herramientas para entender las matemáticas de cuarto de la ESO",
+    "children": [
+        {
+        "type": "group",
+        "title": "Trigonometría",
+        "description": "Herramientas para comprender la trigonometría",
+        "children": [
+          {
+            "type": "item",
+            "title": "Trigonometría interactiva",
+            "description": "Herramienta interactiva para entender trigonometría",
+            "url": "utils/trigonometria_interactiva.html"
+          },
+          {
+            "type": "item",
+            "title": "Solucionador de ejercicios triángulos rectángulos",
+            "description": "Simple solucionador de ejercicios de triángulos rectángulos mediante el uso de trigonometría",
+            "url": "utils/trigonometria_triangulo_rectangulo.html"
+          },
+          {
+            "type": "item",
+            "title": "Solucionador de ejercicios triángulos rectángulos (2)",
+            "description": "Simple solucionador de ejercicios de triángulos rectángulos mediante el uso de trigonometría",
+            "url": "utils/trigonometria_triangulo_rectangulo_pasos.html"
+          }
+        ]
+      },
+      {
+        "type": "group",
+        "title": "Vectores",
+        "description": "Herramientas para comprender qué es un vector y cómo usarlos",
+        "children": [
+          {
+            "type": "item",
+            "title": "Solucionador de ejercicios",
+            "description": "Simple solucionador de ejercicios con vectores",
+            "url": "utils/vectores_solucionador.html"
+          },
+          {
+            "type": "item",
+            "title": "Solucionador de ejercicios (Método del triángulo)",
+            "description": "Simple solucionador de ejercicios con vectores usando el método del triángulo para el apartado gráfico",
+            "url": "utils/vectores_solucionador_triangulo.html"
+          },
+          {
+            "type": "item",
+            "title": "Punto medio y alineación",
+            "description": "Simple solucionador de cálculo del punto medio de un vector y la alineación de vectores",
+            "url": "utils/vectores_alineacion_punto_medio.html"
+          },
+          {
+            "type": "item",
+            "title": "Ecuaciones",
+            "description": "Cómo pasar de puntos y vectores a los distintos tipos de ecuaciones",
+            "url": "utils/vectores_ecuaciones.html"
+          },
+          {
+            "type": "item",
+            "title": "Cálculo de áreas y distancia punto-vector",
+            "description": "Herramienta para calcular áreas con vectores y distancias entre puntos y vectores",
+            "url": "utils/vectores_distancia_area.html"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Biblioteca de HTMLs</title>
+    <style>
+        :root {
+            --sidebar-width: 320px;
+            --bg-color: #f8f9fa;
+            --border-color: #e9ecef;
+            --primary-color: #007bff;
+            --text-color: #333;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* Sidebar */
+        #sidebar {
+            width: var(--sidebar-width);
+            border-right: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-header h1 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        #menu-tree {
+            padding: 15px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        /* Estilos del Árbol Recursivo */
+        ul {
+            list-style: none;
+            padding-left: 15px;
+            margin: 5px 0;
+        }
+
+        #menu-tree > ul {
+            padding-left: 0;
+        }
+
+        .group-title {
+            font-weight: bold;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 4px;
+            display: block;
+            background-color: #e2e8f0;
+            margin-top: 5px;
+        }
+
+        .group-title:hover {
+            background-color: #cbd5e1;
+        }
+
+        .item-link {
+            display: block;
+            padding: 6px 8px;
+            color: #4a5568;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .item-link:hover {
+            background-color: #edf2f7;
+            color: var(--primary-color);
+        }
+
+        .item-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Contenedor Principal (Iframe + Info) */
+        #main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #info-panel {
+            padding: 15px 20px;
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        #info-panel h2 { margin: 0 0 5px 0; font-size: 1.4rem; }
+        #info-panel p { margin: 0; color: #666; font-size: 0.95rem; }
+
+        #viewer-frame {
+            flex-grow: 1;
+            border: none;
+            width: 100%;
+            background: #fff;
+        }
+
+        .placeholder-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #a0aec0;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <h1>📚 Mi Biblioteca Indexada</h1>
+        </div>
+        <div id="menu-tree">
+            </div>
+    </div>
+
+    <div id="main-content">
+        <div id="info-panel">
+            <h2 id="doc-title">Selecciona un documento</h2>
+            <p id="doc-desc">Elige cualquier elemento del menú de la izquierda para previsualizarlo aquí.</p>
+        </div>
+        <iframe id="viewer-frame" src="about:blank"></iframe>
+    </div>
+
+    <script>
+        // Cargar el JSON e iniciar la renderización
+        fetch('biblioteca.json')
+            .then(response => response.json())
+            .then(data => {
+                const menuTree = document.getElementById('menu-tree');
+                menuTree.appendChild(createTree(data));
+            })
+            .catch(error => console.error("Error cargando el índice de la biblioteca:", error));
+
+        // Función recursiva para construir el árbol HTML
+        function createTree(nodes) {
+            const ul = document.createElement('ul');
+
+            nodes.forEach(node => {
+                const li = document.createElement('li');
+
+                if (node.type === 'group') {
+                    // Es un grupo (puede contener hijos)
+                    const titleSpan = document.createElement('span');
+                    titleSpan.className = 'group-title';
+                    titleSpan.textContent = `📁 ${node.title}`;
+                    titleSpan.title = node.description || '';
+                    
+                    li.appendChild(titleSpan);
+
+                    // Si tiene hijos, llamamos a la función recursivamente
+                    if (node.children && node.children.length > 0) {
+                        const childrenUl = createTree(node.children);
+                        li.appendChild(childrenUl);
+
+                        // Opcional: Funcionalidad de colapsar/desplegar
+                        titleSpan.addEventListener('click', () => {
+                            const isHidden = childrenUl.style.display === 'none';
+                            childrenUl.style.style.display = isHidden ? 'block' : 'none';
+                        });
+                    }
+                } else if (node.type === 'item') {
+                    // Es un enlace final
+                    const a = document.createElement('a');
+                    a.className = 'item-link';
+                    a.textContent = `📄 ${node.title}`;
+                    a.href = "#"; // Evitamos navegación real de la página
+                    
+                    // Evento al hacer clic en el archivo
+                    a.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        
+                        // Quitar clase activa a otros y ponérsela a este
+                        document.querySelectorAll('.item-link').forEach(el => el.classList.remove('active'));
+                        a.classList.add('active');
+
+                        // Actualizar textos e iframe
+                        document.getElementById('doc-title').textContent = node.title;
+                        document.getElementById('doc-desc').textContent = node.description || 'Sin descripción disponible.';
+                        document.getElementById('viewer-frame').src = node.url;
+                    });
+
+                    li.appendChild(a);
+                }
+
+                ul.appendChild(li);
+            });
+
+            return ul;
+        }
+    </script>
+</body>
+</html>
